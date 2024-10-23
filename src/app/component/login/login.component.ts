@@ -24,7 +24,7 @@ export class LoginComponent {
     this.firestoreService.setCollectionName('roles');
   }
 
-  async login() {
+  async loginWithGoogle() {
     try {
       var userCredential = await this.authService.loginWithGoogle();
       if(this.authService.isInLogin) {       

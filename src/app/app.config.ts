@@ -7,6 +7,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { environment } from './environments/environment';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { provideServiceWorker } from '@angular/service-worker';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -18,6 +19,6 @@ export const appConfig: ApplicationConfig = {
     provideServiceWorker('./ngsw-worker.js', {
             enabled: true, //!isDevMode(),
             registrationStrategy: 'registerWhenStable:30000'
-          })
+          }), provideAnimationsAsync()
   ]
 };

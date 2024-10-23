@@ -1,0 +1,6 @@
+<div *ngIf="isAuthLoginCompleted; else loginTemplate">
+
+</div>
+<ng-template #loginTemplate>
+  <button (click)="login()">Login con Google</button>
+</ng-template>

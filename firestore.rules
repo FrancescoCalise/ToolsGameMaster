@@ -1,0 +1,35 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Funzione per verificare se l'utente è un admin
+    function isAdmin() {
+      return exists(/databases/$(database)/documents/roles/$(request.auth.uid)) && get(/databases/$(database)/documents/roles/$(request.auth.uid)).data.type == 'admin';
+    }
+
+    // Funzione per verificare se l'utente è il proprietario del documento
+    function isOwner(resource) {
+      return resource.data.owner == request.auth.uid;
+    }
+
+    // Regole per la collezione specifica
+    match /{document=**} {
+      // Permette la lettura se l'utente è l'admin o il proprietario del documento ed il documento esiste
+            allow read: if request.auth != null && 
+            (!exists(/databases/$(database)/documents/$(document)) || 
+            (exists(/databases/$(database)/documents/$(document)) && 
+            	(isAdmin() || isOwner(resource))));
+
+      // Permette l'aggiornamento se l'utente è l'admin o il proprietario del documento ed il documento esiste
+      allow update: if request.auth != null && resource != null && (isAdmin() || isOwner(resource));
+
+      // Permette la cancellazione se l'utente è l'admin o il proprietario del documento ed il documento esiste
+      allow delete: if request.auth != null && resource != null && (isAdmin() || isOwner(resource));
+
+      // Permette la scrittura se l'utente è autenticato
+      allow write: if request.auth != null && request.auth.uid != null;
+
+      // Permette la lettura della lista se l'utente è autenticato
+      allow list: if request.auth != null;
+    }
+  }
+}

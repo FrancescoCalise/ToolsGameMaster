@@ -1,0 +1,13 @@
+<div>
+    <h2>Add Item</h2>
+    <form [formGroup]="itemForm" (ngSubmit)="saveItem()">
+      <label for="name">Name</label>
+      <input id="name" formControlName="name" />
+  
+      <label for="description">Description</label>
+      <input id="description" formControlName="description" />
+  
+      <button type="submit">Add Item</button>
+    </form>
+  </div>
+  

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ToolsGameMaster": {
+    "toolsgamemaster.": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -86,10 +86,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ToolsGameMaster:build:production"
+              "buildTarget": "toolsgamemaster.:build:production"
             },
             "development": {
-              "buildTarget": "ToolsGameMaster:build:development"
+              "buildTarget": "toolsgamemaster.:build:development"
             }
           },
           "defaultConfiguration": "development"

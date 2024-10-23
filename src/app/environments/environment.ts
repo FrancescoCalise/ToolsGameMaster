@@ -3,15 +3,14 @@ import { FirebaseOptions } from '@firebase/app';
 export const environment = {
   production: false,
   firebase: {
-    apiKey: "AIzaSyB27CE_lOHNyC3MtgnWU-hdWJlabJZFPfw",
-    authDomain: "ToolsGameMaster.firebaseapp.com",
-    projectId: "ToolsGameMaster",
-    storageBucket: "ToolsGameMaster.appspot.com",
-    messagingSenderId: "730757104220",
-    appId: "1:730757104220:web:a25fc90f977ad383371c99",
-    measurementId: "G-8092BY6Y3G",
-    locationId: "europe-west",
-    databaseURL: "https://ToolsGameMaster-default-rtdb.europe-west1.firebasedatabase.app"
+    apiKey: "AIzaSyBlwCAaz4KN8ggWSNh3YREN3WWEOo-cvrA",
+    authDomain: "toolsgamemaster.firebaseapp.com",
+    databaseURL: "https://toolsgamemaster-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "toolsgamemaster",
+    storageBucket: "toolsgamemaster.appspot.com",
+    messagingSenderId: "1040681236914",
+    appId: "1:1040681236914:web:054073e0de6ba1ffc04cab",
+    measurementId: "G-4W0QCDYVYF"
   } as FirebaseOptions
   
   

@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container-fluid">
     <!-- Nome dell'applicazione con margine sinistro -->
     <img src="assets/icons/logo-app.png" alt="logo-app" width="50" height="50">
@@ -17,17 +17,45 @@
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <!-- Dropdown per la selezione della lingua -->
+    <!-- Dropdown per la selezione della lingua e user -->
     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
       <ul class="navbar-nav">
+        
+        <!-- Dropdown per l'utente -->
+        <li *ngIf="isAuthenticating" class="nav-item dropdown">
+          <button
+            class="nav-link dropdown-toggle btn btn-link"
+            id="userDropdown"
+            type="button"
+            data-bs-toggle="dropdown"
+            data-bs-display="static"
+            aria-expanded="false"
+          >
+            <mat-icon>person</mat-icon> <!-- Icona user -->
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <!-- Collegamenti utente -->
+            <li>
+              <a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a>
+            </li>
+            <li>
+              <a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a>
+            </li>
+            <li><hr class="dropdown-divider"></li>
+            <li>
+              <button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Dropdown per la selezione della lingua -->
         <li class="nav-item dropdown">
-          <!-- Bottone per la dropdown -->
           <button
             class="nav-link dropdown-toggle btn btn-link"
             id="languageDropdown"
             type="button"
             data-bs-toggle="dropdown"
-            data-bs-display="static" 
+            data-bs-display="static"
             aria-expanded="false"
           >
             <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
@@ -42,6 +70,7 @@
             </li>
           </ul>
         </li>
+        
       </ul>
     </div>
   </div>

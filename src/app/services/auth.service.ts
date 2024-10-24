@@ -5,6 +5,7 @@ import { Role, RoleType } from '../interface/roles';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CacheStorageService } from './cache-storage.service';
 import { SpinnerService } from './spinner.service';
+import { Router } from '@angular/router';
 
 export interface PersonalUser {
   displayName: string | null;
@@ -31,7 +32,8 @@ export class AuthService {
   constructor(
     private auth: Auth,
     private cacheService: CacheStorageService,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+    private router: Router
   ) {
       this.userSubject = new BehaviorSubject<PersonalUser | null>(null);
       this.user$ = this.userSubject.asObservable();
@@ -70,10 +72,13 @@ export class AuthService {
   // Logout
   async logout(): Promise<void> {
     try {
+      this.spinner.showSpinner();
       await signOut(this.auth);
       this.isInLogin = false;
       this.isLoginCompleted = false;
       this.userSubject.next(null);
+      this.cacheService.removeItem(this.cacheService.userInfoKey);
+      this.router.navigateByUrl('/login');
       console.log('Logout effettuato con successo');
     } catch (error) {
       console.error('Errore durante il logout: ', error);

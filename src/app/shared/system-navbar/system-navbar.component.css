@@ -1,0 +1,26 @@
+.navbar-custom {
+    background-color: #001f3f; /* Blu notte */
+    color: white; /* Colore del testo bianco per contrastare */
+  }
+  
+  .navbar-custom .navbar-brand {
+    color: white; /* Colore del testo della marca */
+  }
+  
+  .navbar-custom .nav-link {
+    color: white; /* Colore del testo nei link */
+  }
+  
+  .navbar-custom .dropdown-menu {
+    background-color: #001f3f; /* Sfondo blu notte per il menu a discesa */
+    color: white; /* Testo bianco per i dropdown items */
+  }
+  
+  .navbar-custom .dropdown-item {
+    color: white; /* Colore del testo nel dropdown */
+  }
+  
+  .navbar-custom .dropdown-item:hover {
+    background-color: #003366; /* Colore di sfondo al passaggio del mouse */
+  }
+  

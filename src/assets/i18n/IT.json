@@ -11,5 +11,10 @@
         "LOGIN": "Accedi",
         "DESCRIPTION": "Accedi per utilizzare gli strumenti del Game Master",
         "LOGIN_GOOGLE": "Accedi con Google"
+    },
+    "USER":{
+        "LOGOUT": "Esci",
+        "PROFILE": "Profilo",
+        "SETTINGS": "Impostazioni"
     }
 }

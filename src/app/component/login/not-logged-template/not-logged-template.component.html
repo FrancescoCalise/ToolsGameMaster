@@ -1,0 +1,25 @@
+
+  <div class="row justify-content-center" style="padding:  20px;">
+    <!-- Colonna sinistra (vuota) -->
+    <div class="col-12 col-md-3 col-lg-3 d-none d-md-block"></div>
+
+    <!-- Colonna centrale (con la card di login) -->
+    <div class="col-12 col-md-6 col-lg-6">
+      <div class="login-container text-center">
+        <mat-card class="login-card text-center">
+          <mat-card-header>
+            <mat-card-title>{{ 'LOGIN.TITLE' | translate }}</mat-card-title>
+            <mat-card-subtitle>{{ 'LOGIN.DESCRIPTION' | translate }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <button mat-raised-button color="primary" type="submit" (click)="loginWithGoogle()">
+              {{ 'LOGIN.LOGIN_GOOGLE' | translate }}
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+
+    <!-- Colonna destra (vuota) -->
+    <div class="col-12 col-md-3 col-lg-3 d-none d-md-block"></div>
+  </div>

@@ -1,0 +1,15 @@
+{
+    "HOME": {
+        "TITLE": "Benvenuto",
+        "DESCRIPTION": "Questa è la home page"
+    },
+    "SYSTEM_NAVBAR":{
+        "TITLE": "STRUMENTI DEL GAME MASTER"
+    },
+    "LOGIN":{
+        "TITLE": "Bentornato",
+        "LOGIN": "Accedi",
+        "DESCRIPTION": "Accedi per utilizzare gli strumenti del Game Master",
+        "LOGIN_GOOGLE": "Accedi con Google"
+    }
+}

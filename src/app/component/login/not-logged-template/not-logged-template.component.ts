@@ -1,34 +1,43 @@
-import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { SharedModule } from '../../shared/shared.module';
-import { Role, RoleType } from '../../interface/roles';
-import { FirestoreService } from '../../services/firestore.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { Role, RoleType } from '../../../interface/roles';
+import { FirestoreService } from '../../../services/firestore.service';
 import { QueryFieldFilterConstraint, where } from '@angular/fire/firestore';
-import { NotLoggedTemplateComponent } from './not-logged-template/not-logged-template.component';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  selector: 'app-not-logged-template',
+  templateUrl: './not-logged-template.component.html',
+  styleUrls: ['./not-logged-template.component.css'],
   standalone: true,
   imports: [
     SharedModule,
-    NotLoggedTemplateComponent
-  ]
+    ReactiveFormsModule
+   ]
 })
-
-export class LoginComponent {
+export class NotLoggedTemplateComponent implements OnInit {
   isAuthLoginCompleted: boolean = false;
-
+  loading = true;
+  selectedLanguage = 'EN';
+  languages = ['EN', 'FR', 'IT', 'ES'];
+  
   constructor(
     private authService: AuthService,
     private router: Router,
-    private firestoreService: FirestoreService<Role>
+    private firestoreService: FirestoreService<Role>,
   ) {
     this.firestoreService.setCollectionName('roles');
-  }
 
+  }
+  
+  ngOnInit(): void {
+    setTimeout(() => {
+      this.loading = false;  // Simulating loading time
+    }, 2000);
+  }
+  
   async loginWithGoogle() {
     try {
       var userCredential = await this.authService.loginWithGoogle();

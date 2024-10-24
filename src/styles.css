@@ -1,14 +1,22 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.app-main{
-    height: 100%;
+html, body {
+    height: 100%; /* Assicura che l'html e il body abbiano il 100% della dimensione del loro contenitore */
     width: 100%;
-    position: absolute;
-    /* background: #f5f5f5; */
-    background: red;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* Nasconde eventuale overflow orizzontale */
+}
+
+.main {
+    height: 100vh; /* Imposta l'elemento per riempire il 100% della finestra del browser */
+    width: 100%;
+}
+
+body { 
+    margin: 0; 
+    font-family: Arial, Helvetica, sans-serif; 
+    background: #f5f5f5;
 }
 
 .text-center{

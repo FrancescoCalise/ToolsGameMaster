@@ -1,19 +1,7 @@
-<div class="container-fluid d-flex justify-content-center align-items-center vh-100">
-  <div *ngIf="isAuthLoginCompleted; else loginTemplate">
-    <!-- Add content for authenticated users here -->
-  </div>
-
-  <ng-template #loginTemplate>
-    <mat-card class="login-card text-center">
-      <mat-card-header class="login-card-header">
-        <mat-card-title>Tools Game Master</mat-card-title>
-      </mat-card-header>
-      <mat-card-content class="login-card-content">
-        <button mat-raised-button color="primary" (click)="loginWithGoogle()">
-          <mat-icon>login</mat-icon>
-          Login with Google
-        </button>
-      </mat-card-content>
-    </mat-card>
-  </ng-template>
+<div *ngIf="isAuthLoginCompleted; else notLoggedTemplate">
+  <!-- Add content for authenticated users here -->
 </div>
+
+<ng-template #notLoggedTemplate>
+  <app-not-logged-template></app-not-logged-template>
+</ng-template>

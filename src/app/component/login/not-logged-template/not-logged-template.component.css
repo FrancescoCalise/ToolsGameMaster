@@ -1,0 +1,27 @@
+/* Per la disposizione della card */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* Mantiene la card centrata verticalmente */
+  max-width: 100vh; /* Limita la larghezza massima della card */
+  width: 100vh; /* Fa in modo che la card riempia la larghezza della pagina */
+}
+
+.login-card {
+  width: 100vh; /* Fa in modo che la card riempia la colonna centrale */
+  max-width: 80vh; /* Limita la larghezza massima della card */
+  min-height: 50vh; /* Altezza minima maggiore per farla sembrare più grande verticalmente */
+  padding: 40px 20px; /* Aggiungi del padding interno per aumentare lo spazio verticale */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* Spaziatura tra il contenuto */
+}
+
+@media (max-width: 767px) {
+  /* Stile per dispositivi mobili */
+  .login-card {
+    width: 100vh;
+    min-height: 40vh; /* Altezza minore sui dispositivi mobili */
+  }
+}

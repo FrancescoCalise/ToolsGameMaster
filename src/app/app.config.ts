@@ -13,9 +13,13 @@ import { importProvidersFrom } from '@angular/core';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
+}
+interface NgxSpinnerConfig {
+  type?: string;
 }
 
 export const appConfig: ApplicationConfig = {
@@ -39,6 +43,8 @@ export const appConfig: ApplicationConfig = {
           deps: [HttpClient]
         }
       })
-    )
+    ),
+    importProvidersFrom(NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' }))
+
   ]
 };

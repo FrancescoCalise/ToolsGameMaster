@@ -4,6 +4,7 @@ import { Auth, User, signInWithPopup, GoogleAuthProvider, signOut, UserCredentia
 import { Role, RoleType } from '../interface/roles';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CacheStorageService } from './cache-storage.service';
+import { SpinnerService } from './spinner.service';
 
 export interface PersonalUser {
   displayName: string | null;
@@ -29,7 +30,9 @@ export class AuthService {
 
   constructor(
     private auth: Auth,
-    private cacheService: CacheStorageService) {
+    private cacheService: CacheStorageService,
+    private spinner: SpinnerService
+  ) {
       this.userSubject = new BehaviorSubject<PersonalUser | null>(null);
       this.user$ = this.userSubject.asObservable();
   }
@@ -38,6 +41,7 @@ export class AuthService {
   async loginWithGoogle(): Promise<UserCredential> {
     try {
       let user = await signInWithPopup(this.auth, new GoogleAuthProvider());
+      this.spinner.showSpinner();
       let partialUser = this.mapFirebaseUser(user.user);
       this.userSubject.next(partialUser);
       this.isInLogin = true;
@@ -60,6 +64,7 @@ export class AuthService {
     this.isLoginCompleted = true;
     this.cacheService.setItem(this.cacheService.userInfoKey, this.user);
     this.userSubject.next(this.user);
+    this.spinner.hideSpinner();
   }
 
   // Logout

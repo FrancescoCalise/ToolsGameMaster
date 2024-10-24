@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
 import { Role, RoleType } from '../../../interface/roles';
 import { FirestoreService } from '../../../services/firestore.service';
-import { QueryFieldFilterConstraint, where } from '@angular/fire/firestore';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SpinnerService } from '../../../services/spinner.service';
 
 @Component({
   selector: 'app-not-logged-template',
@@ -17,25 +17,26 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
     ReactiveFormsModule
    ]
 })
-export class NotLoggedTemplateComponent implements OnInit {
+export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
   isAuthLoginCompleted: boolean = false;
-  loading = true;
-  selectedLanguage = 'EN';
-  languages = ['EN', 'FR', 'IT', 'ES'];
+  selectedLanguage = 'IT';
+  languages = ['EN', 'IT',];
   
   constructor(
     private authService: AuthService,
     private router: Router,
     private firestoreService: FirestoreService<Role>,
+    private spinner: SpinnerService
   ) {
     this.firestoreService.setCollectionName('roles');
 
   }
+  ngAfterViewInit(): void {
+    this.spinner.hideSpinner();
+  }
   
   ngOnInit(): void {
-    setTimeout(() => {
-      this.loading = false;  // Simulating loading time
-    }, 2000);
+   
   }
   
   async loginWithGoogle() {

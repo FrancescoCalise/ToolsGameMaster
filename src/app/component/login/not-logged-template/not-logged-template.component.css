@@ -1,22 +1,23 @@
-/* Per la disposizione della card */
-.login-container {
+.login-card {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh; /* Mantiene la card centrata verticalmente */
-  max-width: 100vh; /* Limita la larghezza massima della card */
-  width: 100vh; /* Fa in modo che la card riempia la larghezza della pagina */
+  padding: 20px;
+  flex-direction: row;
+  max-width: 100%;
+  height: auto; /* Assicura che la card si adatti al contenuto */
 }
 
-.login-card {
-  width: 100vh; /* Fa in modo che la card riempia la colonna centrale */
-  max-width: 80vh; /* Limita la larghezza massima della card */
-  min-height: 50vh; /* Altezza minima maggiore per farla sembrare più grande verticalmente */
-  padding: 40px 20px; /* Aggiungi del padding interno per aumentare lo spazio verticale */
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* Spaziatura tra il contenuto */
+.login-container {
+  width: 100%; /* Assicura che il contenitore riempia la colonna */
 }
+
+.google-login-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Spazio tra il logo e il testo */
+  margin-top: 50px;
+}
+
+
 
 @media (max-width: 767px) {
   /* Stile per dispositivi mobili */

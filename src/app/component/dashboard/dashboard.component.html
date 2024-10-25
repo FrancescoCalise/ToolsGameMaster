@@ -1,0 +1,13 @@
+<div class="container mt-5">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+      <div *ngFor="let game of games" class="col">
+        <div class="card h-100 game-card" (click)="navigateToGame(game.route)">
+          <img [src]="game.image" class="card-img-top" [alt]="game.name">
+          <div class="card-body text-center">
+            <h5 class="card-title">{{ game.name }}</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

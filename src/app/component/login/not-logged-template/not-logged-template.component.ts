@@ -6,7 +6,7 @@ import { FirestoreService } from '../../../services/firestore.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerService } from '../../../services/spinner.service';
 import { ToastService } from '../../../services/toast.service';
-import { RoleType, UserInformationSaved } from '../../../interface/UserInformationSaved';
+import { RoleType, UserInformationSaved } from '../../../interface/Document/UserInformationSaved';
 
 export const USER_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<UserInformationSaved>>('UserFirestoreService');
 
@@ -67,7 +67,7 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
 
       this.isAuthLoginCompleted = this.authService.isAuthLoginCompleted();
       if (this.isAuthLoginCompleted) {
-        this.router.navigate(['/home']);
+        this.router.navigate(['/']);
       } else {
         throw new Error('User is not authenticated');
       }

@@ -1,5 +1,5 @@
 import { Timestamp } from 'firebase/firestore';
-import { BaseDocument } from './models';
+import { BaseDocument } from './BaseModel';
 
 export interface UserInformationSaved extends BaseDocument {
   role: RoleType;

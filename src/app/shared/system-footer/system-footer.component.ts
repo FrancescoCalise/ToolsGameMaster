@@ -8,7 +8,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { BreakpointService } from '../../services/breakpoint.service';
 import { FirestoreService } from '../../services/firestore.service';
 import { Timestamp } from 'firebase/firestore';
-import { UserInformationSaved } from '../../interface/UserInformationSaved';
+import { UserInformationSaved } from '../../interface/Document/UserInformationSaved';
 
 
 @Component({

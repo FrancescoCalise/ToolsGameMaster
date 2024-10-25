@@ -1,6 +1,6 @@
 import { Firestore, collection, query, where, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, serverTimestamp, QueryFieldFilterConstraint } from '@angular/fire/firestore';
 import { Injectable, OnDestroy, OnInit } from '@angular/core';
-import { BaseDocument } from '../interface/models';
+import { BaseDocument } from '../interface/Document/BaseModel';
 import { AuthService, PersonalUser } from './auth.service';
 import { Subscription } from 'rxjs';
 import { SpinnerService } from './spinner.service';

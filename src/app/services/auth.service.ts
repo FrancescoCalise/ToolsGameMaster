@@ -5,7 +5,7 @@ import { CacheStorageService } from './cache-storage.service';
 import { SpinnerService } from './spinner.service';
 import { Router } from '@angular/router';
 import { Timestamp } from 'firebase/firestore';
-import { RoleType, UserInformationSaved } from '../interface/UserInformationSaved';
+import { RoleType, UserInformationSaved } from '../interface/Document/UserInformationSaved';
 
 export interface PersonalUser {
   displayName: string | null;

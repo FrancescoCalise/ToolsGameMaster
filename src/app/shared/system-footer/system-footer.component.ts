@@ -8,7 +8,6 @@ import { TranslateService } from '@ngx-translate/core';
 import { BreakpointService } from '../../services/breakpoint.service';
 import { FirestoreService } from '../../services/firestore.service';
 import { Donation } from '../../interface/donation';
-import { SpinnerService } from '../../services/spinner.service';
 import { Timestamp } from 'firebase/firestore';
 
 
@@ -48,10 +47,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     private toastService: ToastService,
     private translateService: TranslateService,
     private breakpointService: BreakpointService,
-    private cdr: ChangeDetectorRef,
-    private firestoreDonationService: FirestoreService<Donation>,
-    private spinner: SpinnerService,
-
+    private firestoreDonationService: FirestoreService<Donation>
   ) {
     this.firestoreDonationService.setCollectionName('donation');
   }

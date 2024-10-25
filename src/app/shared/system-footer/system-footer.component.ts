@@ -1,4 +1,4 @@
-import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { AuthService, PersonalUser } from '../../services/auth.service';
 import { LanguageService } from '../../services/language.service';
@@ -9,6 +9,7 @@ import { BreakpointService } from '../../services/breakpoint.service';
 import { FirestoreService } from '../../services/firestore.service';
 import { Donation } from '../../interface/donation';
 import { SpinnerService } from '../../services/spinner.service';
+import { Timestamp } from 'firebase/firestore';
 
 
 @Component({
@@ -21,23 +22,25 @@ import { SpinnerService } from '../../services/spinner.service';
   ]
 })
 
-export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterViewInit, OnDestroy {
+export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  canShow = true;
+  showFooter = true;
   isAuthenticating: boolean = false;
-  haveDonationValid: boolean = false;
   user: PersonalUser | null = null;
 
   currentLang: string = 'IT';
   private languageSubscription: Subscription = new Subscription;
 
   isMobile: boolean = false;
-  private breakpointSubscription: Subscription = new Subscription;;
+  private breakpointSubscription: Subscription = new Subscription;
+
+  private userSubscription: Subscription = new Subscription;
 
   linksDonateImg: Record<string, string> = {
     "IT": "https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donate_LG.gif",
     "EN": "https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
   };
+  public isButtonVisibile: boolean = false;
 
   constructor(
     private authService: AuthService,
@@ -47,10 +50,13 @@ export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterVie
     private breakpointService: BreakpointService,
     private cdr: ChangeDetectorRef,
     private firestoreDonationService: FirestoreService<Donation>,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+
   ) {
     this.firestoreDonationService.setCollectionName('donation');
   }
+
+
 
   ngOnInit(): void {
     this.languageSubscription = this.languageService.subscribeToLanguageChanges()
@@ -63,39 +69,48 @@ export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterVie
 
     this.currentLang = this.languageService.getLanguage();
 
+    this.isMobile = this.breakpointService.getIsMobile();
     this.breakpointSubscription = this.breakpointService.subscribeToBreakpointChanges()
       .subscribe((isMobile: boolean) => {
         this.clearPayPalButtonContainer();
         this.isMobile = isMobile;
-        const currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
-        this.renderPayPalDonateButton(currentLink);
+        this.verifyDonationState();
+      });
+
+    this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
+      (user: PersonalUser | null) => {
+        this.user = user;
+        this.verifyDonationState();
       });
   }
 
   ngAfterViewInit(): void {
-    let currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
-    this.renderPayPalDonateButton(currentLink);
-    this.isMobile = this.breakpointService.getIsMobile();
-    this.cdr.detectChanges();
+    
   }
 
-  ngAfterViewChecked(): void {
-    this.isAuthenticating = this.authService.isAuthLoginCompleted();
-    if (this.isAuthenticating) {
-      this.user = this.authService.getCurrentUser();
-      const oneMonthAgo = new Date();
-      oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // Sottrai un mese dalla data corrente
-
-      var lastDonationDate = this.user?.lastDonation as Date;
-      this.haveDonationValid = lastDonationDate !== undefined && lastDonationDate >= oneMonthAgo;
-      if (!this.haveDonationValid) {
-        this.canShow = true;
-      } else {
-        this.canShow = false;
+  verifyDonationState(): void {
+    console.log(this.isMobile);
+    if (!this.user) {
+      this.showFooter = true;
+      if (!this.isButtonVisibile) {
+        let currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
+        this.renderPayPalDonateButton(currentLink);
       }
+      return;
     }
+    this.isAuthenticating = true;
+    const oneMonthAgo = new Date();
+    oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // Sottrai un mese dalla data corrente
 
-
+    var timeStamp = this.user?.lastDonation as Timestamp;
+    let lastDonationDate = timeStamp ? new Date(timeStamp.seconds * 1000) : undefined;
+    let haveDonationValid = lastDonationDate !== undefined && lastDonationDate >= oneMonthAgo;
+    if (!haveDonationValid) {
+      this.showFooter = true;
+    } else {
+      this.showFooter = false;
+      this.clearPayPalButtonContainer();
+    }
   }
 
   clearPayPalButtonContainer(): void {
@@ -104,6 +119,7 @@ export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterVie
 
     if (paypalContainer) {
       paypalContainer.innerHTML = ''; // Svuota il contenuto del div
+      this.isButtonVisibile = false;
     }
   }
 
@@ -145,7 +161,9 @@ export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterVie
               this.toastService.showError(translation, err, 5000);
             });
         }
-      }).render(`#${idDiv}`);
+      })
+      .render(`#${idDiv}`);
+      this.isButtonVisibile = true;
     }, 0);
   }
 
@@ -153,13 +171,15 @@ export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterVie
     if (!this.isAuthenticating) return;
     let user = this.user as PersonalUser;
     let donation = (await this.firestoreDonationService.getItem(user.uid));
+    var date = new Date();
+    var timeStamp = new Timestamp(date.getTime() / 1000, 0);
     if (!donation) {
       donation = {
-        lastDonation: new Date()
+        lastDonation: timeStamp
       }
       this.firestoreDonationService.addItem(donation, user.uid);
     } else {
-      donation.lastDonation = new Date();
+      donation.lastDonation = timeStamp;
       this.firestoreDonationService.updateItem(donation);
     }
   }
@@ -171,6 +191,9 @@ export class SystemFooterComponent implements OnInit, AfterViewChecked, AfterVie
     }
     if (this.breakpointSubscription) {
       this.breakpointSubscription.unsubscribe();
+    }
+    if (this.userSubscription) {
+      this.userSubscription.unsubscribe();
     }
   }
 }  

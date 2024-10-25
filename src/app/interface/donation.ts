@@ -1,5 +1,6 @@
+import { Timestamp } from 'firebase/firestore';
 import { BaseDocument } from './models';
 
 export interface Donation extends BaseDocument {
-  lastDonation: Date | null;
+  lastDonation: Timestamp | null;
 }

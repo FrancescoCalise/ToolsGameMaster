@@ -1,0 +1,22 @@
+<div class="container mt-5">
+    <div class="card mx-auto" style="width: 24rem;">
+      <img *ngIf="userPhoto" [src]="userPhoto" class="card-img-top rounded-circle" alt="User Photo" style="width: 150px; height: 150px; object-fit: cover; margin: 20px auto;">
+      <div class="card-body text-center">
+        <h5 class="card-title">{{ user.displayName }}</h5>
+        <p class="card-text"><strong>{{ 'USER_PROFILE.EMAIL' | translate }}:</strong> {{ user.email }}</p>
+        <p class="card-text"><strong>{{ 'USER_PROFILE.EMAIL_VERIFIED' | translate }}:</strong> {{ user.emailVerified ? ('USER_PROFILE.YES' | translate) : ('USER_PROFILE.NO' | translate) }}</p>
+        <p class="card-text"><strong>{{ 'USER_PROFILE.ROLE' | translate }}:</strong> {{ user.role }}</p>
+        <p class="card-text" *ngIf="lastDonationDate">
+          <strong>{{ 'USER_PROFILE.LAST_DONATION' | translate }}:</strong> {{ lastDonationDate | date }}
+        </p>
+        <p *ngIf="!user.lastDonation" class="card-text text-muted">
+          <strong>{{ 'USER_PROFILE.LAST_DONATION' | translate }}:</strong> {{ 'USER_PROFILE.NO_DONATION_RECORDED' | translate }}
+        </p>
+      </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><strong>{{ 'USER_PROFILE.UID' | translate }}:</strong> {{ user.uid }}</li>
+        <li class="list-group-item"><strong>{{ 'USER_PROFILE.ANONYMOUS' | translate }}:</strong> {{ user.isAnonymous ? ('USER_PROFILE.YES' | translate) : ('USER_PROFILE.NO' | translate) }}</li>
+      </ul>
+    </div>
+  </div>
+  

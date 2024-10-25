@@ -11,25 +11,21 @@ import { SpinnerService } from './spinner.service';
 export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestroy {
   private collectionName!: string;
   private user: PersonalUser | null = null;
-  private userSubscription!: Subscription
+  private userSubscription: Subscription = new Subscription;
 
   constructor(
     private firestore: Firestore,
     private authService: AuthService,
     private spinner: SpinnerService
   ) {
-    this.userSubscription = this.authService.user$.subscribe(user => {
-      this.user = user;
-    });
-    
     if(!this.user)
       this.user = this.authService.getCurrentUser();
   }
 
   ngOnInit(): void {
-    this.userSubscription = this.authService.user$.
-    subscribe(user => {
-      this.user = user;
+    this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
+      (user: PersonalUser | null) => {
+        this.user = user;
     });
   }
 

@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Inject, InjectionToken, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
@@ -7,6 +7,10 @@ import { FirestoreService } from '../../../services/firestore.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerService } from '../../../services/spinner.service';
 import { ToastService } from '../../../services/toast.service';
+import { Donation } from '../../../interface/donation';
+
+export const ROLE_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<Role>>('RoleFirestoreService');
+export const DONATION_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<Donation>>('DonationFirestoreService');
 
 @Component({
   selector: 'app-not-logged-template',
@@ -16,7 +20,11 @@ import { ToastService } from '../../../services/toast.service';
   imports: [
     SharedModule,
     ReactiveFormsModule
-   ]
+   ],
+   providers: [
+    { provide: ROLE_FIRESTORE_SERVICE, useClass: FirestoreService },
+    { provide: DONATION_FIRESTORE_SERVICE, useClass: FirestoreService }
+  ]
 })
 export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
   isAuthLoginCompleted: boolean = false;
@@ -26,11 +34,15 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private firestoreService: FirestoreService<Role>,
     private spinner: SpinnerService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    @Inject(ROLE_FIRESTORE_SERVICE) private firestoreRoleService: FirestoreService<Role>,
+    @Inject(DONATION_FIRESTORE_SERVICE) private firestoreDonationService: FirestoreService<Donation>
+
   ) {
-    this.firestoreService.setCollectionName('roles');
+    this.firestoreRoleService.setCollectionName('roles');
+    this.firestoreDonationService.setCollectionName('donation');
+
 
   }
   
@@ -45,24 +57,32 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
   async loginWithGoogle() {
     try {
       var userCredential = await this.authService.loginWithGoogle();
-      if(this.authService.isInLogin) {       
-        let role = (await this.firestoreService.getItem(userCredential.user.uid));
+      if(this.authService.isInLogin) {
+
+        let role = (await this.firestoreRoleService.getItem(userCredential.user.uid));
         if(!role){
           role = {
             type: RoleType.User
           }
-          this.firestoreService.addItem(role, userCredential.user.uid);
+          this.firestoreRoleService.addItem(role, userCredential.user.uid);
         }
-        this.authService.setExtraInformation(role.type);
+
+        let donation = (await this.firestoreDonationService.getItem(userCredential.user.uid));
+        if(!donation){
+          donation = {
+            lastDonation: null
+          }
+          this.firestoreDonationService.addItem(donation, userCredential.user.uid);
+        }
+
+        this.authService.setExtraInformation(role.type, donation.lastDonation);
         this.authService.completeLogin();
       }
 
       this.isAuthLoginCompleted = this.authService.isAuthLoginCompleted();
       if (this.isAuthLoginCompleted) {
-        this.toastService.showSuccess('Login successful');
         this.router.navigate(['/home']);
       } else {
-        this.toastService.showError('Login failed');
         throw new Error('User is not authenticated');
       }
     } catch (error) {

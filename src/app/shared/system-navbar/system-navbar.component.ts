@@ -3,6 +3,7 @@ import { SharedModule } from '../shared.module';
 import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
 import { SpinnerService } from '../../services/spinner.service';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -29,7 +30,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
     private languageService: LanguageService,
     private authService: AuthService,
     private spinner: SpinnerService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
@@ -65,5 +67,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
 
   public logout(): void {
     this.authService.logout();
+  }
+  goToHome(): void {
+    this.router.navigate(['/']); // Naviga verso la route della homepage
   }
 }

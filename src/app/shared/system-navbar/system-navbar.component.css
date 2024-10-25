@@ -2,7 +2,16 @@
 .navbar-custom {
   background-color: #001f3f; /* Colore blu notte */
   color: white;
-  padding: 0.5rem 1rem;
+  padding: 1rem;
+  height: 7vh; /* Altezza della navbar */
+  min-height: 7vh; /* Altezza minima della navbar */
+  width: 100%;
+  display: flex;
+  min-height: 100%;
+}
+
+.navbar-expand-lg{
+  background-color: #001f3f; /* Colore blu notte */
 }
 
 /* Colore bianco per il testo della navbar */
@@ -51,4 +60,13 @@
 /* Dropdown per la selezione della lingua */
 .navbar-nav .dropdown-item span {
   margin-right: 5px; /* Spazio tra la bandiera e il nome della lingua */
+}
+
+
+/* Media query per telefoni e tablet (fino a 768px) */
+@media (max-width: 768px) {
+
+  .navbar-custom{
+      padding: 0.5rem;
+  }
 }

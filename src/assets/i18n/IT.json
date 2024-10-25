@@ -3,24 +3,36 @@
         "TITLE": "Benvenuto",
         "DESCRIPTION": "Questa è la home page"
     },
-    "SYSTEM_NAVBAR":{
+    "SYSTEM_NAVBAR": {
         "TITLE": "STRUMENTI DEL GAME MASTER"
     },
-    "LOGIN":{
+    "LOGIN": {
         "TITLE": "Bentornato",
         "LOGIN": "Accedi",
         "DESCRIPTION": "Accedi per utilizzare gli strumenti del Game Master",
         "LOGIN_GOOGLE": "Accedi con Google"
     },
-    "USER":{
+    "USER": {
         "LOGOUT": "Esci",
         "PROFILE": "Profilo",
         "SETTINGS": "Impostazioni"
     },
-    "SYSTEM_FOOTER":{
+    "SYSTEM_FOOTER": {
         "TITLE": "OFFRIMI UNA BIRRA!",
-        "DESCRIPTION": "Se ti piace questo progetta aiutami a supportarlo, mantenerlo ed aggiornarlo.",
+        "DESCRIPTION": "Se ti piace questo progetto aiutami a supportarlo, mantenerlo ed aggiornarlo.",
         "DONATION_SUCCESS": "Grazie per il tuo supporto!",
         "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi."
+    },
+    "USER_PROFILE": {
+        "TITLE": "Profilo Utente",
+        "EMAIL": "Email",
+        "EMAIL_VERIFIED": "Email Verificata",
+        "YES": "Sì",
+        "NO": "No",
+        "ROLE": "Ruolo",
+        "LAST_DONATION": "Ultima Donazione",
+        "NO_DONATION_RECORDED": "Nessuna donazione registrata",
+        "UID": "UID",
+        "ANONYMOUS": "Anonimo"
     }
 }

@@ -1,0 +1,23 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .card {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border-radius: 10px;
+  }
+  
+  .card-body h5 {
+    font-size: 1.5rem;
+  }
+  
+  .card-img-top {
+    border-radius: 50%;
+  }
+  
+  .list-group-item {
+    font-size: 0.9rem;
+  }
+  

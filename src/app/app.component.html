@@ -1,5 +1,12 @@
-<app-loading></app-loading>
-<app-system-navbar></app-system-navbar>
-<router-outlet />
-<app-system-footer></app-system-footer>
-
+<div class="container-layout">
+    <app-loading></app-loading>
+    <div class="system-navbar">
+        <app-system-navbar></app-system-navbar>
+    </div>
+    <div class="router-container">
+        <router-outlet></router-outlet>
+    </div>
+    <div class="system-footer">
+        <app-system-footer></app-system-footer>
+    </div>
+</div>

@@ -1,0 +1,50 @@
+/* Layout principale */
+.container-layout {
+    height: 100vh;
+    width: 100%;
+}
+
+/* Navbar: Desktop */
+.system-navbar {
+    height: 7vh;
+    min-height: 7vh;
+}
+
+/* Router container */
+.router-container {
+    height: 86vh;
+    min-height: 86vh;
+    overflow-y: auto;
+    width: 100%;
+    min-width: 100%;
+    padding: 1rem;
+}
+
+/* Footer */
+.system-footer {
+    height: 7vh;
+    min-height: 7vh;
+}
+
+/* Media query per telefoni e tablet (fino a 768px) */
+@media (max-width: 768px) {
+    /* Navbar più grande sui dispositivi mobili */
+    .system-navbar {
+        height: 10vh; /* Aumenta l'altezza della navbar sui telefoni */
+        min-height: 10vh;
+    }
+    .navbar-custom{
+        padding: 0.5rem;
+    }
+    /* Router container: riduce la sezione centrale per adattarsi alla nuova navbar */
+    .router-container {
+        height: 83vh; /* Riduci l'altezza per compensare la navbar più grande */
+        min-height: 83vh;
+    }
+
+    /* Footer rimane invariato */
+    .system-footer {
+        height: 7vh;
+        min-height: 7vh;
+    }
+}

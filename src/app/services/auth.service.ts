@@ -1,11 +1,12 @@
 // auth.service.ts
 import { Injectable } from '@angular/core';
-import { Auth, User, signInWithPopup, GoogleAuthProvider, signOut, UserCredential } from '@angular/fire/auth';
+import { Auth, User, signInWithPopup, GoogleAuthProvider, signOut, UserCredential, UserProfile } from '@angular/fire/auth';
 import { Role, RoleType } from '../interface/roles';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { CacheStorageService } from './cache-storage.service';
 import { SpinnerService } from './spinner.service';
 import { Router } from '@angular/router';
+import { Timestamp } from 'firebase/firestore';
 
 export interface PersonalUser {
   displayName: string | null;
@@ -15,7 +16,7 @@ export interface PersonalUser {
   photoURL: string | null;
   isAnonymous: boolean;
   role: RoleType;
-  lastDonation: Date | null;
+  lastDonation: Timestamp | null;
 }
 
 @Injectable({
@@ -29,7 +30,7 @@ export class AuthService {
 
   public isInLogin: boolean = false;
   public isLoginCompleted: boolean = false;
-  lastDonationDate: Date | undefined;
+  lastDonationDate: Timestamp | null = null;
 
   constructor(
     private auth: Auth,
@@ -57,9 +58,9 @@ export class AuthService {
     }
   }
   
-  public setExtraInformation(roleType: RoleType, lastDonation?: Date){
+  public setExtraInformation(roleType: RoleType, lastDonation: Timestamp | null){
     this.roleType = roleType;
-    this.lastDonationDate = lastDonation;
+    this.lastDonationDate = lastDonation != null ? lastDonation as Timestamp : null;
     this.user = this.mapFirebaseUser(this.auth.currentUser);
   }
 
@@ -115,7 +116,8 @@ export class AuthService {
   public setFromCache(user: PersonalUser){
    if(user){
     let role = user.role;
-    this.setExtraInformation(role);
+    let lastDonation = user.lastDonation;
+    this.setExtraInformation(role, lastDonation);
     this.user = user;
     
     this.completeLogin();
@@ -124,9 +126,15 @@ export class AuthService {
 
   public updateLastDonationDate(date: Date){
     if(this.user){
-      this.user.lastDonation = date;
+      let timeStamp = new Timestamp(date.getTime() / 1000, 0);
+      this.user.lastDonation = timeStamp;
       this.cacheService.setItem(this.cacheService.userInfoKey, this.user);
       this.userSubject.next(this.user);
     }
+  }
+
+  // Metodo a cui i componenti possono sottoscriversi per ricevere aggiornamenti di breakpoint
+  subscribeToUserChanges(): Observable<PersonalUser | null> {
+    return this.userSubject.asObservable();
   }
 }

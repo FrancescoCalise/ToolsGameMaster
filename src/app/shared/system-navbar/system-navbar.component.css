@@ -62,6 +62,14 @@
   margin-right: 5px; /* Spazio tra la bandiera e il nome della lingua */
 }
 
+.nowrap-container {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.navbar-nav {
+  gap: 10px; /* Spazio tra i dropdown del profilo e della lingua */
+}
 
 /* Media query per telefoni e tablet (fino a 768px) */
 @media (max-width: 768px) {

@@ -1,19 +1,19 @@
 <nav class="navbar navbar-expand-lg navbar-custom">
   <div class="container-fluid">
     <!-- Prima colonna: Logo e Titolo con wrap text -->
-    <div class="col-6 d-flex align-items-center" (click)="goToHome()" style="cursor: pointer;">
+    <div class="col-8 d-flex align-items-center" (click)="goToHome()" style="cursor: pointer;">
       <img src="assets/icons/logo-app.png" alt="logo-app" class="logo-img me-2">
       <div class="navbar-title text-wrap">
         <span class="navbar-brand text-wrap">{{ 'SYSTEM_NAVBAR.TITLE' | translate }}</span>
       </div>
     </div>
 
-    <!-- Seconda colonna: Menu Profilo e Lingua allineati a destra -->
-    <div class="col-6 d-flex justify-content-end align-items-center">
-      <ul class="navbar-nav d-flex align-items-center">
-
+    <!-- Seconda colonna: Menu Profilo e Lingua allineati su una singola riga -->
+    <div class="col-4 d-flex justify-content-end align-items-center nowrap-container">
+      <ul class="navbar-nav d-flex flex-row align-items-center">
+        
         <!-- Dropdown per l'utente (solo se autenticato) -->
-        <li *ngIf="isAuthenticating" class="nav-item dropdown">
+        <li *ngIf="isAuthenticating" class="nav-item dropdown me-3">
           <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
             <mat-icon>person</mat-icon>
           </a>
@@ -38,7 +38,7 @@
             </li>
           </ul>
         </li>
-        
+
       </ul>
     </div>
   </div>

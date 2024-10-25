@@ -18,15 +18,18 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
     private authService: AuthService,
     private spinner: SpinnerService
   ) {
-    if(!this.user)
-      this.user = this.authService.getCurrentUser();
-  }
-
-  ngOnInit(): void {
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
       (user: PersonalUser | null) => {
         this.user = user;
-    });
+      }
+    );
+    if (!this.user) {
+      this.user = this.authService.getCurrentUser();
+    }
+  }
+
+  ngOnInit(): void {
+    
   }
 
   ngOnDestroy() {
@@ -53,7 +56,6 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
     const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
     try{
       const docSnap = await getDoc(docRef);
-      this.spinner.hideSpinner();
       return docSnap.exists() ? ({ id: docSnap.id, ...docSnap.data() } as T) : null;
     }catch(e){
       throw new Error('Error getting item: ' + e);

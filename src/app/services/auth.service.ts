@@ -1,8 +1,7 @@
-// auth.service.ts
 import { Injectable } from '@angular/core';
-import { Auth, User, signInWithPopup, GoogleAuthProvider, signOut, UserCredential, UserProfile } from '@angular/fire/auth';
-import { Role, RoleType } from '../interface/roles';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Auth, User, signInWithPopup, GoogleAuthProvider, signOut, UserCredential } from '@angular/fire/auth';
+import { RoleType } from '../interface/roles';
+import { Observable, BehaviorSubject } from 'rxjs';
 import { CacheStorageService } from './cache-storage.service';
 import { SpinnerService } from './spinner.service';
 import { Router } from '@angular/router';
@@ -26,7 +25,6 @@ export class AuthService {
   roleType: RoleType | null = null;
   protected user: PersonalUser | null = null;
   private userSubject: BehaviorSubject<PersonalUser | null>;
-  public user$: Observable<PersonalUser | null>;
 
   public isInLogin: boolean = false;
   public isLoginCompleted: boolean = false;
@@ -38,8 +36,7 @@ export class AuthService {
     private spinner: SpinnerService,
     private router: Router
   ) {
-      this.userSubject = new BehaviorSubject<PersonalUser | null>(null);
-      this.user$ = this.userSubject.asObservable();
+    this.userSubject = new BehaviorSubject<PersonalUser | null>(null); // Utilizziamo BehaviorSubject
   }
 
   // Login con Google
@@ -57,15 +54,14 @@ export class AuthService {
       throw new Error('Errore durante il login con Google');
     }
   }
-  
-  public setExtraInformation(roleType: RoleType, lastDonation: Timestamp | null){
+
+  public setExtraInformation(roleType: RoleType, lastDonation: Timestamp | null) {
     this.roleType = roleType;
     this.lastDonationDate = lastDonation != null ? lastDonation as Timestamp : null;
     this.user = this.mapFirebaseUser(this.auth.currentUser);
   }
 
   public completeLogin() {
-    
     this.isInLogin = false;
     this.isLoginCompleted = true;
     this.cacheService.setItem(this.cacheService.userInfoKey, this.user);
@@ -94,7 +90,13 @@ export class AuthService {
   }
 
   public getCurrentUser(): PersonalUser | null {
-    return this.userSubject.value;
+    if (!this.user) {
+      let cachedUser = this.cacheService.getItem(this.cacheService.userInfoKey);
+      if (cachedUser) {
+        this.setFromCache(cachedUser);
+      }
+    }
+    return this.user;
   }
 
   private mapFirebaseUser(user: User | null): PersonalUser | null {
@@ -113,27 +115,27 @@ export class AuthService {
     };
   }
 
-  public setFromCache(user: PersonalUser){
-   if(user){
-    let role = user.role;
-    let lastDonation = user.lastDonation;
-    this.setExtraInformation(role, lastDonation);
-    this.user = user;
-    
-    this.completeLogin();
-   }
+  public setFromCache(user: PersonalUser) {
+    if (user) {
+      let role = user.role;
+      let lastDonation = user.lastDonation;
+      this.setExtraInformation(role, lastDonation);
+      this.user = user;
+      this.completeLogin();
+    }
   }
 
-  public updateLastDonationDate(date: Date){
-    if(this.user){
-      let timeStamp = new Timestamp(date.getTime() / 1000, 0);
+  public updateLastDonationDate(date: Date) {
+    if (this.user) {
+      let seconds = Math.floor(date.getTime() / 1000);
+      let timeStamp = new Timestamp(seconds, 0);
       this.user.lastDonation = timeStamp;
       this.cacheService.setItem(this.cacheService.userInfoKey, this.user);
       this.userSubject.next(this.user);
     }
   }
 
-  // Metodo a cui i componenti possono sottoscriversi per ricevere aggiornamenti di breakpoint
+  // Metodo a cui i componenti possono sottoscriversi per ricevere aggiornamenti
   subscribeToUserChanges(): Observable<PersonalUser | null> {
     return this.userSubject.asObservable();
   }

@@ -8,6 +8,8 @@ import { LoadingComponent } from './shared/loading/loading.component';
 import { SpinnerService } from './services/spinner.service';
 import { SystemFooterComponent } from './shared/system-footer/system-footer.component';
 
+import { environment } from '../app/environments/environment';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -30,7 +32,7 @@ export class AppComponent {
     private languageService: LanguageService,
     private spinnerService: SpinnerService
   ) {
-    
+    console.log('Environment: ', environment);
     spinnerService.showSpinner();
 
     let selectedLanguage = this.languageService.getLanguage();

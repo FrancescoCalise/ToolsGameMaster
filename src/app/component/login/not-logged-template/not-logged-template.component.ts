@@ -57,8 +57,8 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
   async loginWithGoogle() {
     try {
       var userCredential = await this.authService.loginWithGoogle();
+      
       if(this.authService.isInLogin) {
-
         let role = (await this.firestoreRoleService.getItem(userCredential.user.uid));
         if(!role){
           role = {

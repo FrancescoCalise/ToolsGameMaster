@@ -1,0 +1,8 @@
+footer h1 {
+  font-size: 1.5rem; /* Dimensione del titolo */
+  margin: 0;
+}
+
+footer p {
+  margin-bottom: 0.5rem; /* Margine tra descrizione e pulsante */
+}

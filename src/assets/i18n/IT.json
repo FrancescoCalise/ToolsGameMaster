@@ -16,5 +16,11 @@
         "LOGOUT": "Esci",
         "PROFILE": "Profilo",
         "SETTINGS": "Impostazioni"
+    },
+    "SYSTEM_FOOTER":{
+        "TITLE": "OFFRIMI UNA BIRRA!",
+        "DESCRIPTION": "Se ti piace questo progetta aiutami a supportarlo, mantenerlo ed aggiornarlo.",
+        "DONATION_SUCCESS": "Grazie per il tuo supporto!",
+        "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi."
     }
 }

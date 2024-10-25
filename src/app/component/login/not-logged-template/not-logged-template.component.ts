@@ -6,6 +6,7 @@ import { Role, RoleType } from '../../../interface/roles';
 import { FirestoreService } from '../../../services/firestore.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerService } from '../../../services/spinner.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-not-logged-template',
@@ -26,11 +27,13 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
     private authService: AuthService,
     private router: Router,
     private firestoreService: FirestoreService<Role>,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+    private toastService: ToastService
   ) {
     this.firestoreService.setCollectionName('roles');
 
   }
+  
   ngAfterViewInit(): void {
     this.spinner.hideSpinner();
   }
@@ -56,8 +59,10 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
 
       this.isAuthLoginCompleted = this.authService.isAuthLoginCompleted();
       if (this.isAuthLoginCompleted) {
+        this.toastService.showSuccess('Login successful');
         this.router.navigate(['/home']);
       } else {
+        this.toastService.showError('Login failed');
         throw new Error('User is not authenticated');
       }
     } catch (error) {
@@ -67,10 +72,13 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
 
   async logout() {
     try {
+      this.toastService.showSuccess('User logged out');
       await this.authService.logout();
       console.log('User logged out');
     } catch (error) {
-      console.error('Error during logout: ', error);
+      var message  = 'Error during logout: ' + error;
+      this.toastService.showError(message);
+      console.error(message);
     }
   }
 }

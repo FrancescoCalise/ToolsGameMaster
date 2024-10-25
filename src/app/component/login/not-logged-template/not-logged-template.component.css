@@ -1,28 +1,31 @@
+/* Stile per la login card */
 .login-card {
   display: flex;
   padding: 20px;
   flex-direction: row;
   max-width: 100%;
-  height: auto; /* Assicura che la card si adatti al contenuto */
+  height: auto;
+  justify-content: center; /* Centra il contenuto della card orizzontalmente */
 }
 
+/* Assicura che il contenitore riempia la colonna */
 .login-container {
-  width: 100%; /* Assicura che il contenitore riempia la colonna */
+  width: 100%;
+  display: flex;
+  justify-content: center; /* Centra la card orizzontalmente */
 }
 
+/* Stile per il bottone di Google */
 .google-login-btn {
   display: flex;
   align-items: center;
-  gap: 10px; /* Spazio tra il logo e il testo */
-  margin-top: 50px;
+  gap: 10px;
+  margin-top: 20px;
 }
 
-
-
+/* Stile mobile */
 @media (max-width: 767px) {
-  /* Stile per dispositivi mobili */
   .login-card {
-    width: 100vh;
-    min-height: 40vh; /* Altezza minore sui dispositivi mobili */
+    width: 100%; /* Larghezza completa per i dispositivi mobili */
   }
 }

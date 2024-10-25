@@ -15,6 +15,7 @@ export interface PersonalUser {
   photoURL: string | null;
   isAnonymous: boolean;
   role: RoleType;
+  lastDonation: Date | null;
 }
 
 @Injectable({
@@ -103,7 +104,8 @@ export class AuthService {
       emailVerified: user.emailVerified,
       photoURL: user.photoURL,
       isAnonymous: user.isAnonymous,
-      role: roleType
+      role: roleType,
+      lastDonation: new Date()
     };
   }
 

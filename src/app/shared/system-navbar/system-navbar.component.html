@@ -1,68 +1,36 @@
 <nav class="navbar navbar-expand-lg navbar-light navbar-custom">
   <div class="container-fluid">
-    <!-- Nome dell'applicazione con margine sinistro -->
-    <img src="assets/icons/logo-app.png" alt="logo-app" width="50" height="50">
-    <span class="navbar-brand ms-3">{{ 'SYSTEM_NAVBAR.TITLE' | translate }}</span>
+    <!-- Prima colonna: Logo e Titolo con wrap text -->
+    <div class="col-6 d-flex align-items-center">
+      <img src="assets/icons/logo-app.png" alt="logo-app" class="logo-img me-2">
+      <div class="navbar-title text-wrap">
+        <span class="navbar-brand">{{ 'SYSTEM_NAVBAR.TITLE' | translate }}</span>
+      </div>
+    </div>
 
-    <!-- Bottone per visualizzazione mobile -->
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
-    >
-      <span class="navbar-toggler-icon"></span>
-    </button>
+    <!-- Seconda colonna: Menu Profilo e Lingua allineati a destra -->
+    <div class="col-6 d-flex justify-content-end align-items-center">
+      <ul class="navbar-nav d-flex align-items-center">
 
-    <!-- Dropdown per la selezione della lingua e user -->
-    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-      <ul class="navbar-nav">
-        
-        <!-- Dropdown per l'utente -->
+        <!-- Dropdown per l'utente (solo se autenticato) -->
         <li *ngIf="isAuthenticating" class="nav-item dropdown">
-          <button
-            class="nav-link dropdown-toggle btn btn-link"
-            id="userDropdown"
-            type="button"
-            data-bs-toggle="dropdown"
-            data-bs-display="static"
-            aria-expanded="false"
-          >
-            <mat-icon>person</mat-icon> <!-- Icona user -->
-          </button>
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+            <mat-icon>person</mat-icon>
+          </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-            <!-- Collegamenti utente -->
-            <li>
-              <a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a>
-            </li>
-            <li>
-              <a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a>
-            </li>
+            <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
+            <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
             <li><hr class="dropdown-divider"></li>
-            <li>
-              <button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button>
-            </li>
+            <li><button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
           </ul>
         </li>
 
         <!-- Dropdown per la selezione della lingua -->
         <li class="nav-item dropdown">
-          <button
-            class="nav-link dropdown-toggle btn btn-link"
-            id="languageDropdown"
-            type="button"
-            data-bs-toggle="dropdown"
-            data-bs-display="static"
-            aria-expanded="false"
-          >
+          <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
             <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
-          </button>
-          <!-- Lista delle lingue nella dropdown -->
+          </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-            <!-- Lingue con bandiere -->
             <li *ngFor="let language of languages">
               <button class="dropdown-item" type="button" (click)="changeLanguage(language.code)">
                 <span class="{{ language.flag }}"></span> {{ language.label }}

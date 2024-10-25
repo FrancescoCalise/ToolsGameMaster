@@ -1,26 +1,54 @@
+/* Stile generale della navbar */
 .navbar-custom {
-    background-color: #001f3f; /* Blu notte */
-    color: white; /* Colore del testo bianco per contrastare */
-  }
-  
-  .navbar-custom .navbar-brand {
-    color: white; /* Colore del testo della marca */
-  }
-  
-  .navbar-custom .nav-link {
-    color: white; /* Colore del testo nei link */
-  }
-  
-  .navbar-custom .dropdown-menu {
-    background-color: #001f3f; /* Sfondo blu notte per il menu a discesa */
-    color: white; /* Testo bianco per i dropdown items */
-  }
-  
-  .navbar-custom .dropdown-item {
-    color: white; /* Colore del testo nel dropdown */
-  }
-  
-  .navbar-custom .dropdown-item:hover {
-    background-color: #003366; /* Colore di sfondo al passaggio del mouse */
-  }
-  
+  background-color: #001f3f; /* Colore blu notte */
+  color: white;
+  padding: 0.5rem 1rem;
+}
+
+/* Colore bianco per il testo della navbar */
+.navbar-custom .navbar-brand,
+.navbar-custom .nav-link {
+  color: white;
+  font-size: 1rem; /* Dimensione del testo */
+}
+
+/* Styling per il titolo con wrap text */
+.navbar-title {
+  word-wrap: break-word; /* Consente al testo di andare a capo se necessario */
+  font-size: 1.2rem; /* Dimensione del titolo */
+  font-weight: bold;
+  color: white; /* Colore del titolo */
+}
+
+/* Stile per il logo */
+.logo-img {
+  max-height: 40px; /* Altezza massima per il logo */
+  margin-right: 10px; /* Spazio tra il logo e il titolo */
+}
+
+/* Dropdown Menu - Profilo e Lingua */
+.dropdown-menu {
+  background-color: #001f3f; /* Sfondo blu notte per il dropdown */
+  border: none; /* Rimuove il bordo del dropdown */
+  position: absolute; /* Posiziona il dropdown sopra la pagina */
+  z-index: 1050; /* Assicura che sia sovrapposto agli altri contenuti */
+}
+
+.dropdown-menu .dropdown-item {
+  color: white; /* Colore delle voci del dropdown */
+}
+
+.dropdown-menu .dropdown-item:hover {
+  background-color: #007bff; /* Sfondo blu al passaggio del mouse */
+  color: white; /* Colore bianco al passaggio del mouse */
+}
+
+/* Personalizzazione per l'icona del profilo */
+.mat-icon {
+  color: white; /* Colore bianco per l'icona del profilo */
+}
+
+/* Dropdown per la selezione della lingua */
+.navbar-nav .dropdown-item span {
+  margin-right: 5px; /* Spazio tra la bandiera e il nome della lingua */
+}

@@ -6,11 +6,18 @@ import { TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../app/services/language.service';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { SpinnerService } from './services/spinner.service';
+import { SystemFooterComponent } from './shared/system-footer/system-footer.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, CommonModule, SystemNavBarComponent, LoadingComponent],
+  imports: [
+    RouterOutlet, 
+    CommonModule, 
+    SystemNavBarComponent, 
+    LoadingComponent, 
+    SystemFooterComponent
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

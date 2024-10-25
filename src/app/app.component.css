@@ -1,50 +1,46 @@
-/* Layout principale */
+/* Imposta il layout con flexbox */
 .container-layout {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
     width: 100%;
 }
 
 /* Navbar: Desktop */
 .system-navbar {
-    height: 7vh;
+    flex: 0 0 7vh; /* Altezza fissa della navbar */
     min-height: 7vh;
 }
 
 /* Router container */
 .router-container {
-    height: 86vh;
-    min-height: 86vh;
+    flex: 1; /* Riempi lo spazio tra la navbar e il footer */
     overflow-y: auto;
     width: 100%;
-    min-width: 100%;
     padding: 1rem;
 }
 
 /* Footer */
 .system-footer {
-    height: 7vh;
+    flex: 0 0 7vh; /* Altezza fissa del footer */
     min-height: 7vh;
 }
 
-/* Media query per telefoni e tablet (fino a 768px) */
+/* Media query per dispositivi mobili */
 @media (max-width: 768px) {
     /* Navbar più grande sui dispositivi mobili */
     .system-navbar {
-        height: 10vh; /* Aumenta l'altezza della navbar sui telefoni */
+        flex: 0 0 10vh; /* Altezza aumentata per dispositivi mobili */
         min-height: 10vh;
     }
-    .navbar-custom{
-        padding: 0.5rem;
-    }
-    /* Router container: riduce la sezione centrale per adattarsi alla nuova navbar */
+
+    /* Router container: altezza dinamica */
     .router-container {
-        height: 83vh; /* Riduci l'altezza per compensare la navbar più grande */
-        min-height: 83vh;
+        flex: 1; /* Riempi lo spazio rimasto */
     }
 
     /* Footer rimane invariato */
     .system-footer {
-        height: 7vh;
-        min-height: 7vh;
+        flex: 0 0 7vh; /* Mantieni il footer sempre visibile */
     }
 }

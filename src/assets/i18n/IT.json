@@ -20,6 +20,8 @@
     "SYSTEM_FOOTER": {
         "TITLE": "OFFRIMI UNA BIRRA!",
         "DESCRIPTION": "Se ti piace questo progetto aiutami a supportarlo, mantenerlo ed aggiornarlo.",
+        "TITLE_MOBILE": "OFFRIMI UNA BIRRA!",
+        "DESCRIPTION_MOBILE": "Se ti piace questo progetto aiutami a supportarlo, mantenerlo ed aggiornarlo.",
         "DONATION_SUCCESS": "Grazie per il tuo supporto!",
         "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi."
     },

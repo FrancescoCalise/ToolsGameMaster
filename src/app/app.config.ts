@@ -15,7 +15,6 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
-import { ToastrModule } from 'ngx-toastr'; // Importa il modulo di ngx-toastr
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -52,13 +51,7 @@ export const appConfig: ApplicationConfig = {
     importProvidersFrom(NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })),
     
     importProvidersFrom(BrowserAnimationsModule),
-    importProvidersFrom(
-      ToastrModule.forRoot({
-        positionClass: 'toast-bottom-right',
-        preventDuplicates: true // Impedisce toast duplicati
-      }),
-    ),
-    provideAnimations(), // required animations providers
+    provideAnimations(),
     provideToastr()
   ]
 };

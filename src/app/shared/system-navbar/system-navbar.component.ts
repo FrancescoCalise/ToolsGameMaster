@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewChecked, AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
@@ -28,7 +28,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
   constructor(
     private languageService: LanguageService,
     private authService: AuthService,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+    private cdr: ChangeDetectorRef
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
@@ -36,7 +37,11 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.isAuthenticating = this.authService.isAuthLoginCompleted();
+    const authStatus = this.authService.isAuthLoginCompleted();
+    if (this.isAuthenticating !== authStatus) {
+      this.isAuthenticating = authStatus;
+      this.cdr.detectChanges(); // Forza il rilevamento delle modifiche
+    }
   }
 
   ngOnInit(): void {

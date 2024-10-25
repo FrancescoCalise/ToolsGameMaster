@@ -6,3 +6,11 @@ footer h1 {
 footer p {
   margin-bottom: 0.5rem; /* Margine tra descrizione e pulsante */
 }
+
+footer {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap; /* Consente al contenuto di andare a capo se necessario */
+  padding: 0.5rem 1rem; /* Padding per un po' di spazio attorno al contenuto */
+  box-sizing: border-box; /* Garantisce che il padding non aumenti la larghezza */
+}

@@ -3,6 +3,7 @@ import { Injectable, OnDestroy, OnInit } from '@angular/core';
 import { BaseDocument } from '../interface/models';
 import { AuthService, PersonalUser } from './auth.service';
 import { Subscription } from 'rxjs';
+import { SpinnerService } from './spinner.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,8 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
 
   constructor(
     private firestore: Firestore,
-    private authService: AuthService
+    private authService: AuthService,
+    private spinner: SpinnerService
   ) {
     this.userSubscription = this.authService.user$.subscribe(user => {
       this.user = user;
@@ -25,7 +27,8 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
   }
 
   ngOnInit(): void {
-    this.userSubscription = this.authService.user$.subscribe(user => {
+    this.userSubscription = this.authService.user$.
+    subscribe(user => {
       this.user = user;
     });
   }
@@ -41,30 +44,40 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
   }
 
   async getItems(): Promise<T[]> {
+    this.spinner.showSpinner();
     const colRef = collection(this.firestore, this.collectionName);
     const q = query(colRef, where('ownerId', '==', this.user?.uid));
     const querySnapshot = await getDocs(q);
+    this.spinner.hideSpinner();
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];
   }
 
   async getItem(id: string): Promise<T | null> {
+    this.spinner.showSpinner();
     const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
     try{
       const docSnap = await getDoc(docRef);
+      this.spinner.hideSpinner();
       return docSnap.exists() ? ({ id: docSnap.id, ...docSnap.data() } as T) : null;
     }catch(e){
       throw new Error('Error getting item: ' + e);
     }
+    finally{
+      this.spinner.hideSpinner();
+    }
   }
 
   async getItemsWhere(where: QueryFieldFilterConstraint): Promise<T[]> {
+    this.spinner.showSpinner();
     const colRef = collection(this.firestore, this.collectionName);
     const q = query(colRef, where);
     const querySnapshot = await getDocs(q);
+    this.spinner.hideSpinner();
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];
   }
 
   async addItem(item: T, forceId?:string): Promise<boolean> {
+    this.spinner.showSpinner();
     try {
       const colRef = collection(this.firestore, this.collectionName);
       item.ownerId = this.user?.uid;
@@ -86,9 +99,13 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
       console.error('Error adding item: ', e);
       return false;
     }
+    finally{
+      this.spinner.hideSpinner();
+    }
   }
 
   async updateItem(item: T): Promise<boolean> {
+    this.spinner.showSpinner();
     item.lastUpdateDate = serverTimestamp();
     const docRef = doc(this.firestore, `${this.collectionName}/${item.id}`);
     try {
@@ -98,9 +115,13 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
       console.error('Error updating item: ', e);
       return false;
     }
+    finally{
+      this.spinner.hideSpinner();
+    }
   }
 
   async deleteItem(id: string): Promise<boolean> {
+    this.spinner.showSpinner();
     const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
     try {
       await deleteDoc(docRef);
@@ -109,5 +130,8 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
       console.error('Error deleting item: ', e);
       return false;
     }
+    finally{
+      this.spinner.hideSpinner(); 
+    } 
   }
 }

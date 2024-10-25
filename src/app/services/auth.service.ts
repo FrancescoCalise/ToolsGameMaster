@@ -29,6 +29,7 @@ export class AuthService {
 
   public isInLogin: boolean = false;
   public isLoginCompleted: boolean = false;
+  lastDonationDate: Date | undefined;
 
   constructor(
     private auth: Auth,
@@ -56,8 +57,9 @@ export class AuthService {
     }
   }
   
-  public setRoleType(roleType: RoleType) {
+  public setExtraInformation(roleType: RoleType, lastDonation?: Date){
     this.roleType = roleType;
+    this.lastDonationDate = lastDonation;
     this.user = this.mapFirebaseUser(this.auth.currentUser);
   }
 
@@ -97,6 +99,7 @@ export class AuthService {
   private mapFirebaseUser(user: User | null): PersonalUser | null {
     if (!user) return null;
     let roleType = this.roleType ? this.roleType : RoleType.User;
+    let lastDonation = this.lastDonationDate ? this.lastDonationDate : null;
     return {
       displayName: user.displayName,
       email: user.email,
@@ -105,17 +108,25 @@ export class AuthService {
       photoURL: user.photoURL,
       isAnonymous: user.isAnonymous,
       role: roleType,
-      lastDonation: new Date()
+      lastDonation: lastDonation
     };
   }
 
   public setFromCache(user: PersonalUser){
    if(user){
     let role = user.role;
-    this.setRoleType(role);
+    this.setExtraInformation(role);
     this.user = user;
     
     this.completeLogin();
    }
+  }
+
+  public updateLastDonationDate(date: Date){
+    if(this.user){
+      this.user.lastDonation = date;
+      this.cacheService.setItem(this.cacheService.userInfoKey, this.user);
+      this.userSubject.next(this.user);
+    }
   }
 }

@@ -53,7 +53,7 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
           }
           this.firestoreService.addItem(role, userCredential.user.uid);
         }
-        this.authService.setRoleType(role.type);
+        this.authService.setExtraInformation(role.type);
         this.authService.completeLogin();
       }
 

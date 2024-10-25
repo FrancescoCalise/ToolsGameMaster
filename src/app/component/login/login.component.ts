@@ -6,6 +6,7 @@ import { Role, RoleType } from '../../interface/roles';
 import { FirestoreService } from '../../services/firestore.service';
 import { QueryFieldFilterConstraint, where } from '@angular/fire/firestore';
 import { NotLoggedTemplateComponent } from './not-logged-template/not-logged-template.component';
+import { Donation } from '../../interface/donation';
 
 @Component({
   selector: 'app-login',
@@ -24,23 +25,33 @@ export class LoginComponent {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private firestoreService: FirestoreService<Role>
+    private firestoreRoleService: FirestoreService<Role>,
+    private firestoreDonationService: FirestoreService<Donation>
   ) {
-    this.firestoreService.setCollectionName('roles');
+    this.firestoreRoleService.setCollectionName('roles');
+    this.firestoreDonationService.setCollectionName('donation');
   }
 
   async loginWithGoogle() {
     try {
       var userCredential = await this.authService.loginWithGoogle();
       if(this.authService.isInLogin) {       
-        let role = (await this.firestoreService.getItem(userCredential.user.uid));
+        let role = (await this.firestoreRoleService.getItem(userCredential.user.uid));
         if(!role){
           role = {
             type: RoleType.User
           }
-          this.firestoreService.addItem(role, userCredential.user.uid);
+          this.firestoreRoleService.addItem(role, userCredential.user.uid);
         }
-        this.authService.setRoleType(role.type);
+        let donation = (await this.firestoreDonationService.getItem(userCredential.user.uid));
+        if(!donation){
+          donation = {
+            lastDonation: null
+          }
+          this.firestoreDonationService.addItem(donation, userCredential.user.uid);
+        }
+
+        this.authService.setExtraInformation(role.type);
         this.authService.completeLogin();
       }
 

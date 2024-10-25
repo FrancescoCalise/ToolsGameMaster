@@ -23,10 +23,10 @@
 
 /* Styling per il titolo con wrap text */
 .navbar-title {
-  word-wrap: break-word; /* Consente al testo di andare a capo se necessario */
-  font-size: 1.2rem; /* Dimensione del titolo */
-  font-weight: bold;
-  color: white; /* Colore del titolo */
+  white-space: normal; /* Forza il wrapping del testo */
+  word-wrap: break-word; /* Consente al testo di spezzarsi tra le parole lunghe */
+  overflow-wrap: break-word; /* Supporto per altre parole lunghe */
+  max-width: 100%; /* Imposta una larghezza massima, eventualmente personalizzabile */
 }
 
 /* Stile per il logo */

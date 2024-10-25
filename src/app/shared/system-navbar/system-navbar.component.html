@@ -8,7 +8,7 @@
       </div>
     </div>
 
-    <!-- Seconda colonna: Menu Profilo e Lingua allineati su una singola riga -->
+    <!-- Seconda colonna: Menu Profilo, Lingua e Informazioni Ambiente/Versione -->
     <div class="col-4 d-flex justify-content-end align-items-center nowrap-container">
       <ul class="navbar-nav d-flex flex-row align-items-center">
         
@@ -26,7 +26,7 @@
         </li>
 
         <!-- Dropdown per la selezione della lingua -->
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown me-3">
           <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
             <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
           </a>
@@ -39,6 +39,17 @@
           </ul>
         </li>
 
+        <!-- Dropdown con icona dei tre puntini -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <mat-icon>more_vert</mat-icon>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
+            <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
+            <li><span class="dropdown-item">Version: {{ version }}</span></li>
+          </ul>
+        </li>
+        
       </ul>
     </div>
   </div>

@@ -4,6 +4,7 @@ import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
 import { SpinnerService } from '../../services/spinner.service';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 
 @Component({
@@ -26,6 +27,9 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
   ];
   isAuthenticating: boolean = false;
 
+  environment: string = '';
+  version: string = '';
+
   constructor(
     private languageService: LanguageService,
     private authService: AuthService,
@@ -36,6 +40,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
     this.selectedFlag = selectedLang ? selectedLang.flag : 'fi fi-it';
+    this.environment = environment.production ? 'prod' : 'test';
+    this.version = environment.version;
   }
 
   ngAfterViewChecked(): void {

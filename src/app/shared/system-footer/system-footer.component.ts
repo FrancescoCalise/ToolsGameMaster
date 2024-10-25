@@ -7,8 +7,8 @@ import { ToastService } from '../../services/toast.service';
 import { TranslateService } from '@ngx-translate/core';
 import { BreakpointService } from '../../services/breakpoint.service';
 import { FirestoreService } from '../../services/firestore.service';
-import { Donation } from '../../interface/donation';
 import { Timestamp } from 'firebase/firestore';
+import { UserInformationSaved } from '../../interface/UserInformationSaved';
 
 
 @Component({
@@ -47,9 +47,9 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     private toastService: ToastService,
     private translateService: TranslateService,
     private breakpointService: BreakpointService,
-    private firestoreDonationService: FirestoreService<Donation>
+    private firestoreUserService: FirestoreService<UserInformationSaved>
   ) {
-    this.firestoreDonationService.setCollectionName('donation');
+    this.firestoreUserService.setCollectionName('users');
   }
 
 
@@ -81,17 +81,21 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    
+
+  }
+
+  toggleDonateButton(): void {
+    if (!this.isButtonVisibile) {
+      let currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
+      this.renderPayPalDonateButton(currentLink);
+      this.isButtonVisibile = true;
+    }
   }
 
   verifyDonationState(): void {
-    console.log(this.isMobile);
     if (!this.user) {
       this.showFooter = true;
-      if (!this.isButtonVisibile) {
-        let currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
-        this.renderPayPalDonateButton(currentLink);
-      }
+      this.toggleDonateButton();
       return;
     }
     this.isAuthenticating = true;
@@ -99,10 +103,16 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // Sottrai un mese dalla data corrente
 
     var timeStamp = this.user?.lastDonation as Timestamp;
+    if(!timeStamp){
+      this.toggleDonateButton();
+    }
+
     let lastDonationDate = timeStamp ? new Date(timeStamp.seconds * 1000) : undefined;
     let haveDonationValid = lastDonationDate !== undefined && lastDonationDate >= oneMonthAgo;
+
     if (!haveDonationValid) {
       this.showFooter = true;
+      this.toggleDonateButton();
     } else {
       this.showFooter = false;
       this.clearPayPalButtonContainer();
@@ -158,7 +168,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
             });
         }
       })
-      .render(`#${idDiv}`);
+        .render(`#${idDiv}`);
       this.isButtonVisibile = true;
     }, 0);
   }
@@ -166,17 +176,12 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
   async saveLastDonation() {
     if (!this.isAuthenticating) return;
     let user = this.user as PersonalUser;
-    let donation = (await this.firestoreDonationService.getItem(user.uid));
+    let userInformationSaved = (await this.firestoreUserService.getItem(user.uid));
     var date = new Date();
     var timeStamp = new Timestamp(date.getTime() / 1000, 0);
-    if (!donation) {
-      donation = {
-        lastDonation: timeStamp
-      }
-      this.firestoreDonationService.addItem(donation, user.uid);
-    } else {
-      donation.lastDonation = timeStamp;
-      this.firestoreDonationService.updateItem(donation);
+    if (userInformationSaved) {
+      userInformationSaved.lastDonation = timeStamp;
+      this.firestoreUserService.updateItem(userInformationSaved);
     }
   }
 

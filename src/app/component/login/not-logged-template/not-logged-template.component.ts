@@ -2,15 +2,13 @@ import { AfterViewInit, Component, Inject, InjectionToken, OnInit } from '@angul
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
-import { Role, RoleType } from '../../../interface/roles';
 import { FirestoreService } from '../../../services/firestore.service';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SpinnerService } from '../../../services/spinner.service';
 import { ToastService } from '../../../services/toast.service';
-import { Donation } from '../../../interface/donation';
+import { RoleType, UserInformationSaved } from '../../../interface/UserInformationSaved';
 
-export const ROLE_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<Role>>('RoleFirestoreService');
-export const DONATION_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<Donation>>('DonationFirestoreService');
+export const USER_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<UserInformationSaved>>('UserFirestoreService');
 
 @Component({
   selector: 'app-not-logged-template',
@@ -22,8 +20,7 @@ export const DONATION_FIRESTORE_SERVICE = new InjectionToken<FirestoreService<Do
     ReactiveFormsModule
    ],
    providers: [
-    { provide: ROLE_FIRESTORE_SERVICE, useClass: FirestoreService },
-    { provide: DONATION_FIRESTORE_SERVICE, useClass: FirestoreService }
+    { provide: USER_FIRESTORE_SERVICE, useClass: FirestoreService }
   ]
 })
 export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
@@ -36,13 +33,9 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
     private router: Router,
     private spinner: SpinnerService,
     private toastService: ToastService,
-    @Inject(ROLE_FIRESTORE_SERVICE) private firestoreRoleService: FirestoreService<Role>,
-    @Inject(DONATION_FIRESTORE_SERVICE) private firestoreDonationService: FirestoreService<Donation>
-
+    @Inject(USER_FIRESTORE_SERVICE) private firestoreUserService: FirestoreService<UserInformationSaved>
   ) {
-    this.firestoreRoleService.setCollectionName('roles');
-    this.firestoreDonationService.setCollectionName('donation');
-
+    this.firestoreUserService.setCollectionName('users');
 
   }
   
@@ -59,23 +52,16 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
       var userCredential = await this.authService.loginWithGoogle();
       
       if(this.authService.isInLogin) {
-        let role = (await this.firestoreRoleService.getItem(userCredential.user.uid));
-        if(!role){
-          role = {
-            type: RoleType.User
-          }
-          this.firestoreRoleService.addItem(role, userCredential.user.uid);
-        }
-
-        let donation = (await this.firestoreDonationService.getItem(userCredential.user.uid));
-        if(!donation){
-          donation = {
+        let user = (await this.firestoreUserService.getItem(userCredential.user.uid));
+        if(!user){
+          user = {
+            role: RoleType.User,
+            email: userCredential.user.email as string,
             lastDonation: null
           }
-          this.firestoreDonationService.addItem(donation, userCredential.user.uid);
+          this.firestoreUserService.addItem(user, userCredential.user.uid);
         }
-
-        this.authService.setExtraInformation(role.type, donation.lastDonation);
+        this.authService.setExtraInformation(user);
         this.authService.completeLogin();
       }
 

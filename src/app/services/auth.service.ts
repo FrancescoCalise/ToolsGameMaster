@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Auth, User, signInWithPopup, GoogleAuthProvider, signOut, UserCredential } from '@angular/fire/auth';
-import { RoleType } from '../interface/roles';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { CacheStorageService } from './cache-storage.service';
 import { SpinnerService } from './spinner.service';
 import { Router } from '@angular/router';
 import { Timestamp } from 'firebase/firestore';
+import { RoleType, UserInformationSaved } from '../interface/UserInformationSaved';
 
 export interface PersonalUser {
   displayName: string | null;
@@ -55,9 +55,9 @@ export class AuthService {
     }
   }
 
-  public setExtraInformation(roleType: RoleType, lastDonation: Timestamp | null) {
-    this.roleType = roleType;
-    this.lastDonationDate = lastDonation != null ? lastDonation as Timestamp : null;
+  public setExtraInformation(user: UserInformationSaved) {
+    this.roleType = user.role;
+    this.lastDonationDate = user.lastDonation != null ? user.lastDonation as Timestamp : null;
     this.user = this.mapFirebaseUser(this.auth.currentUser);
   }
 
@@ -117,9 +117,12 @@ export class AuthService {
 
   public setFromCache(user: PersonalUser) {
     if (user) {
-      let role = user.role;
-      let lastDonation = user.lastDonation;
-      this.setExtraInformation(role, lastDonation);
+      let userInformationSaved: UserInformationSaved = {
+        role: user.role,
+        email: user.email as string,
+        lastDonation: user.lastDonation
+      }
+      this.setExtraInformation(userInformationSaved);
       this.user = user;
       this.completeLogin();
     }

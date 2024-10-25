@@ -11,7 +11,6 @@ export const environment = {
     messagingSenderId: "1040681236914",
     appId: "1:1040681236914:web:054073e0de6ba1ffc04cab",
     measurementId: "G-4W0QCDYVYF"
-  } as FirebaseOptions
-  
-  
+  } as FirebaseOptions,
+  version: '0.0.1'
 };

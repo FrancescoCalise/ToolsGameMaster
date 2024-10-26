@@ -4,7 +4,7 @@ const path = require('path');
 
 // Leggi la data e l'ora corrente
 const now = new Date();
-const version = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}.${now.getHours()}${now.getMinutes()}`;
+const version = `${now.getFullYear()}.${now.getMonth() + 1}.${now.getDate()}.${now.getHours()}:${now.getMinutes()}`;
 
 // Percorsi per i file di ambiente
 const environments = ['app/environments/environment.ts', 'app/environments/environment.prod.ts'];

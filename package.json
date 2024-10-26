@@ -6,6 +6,7 @@
     "start": "ng serve",
     "prebuild": "rimraf public && node ./src/update-version.js",
     "build": "ng build --configuration production",
+    "postbuild": "firebase deploy",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

@@ -1,4 +1,10 @@
 {
+    "GENERIC_LABEL":{
+        "CLOSE": "Chiudi"
+    },
+    "FIRESTORE": {
+        "DOC_REF_NULL": "Il riferimento del documento è nullo"
+    },
     "HOME": {
         "TITLE": "Benvenuto",
         "DESCRIPTION": "Questa è la home page"
@@ -10,7 +16,9 @@
         "TITLE": "Bentornato",
         "LOGIN": "Accedi",
         "DESCRIPTION": "Accedi per utilizzare gli strumenti del Game Master",
-        "LOGIN_GOOGLE": "Accedi con Google"
+        "LOGIN_GOOGLE": "Accedi con Google",
+        "USER_NOT_AUTHENTICATED": "Utente non autenticato",
+        "LOGOUT_CONFIRMED": "Sei stato disconnesso"  
     },
     "USER": {
         "LOGOUT": "Esci",
@@ -23,7 +31,8 @@
         "TITLE_MOBILE": "OFFRIMI UNA BIRRA!",
         "DESCRIPTION_MOBILE": "Se ti piace questo progetto aiutami a supportarlo, mantenerlo ed aggiornarlo.",
         "DONATION_SUCCESS": "Grazie per il tuo supporto!",
-        "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi."
+        "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi.",
+        "CONTAINER_NOT_FOUND": "Il contenitore non è stato trovato."
     },
     "USER_PROFILE": {
         "TITLE": "Profilo Utente",
@@ -36,5 +45,12 @@
         "NO_DONATION_RECORDED": "Nessuna donazione registrata",
         "UID": "UID",
         "ANONYMOUS": "Anonimo"
+    },
+    "ERROR":{
+        "TITLE": "Si è verificato un errore",
+        "UNKNOWN": "Errore sconosciuto",
+        "COMPONENT_UNKNOWN": "Componente sconosciuto",
+        "CODE_ERROR_LABEL": "Codice errore"
+
     }
 }

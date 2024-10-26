@@ -1,14 +1,15 @@
 import { Firestore, collection, query, where, doc, getDoc, getDocs, addDoc, setDoc, deleteDoc, serverTimestamp, QueryFieldFilterConstraint } from '@angular/fire/firestore';
-import { Injectable, OnDestroy, OnInit } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { BaseDocument } from '../interface/Document/BaseModel';
 import { AuthService, PersonalUser } from './auth.service';
 import { Subscription } from 'rxjs';
 import { SpinnerService } from './spinner.service';
+import { TranslationMessageService } from './translation-message-service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestroy {
+export class FirestoreService<T extends BaseDocument> implements OnDestroy {
   private collectionName!: string;
   private user: PersonalUser | null = null;
   private userSubscription: Subscription = new Subscription;
@@ -16,7 +17,8 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
   constructor(
     private firestore: Firestore,
     private authService: AuthService,
-    private spinner: SpinnerService
+    private spinner: SpinnerService,
+    private translationMessageService: TranslationMessageService
   ) {
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
       (user: PersonalUser | null) => {
@@ -26,10 +28,6 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
     if (!this.user) {
       this.user = this.authService.getCurrentUser();
     }
-  }
-
-  ngOnInit(): void {
-    
   }
 
   ngOnDestroy() {
@@ -54,13 +52,13 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
   async getItem(id: string): Promise<T | null> {
     this.spinner.showSpinner();
     const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
-    try{
+    try {
       const docSnap = await getDoc(docRef);
       return docSnap.exists() ? ({ id: docSnap.id, ...docSnap.data() } as T) : null;
-    }catch(e){
-      throw new Error('Error getting item: ' + e);
+    } catch (e) {
+      throw e;
     }
-    finally{
+    finally {
       this.spinner.hideSpinner();
     }
   }
@@ -74,30 +72,32 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];
   }
 
-  async addItem(item: T, forceId?:string): Promise<boolean> {
+  async addItem(item: T, forceId?: string): Promise<boolean> {
     this.spinner.showSpinner();
     try {
       const colRef = collection(this.firestore, this.collectionName);
-      item.ownerId = this.user?.uid;
+      item.ownerId = this.user ? this.user.uid : null;
       item.creationDate = serverTimestamp();
       item.lastUpdateDate = serverTimestamp();
       let haveId = forceId !== undefined;
-      let docRef:any = null;
+      let docRef: any = null;
 
-      if(haveId){
+      if (haveId) {
         docRef = doc(colRef, forceId)
-      }else{
+      } else {
         docRef = doc(colRef);
       }
-      if(docRef === null) throw new Error('Error adding item: docRef is null');
+      if (docRef === null) {
+        const message = await this.translationMessageService.translate("FIRESTORE.DOC_REF_NULL");
+        throw new Error(message);
+      }
 
-      await setDoc(docRef,{...item});
+      await setDoc(docRef, { ...item });
       return true;
     } catch (e) {
-      console.error('Error adding item: ', e);
-      return false;
+      throw e;
     }
-    finally{
+    finally {
       this.spinner.hideSpinner();
     }
   }
@@ -110,10 +110,9 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
       await setDoc(docRef, item);
       return true;
     } catch (e) {
-      console.error('Error updating item: ', e);
-      return false;
+      throw e;
     }
-    finally{
+    finally {
       this.spinner.hideSpinner();
     }
   }
@@ -125,11 +124,10 @@ export class FirestoreService<T extends BaseDocument> implements OnInit, OnDestr
       await deleteDoc(docRef);
       return true;
     } catch (e) {
-      console.error('Error deleting item: ', e);
-      return false;
+      throw e;
     }
-    finally{
-      this.spinner.hideSpinner(); 
-    } 
+    finally {
+      this.spinner.hideSpinner();
+    }
   }
 }

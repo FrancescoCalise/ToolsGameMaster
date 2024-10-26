@@ -47,11 +47,9 @@ export class AuthService {
       let partialUser = this.mapFirebaseUser(user.user);
       this.userSubject.next(partialUser);
       this.isInLogin = true;
-      console.log('Partial Login con Google effettuato con successo');
       return user;
     } catch (error) {
-      console.error('Errore durante il login con Google: ', error);
-      throw new Error('Errore durante il login con Google');
+      throw error;
     }
   }
 
@@ -71,18 +69,15 @@ export class AuthService {
 
   // Logout
   async logout(): Promise<void> {
-    try {
-      this.spinner.showSpinner();
-      await signOut(this.auth);
-      this.isInLogin = false;
-      this.isLoginCompleted = false;
-      this.userSubject.next(null);
-      this.cacheService.removeItem(this.cacheService.userInfoKey);
-      this.router.navigateByUrl('/login');
-      console.log('Logout effettuato con successo');
-    } catch (error) {
-      console.error('Errore durante il logout: ', error);
-    }
+
+    this.spinner.showSpinner();
+    await signOut(this.auth);
+    this.isInLogin = false;
+    this.isLoginCompleted = false;
+    this.userSubject.next(null);
+    this.cacheService.removeItem(this.cacheService.userInfoKey);
+    this.router.navigateByUrl('/login');
+
   }
 
   public isAuthLoginCompleted(): boolean {

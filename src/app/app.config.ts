@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode, ErrorHandler } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 
 import { routes } from './app.routes';
@@ -10,7 +10,7 @@ import { provideServiceWorker } from '@angular/service-worker';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 import { importProvidersFrom } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule, HttpClient, provideHttpClient } from '@angular/common/http';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxSpinnerModule } from 'ngx-spinner';
@@ -18,6 +18,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideToastr } from 'ngx-toastr'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { GlobalErrorHandler } from './services/gobal-error-handler.service';
+import { FireBaseProviders } from './firebase-provider';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -52,6 +54,9 @@ export const appConfig: ApplicationConfig = {
     
     importProvidersFrom(BrowserAnimationsModule),
     provideAnimations(),
-    provideToastr()
+    provideToastr(),
+    provideHttpClient(),
+    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    FireBaseProviders.getProviders()
   ]
 };

@@ -1,7 +1,13 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Consenti la lettura, scrittura, aggiornamento e cancellazione se l'utente è autenticato
+
+    // Consenti l'accesso completo alla collezione 'application-logs' senza autenticazione
+    match /application-logs/{document=**} {
+      allow read, write, update, delete: if true;
+    }
+
+    // Richiedi l'autenticazione per tutte le altre collezioni
     match /{document=**} {
       allow read, write, update, delete: if request.auth != null;
     }

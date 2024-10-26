@@ -1,14 +1,15 @@
-import { AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { AuthService, PersonalUser } from '../../services/auth.service';
 import { LanguageService } from '../../services/language.service';
 import { Subscription } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
-import { TranslateService } from '@ngx-translate/core';
 import { BreakpointService } from '../../services/breakpoint.service';
 import { FirestoreService } from '../../services/firestore.service';
 import { Timestamp } from 'firebase/firestore';
 import { UserInformationSaved } from '../../interface/Document/UserInformationSaved';
+import { TranslationMessageService } from '../../services/translation-message-service';
+import { USER_FIRESTORE_SERVICE } from '../../firebase-provider';
 
 
 @Component({
@@ -45,38 +46,38 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     private authService: AuthService,
     private languageService: LanguageService,
     private toastService: ToastService,
-    private translateService: TranslateService,
+    private translationMessageService: TranslationMessageService,
     private breakpointService: BreakpointService,
-    private firestoreUserService: FirestoreService<UserInformationSaved>
+    @Inject(USER_FIRESTORE_SERVICE) private firestoreUserService: FirestoreService<UserInformationSaved>
   ) {
     this.firestoreUserService.setCollectionName('users');
   }
 
 
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.languageSubscription = this.languageService.subscribeToLanguageChanges()
-      .subscribe((newLang: string) => {
+      .subscribe(async (newLang: string) => {
         this.currentLang = newLang;
         const currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
         this.clearPayPalButtonContainer();
-        this.renderPayPalDonateButton(currentLink);
+        await this.renderPayPalDonateButton(currentLink);
       });
 
     this.currentLang = this.languageService.getLanguage();
 
     this.isMobile = this.breakpointService.getIsMobile();
     this.breakpointSubscription = this.breakpointService.subscribeToBreakpointChanges()
-      .subscribe((isMobile: boolean) => {
+      .subscribe(async (isMobile: boolean) => {
         this.clearPayPalButtonContainer();
         this.isMobile = isMobile;
-        this.verifyDonationState();
+        await this.verifyDonationState();
       });
 
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
-      (user: PersonalUser | null) => {
+      async (user: PersonalUser | null) => {
         this.user = user;
-        this.verifyDonationState();
+        await this.verifyDonationState();
       });
   }
 
@@ -84,18 +85,18 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
 
   }
 
-  toggleDonateButton(): void {
+  async toggleDonateButton(): Promise<void> {
     if (!this.isButtonVisibile) {
       let currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
-      this.renderPayPalDonateButton(currentLink);
+      await this.renderPayPalDonateButton(currentLink);
       this.isButtonVisibile = true;
     }
   }
 
-  verifyDonationState(): void {
+  async verifyDonationState(): Promise<void>  {
     if (!this.user) {
       this.showFooter = true;
-      this.toggleDonateButton();
+      await this.toggleDonateButton();
       return;
     }
     this.isAuthenticating = true;
@@ -104,7 +105,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     var timeStamp = this.user?.lastDonation as Timestamp;
     if(!timeStamp){
-      this.toggleDonateButton();
+      await this.toggleDonateButton();
     }
 
     let lastDonationDate = timeStamp ? new Date(timeStamp.seconds * 1000) : undefined;
@@ -112,7 +113,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
 
     if (!haveDonationValid) {
       this.showFooter = true;
-      this.toggleDonateButton();
+      await this.toggleDonateButton();
     } else {
       this.showFooter = false;
       this.clearPayPalButtonContainer();
@@ -129,14 +130,14 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  renderPayPalDonateButton(currentLink: string) {
+  async renderPayPalDonateButton(currentLink: string) {
     let idDiv = this.isMobile ? 'paypal-donate-button-container-mobile' : 'paypal-donate-button-container';
 
-    setTimeout(() => {
+    setTimeout(async () => {
       const container = document.getElementById(idDiv);
       if (!container) {
-        console.error(`Donate Button Container not found for #${idDiv}`);
-        return;
+      let err = await this.translationMessageService.translate('SYSTEM_FOOTER.CONTAINER_NOT_FOUND')
+        throw new Error(err);
       }
 
       // @ts-ignore
@@ -152,20 +153,14 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
         image: {
           src: currentLink
         },
-        onComplete: (details: any) => {
-          this.translateService.get('SYSTEM_FOOTER.DONATION_SUCCESS')
-            .subscribe(async (translation: string) => {
-              console.log('Donation completed: ', details);
-              await this.saveLastDonation();
-              this.toastService.showSuccess(translation);
-
-            });
+        onComplete: async (details: any) => {
+          await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_SUCCESS')
+          console.log('Donation completed: ', details);
+          await this.saveLastDonation();
         },
-        onError: (err: any) => {
-          this.translateService.get('SYSTEM_FOOTER.DONATION_ERROR')
-            .subscribe((translation: string) => {
-              this.toastService.showError(translation, err, 5000);
-            });
+        onError: async (err: any) => {
+          await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_ERROR')
+          throw new Error(err);
         }
       })
         .render(`#${idDiv}`);

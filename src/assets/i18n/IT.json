@@ -2,6 +2,10 @@
     "GENERIC_LABEL":{
         "CLOSE": "Chiudi"
     },
+    "UPDATE":{
+        "TITLE": "Aggiornamento disponibile",
+        "DESCRIPTION": "Una nuova versione di questa applicazione è disponibile. L'applicazione verrà aggiornata tra 3 secondi."
+    },
     "FIRESTORE": {
         "DOC_REF_NULL": "Il riferimento del documento è nullo"
     },

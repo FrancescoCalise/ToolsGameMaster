@@ -18,7 +18,9 @@ export class ToastService {
     config.timeOut = duration ? duration : this.durationDefault;
     config.positionClass = positionClass ? positionClass : this.positionClassDefault;
 
-    this.toastr.success(message, title, config);
+    let titleToast = title ? title : 'Success';
+
+    this.toastr.success(message, titleToast, config);
   }
 
   // Metodo per mostrare un toast di errore con durata opzionale
@@ -26,7 +28,9 @@ export class ToastService {
     const config: Partial<IndividualConfig> = {};
     config.timeOut = duration ? duration : this.durationDefault;
     config.positionClass = positionClass ? positionClass : this.positionClassDefault;
-    this.toastr.error(message, title, config);
+    let titleToast = title ? title : 'Error';
+
+    this.toastr.error(message, titleToast, config);
   }
 
   // Metodo per mostrare un toast informativo con durata opzionale
@@ -34,7 +38,9 @@ export class ToastService {
     const config: Partial<IndividualConfig> = {};
     config.timeOut = duration ? duration : this.durationDefault;
     config.positionClass = positionClass ? positionClass : this.positionClassDefault;
-    this.toastr.info(message, title, config);
+    let titleToast = title ? title : 'Info';
+
+    this.toastr.info(message, titleToast, config);
   }
 
   // Metodo per mostrare un toast di avviso con durata opzionale
@@ -43,6 +49,7 @@ export class ToastService {
     config.timeOut = duration ? duration : this.durationDefault;
     config.positionClass = positionClass ? positionClass : this.positionClassDefault;
 
-    this.toastr.warning(message, title, config);
+    let titleToast = title ? title : 'Warning';
+    this.toastr.warning(message, titleToast, config);
   }
 }

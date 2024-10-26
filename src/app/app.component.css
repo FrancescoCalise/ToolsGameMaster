@@ -8,8 +8,7 @@
 
 /* Navbar: Desktop */
 .system-navbar {
-    flex: 0 0 7vh; /* Altezza fissa della navbar */
-    min-height: 7vh;
+   
 }
 
 /* Router container */
@@ -17,14 +16,13 @@
     flex: 1; /* Riempi lo spazio tra la navbar e il footer */
     overflow-y: auto;
     width: 100%;
-    padding: 1rem;
+    height: 100%;
 }
 
-/* Footer */
-.system-footer {
-    flex: 0 0 7vh; /* Altezza fissa del footer */
-    min-height: 7vh;
+.system-footer{
+    
 }
+
 
 /* Media query per dispositivi mobili */
 @media (max-width: 768px) {
@@ -37,10 +35,5 @@
     /* Router container: altezza dinamica */
     .router-container {
         flex: 1; /* Riempi lo spazio rimasto */
-    }
-
-    /* Footer rimane invariato */
-    .system-footer {
-        flex: 0 0 7vh; /* Mantieni il footer sempre visibile */
     }
 }

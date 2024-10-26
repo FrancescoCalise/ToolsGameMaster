@@ -21,3 +21,23 @@ body {
     align-items: center;
     justify-content: center;
 }
+
+.full-screen-dialog .mat-dialog-container {
+    padding: 0;
+    border-radius: 0;
+    height: 100vh;
+    width: 100vw;
+}
+
+.game-navbar {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem;
+}
+
+.game-navbar button {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+}

@@ -1,1 +1,50 @@
-<h1>Ultima Rotta </h1>
+<div class="row g-0" style="padding: 1rem;">
+    <!-- Colonna del titolo -->
+    <div class="col-12 col-md-6 col-lg-6 d-flex align-items-center justify-content-md-end">
+        <h1 class="game-title">{{'ULTIMA_ROTTA.TITLE' | translate}}</h1>
+    </div>
+
+    <!-- Colonna dell'immagine -->
+    <div class="col-12 col-md-6 col-lg-6 text-md-start">
+        <img src="https://static.wixstatic.com/media/5738c7_b85f94f134a14da2918869dfe0bd7f6c~mv2.png/v1/fill/w_502,h_278,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20lur_edited.png"
+            alt="Ultima Rotta" class="title-image">
+    </div>
+</div>
+
+
+<div class="game-features">
+    <div class="feature-buttons d-flex flex-wrap">
+      <button *ngFor="let feature of features" 
+              mat-raised-button 
+              matTooltip="{{ feature.tooltip }}" 
+              matTooltipPosition="above"
+              (click)="openFeature(feature.component)">
+        <mat-icon>{{ feature.icon }}</mat-icon>
+        <span>{{ feature.description }}</span>
+      </button>
+    </div>
+  </div>
+
+<div class="game-container">
+    <h2>Contenuto Principale</h2>
+</div>
+
+<div class="game-footer container-fluid text-white">
+    <div class="row">
+        <!-- Colonna del Timer -->
+        <div class="col-3 col-md-3 col-lg-3  d-flex justify-content-center align-items-center death-sun-timer" (click)="startTimer()">
+            <h4 class="m-0">{{ timerDisplay }}</h4>
+        </div>
+
+        <!-- Colonna Test Morte Solare -->
+        <div class="col-8 col-md-8 col-lg-8 d-flex justify-content-start align-items-center">
+            <h4 class="m-0 align-items-center">Test Morte Solare + {{ solarDeathTestValue }}</h4>
+            <p class="align-items-center"> Effetto</p>
+        </div>
+
+        <!-- Colonna Icona Buio -->
+        <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-end align-items-center">
+            <mat-icon *ngIf="isDarkIconVisible">brightness_3</mat-icon>
+        </div>
+    </div>
+</div>

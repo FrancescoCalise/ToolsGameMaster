@@ -55,5 +55,10 @@
         "UNKNOWN": "Errore sconosciuto",
         "COMPONENT_UNKNOWN": "Componente sconosciuto",
         "CODE_ERROR_LABEL": "Codice errore"
+    },
+    "ULTIMA_ROTTA":{
+        "TITLE": "L'ultima Rotta",
+        "FEATURE_TURN_ORDER": "Gestione turni",
+        "FEATURE_TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori"
     }
 }

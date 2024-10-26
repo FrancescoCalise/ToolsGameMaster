@@ -5,6 +5,8 @@ import { AuthService } from '../../services/auth.service';
 import { SpinnerService } from '../../services/spinner.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
+import { Subscription } from 'rxjs';
+import { BreakpointService } from '../../services/breakpoint.service';
 
 
 @Component({
@@ -29,12 +31,15 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
 
   environment: string = '';
   version: string = '';
-
+  isMobile: boolean = false;
+  private breakpointSubscription: Subscription = new Subscription;
+  
   constructor(
     private languageService: LanguageService,
     private authService: AuthService,
     private spinner: SpinnerService,
     private cdr: ChangeDetectorRef,
+    private breakpointService: BreakpointService,
     private router: Router
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
@@ -53,6 +58,12 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
   }
 
   ngOnInit(): void {
+    this.isMobile = this.breakpointService.getIsMobile();
+    this.breakpointSubscription = this.breakpointService.subscribeToBreakpointChanges()
+      .subscribe((isMobile: boolean) => {
+        this.isMobile = isMobile;
+    });
+
     // Ottieni la lingua salvata nella cache o quella di default
     this.selectedLanguage = this.languageService.getLanguage();
     this.updateFlag(this.selectedLanguage); // Aggiorna la flag corrispondente

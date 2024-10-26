@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-custom">
-  <div class="container-fluid">
+  <div class="container-fluid" *ngIf="!isMobile; else mobileTemplate">
     <!-- Prima colonna: Logo e Titolo con wrap text -->
     <div class="col-8 d-flex align-items-center" (click)="goToHome()" style="cursor: pointer;">
       <img src="assets/icons/logo-app.png" alt="logo-app" class="logo-img me-2">
@@ -11,23 +11,27 @@
     <!-- Seconda colonna: Menu Profilo, Lingua e Informazioni Ambiente/Versione -->
     <div class="col-4 d-flex justify-content-end align-items-center nowrap-container">
       <ul class="navbar-nav d-flex flex-row align-items-center">
-        
+
         <!-- Dropdown per l'utente (solo se autenticato) -->
         <li *ngIf="isAuthenticating" class="nav-item dropdown me-3">
-          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+            data-bs-display="static" aria-expanded="false">
             <mat-icon>person</mat-icon>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
             <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
             <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
-            <li><hr class="dropdown-divider"></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
             <li><button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
           </ul>
         </li>
 
         <!-- Dropdown per la selezione della lingua -->
         <li class="nav-item dropdown me-3">
-          <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown"
+            data-bs-display="static" aria-expanded="false">
             <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
@@ -41,7 +45,8 @@
 
         <!-- Dropdown con icona dei tre puntini -->
         <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+          <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
             <mat-icon>more_vert</mat-icon>
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
@@ -49,8 +54,81 @@
             <li><span class="dropdown-item">Version: {{ version }}</span></li>
           </ul>
         </li>
-        
+
       </ul>
     </div>
+
   </div>
 </nav>
+
+<ng-template #mobileTemplate>
+  <div class="container-fluid">
+
+    <!-- Prima riga: Logo e Titolo -->
+    <div class="row text-white m-0 w-100 first-row">
+      <div class="col-12 d-flex align-items-center" (click)="goToHome()" style="cursor: pointer;">
+        <img src=" assets/icons/logo-app.png" alt="logo-app" class="logo-img me-2">
+        <div class="navbar-title text-wrap">
+          <span class="navbar-brand text-wrap">{{ 'SYSTEM_NAVBAR.TITLE' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Seconda riga: Spazio vuoto e Dropdowns -->
+    <div class="text-white w-100 second-row">
+      <!-- Colonna vuota -->
+      <div class="col-6"></div>
+
+      <!-- Colonna Dropdowns allineati a destra -->
+      <div class="col-6 d-flex justify-content-end align-items-center">
+        <ul class="navbar-nav d-flex flex-row align-items-center">
+
+           <!-- Dropdown per l'utente (solo se autenticato) -->
+        <li *ngIf="isAuthenticating" class="nav-item dropdown me-3">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
+            data-bs-display="static" aria-expanded="false">
+            <mat-icon>person</mat-icon>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
+            <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
+            <li>
+              <hr class="dropdown-divider">
+            </li>
+            <li><button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
+          </ul>
+        </li>
+
+        <!-- Dropdown per la selezione della lingua -->
+        <li class="nav-item dropdown me-3">
+          <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown"
+            data-bs-display="static" aria-expanded="false">
+            <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+            <li *ngFor="let language of languages">
+              <button class="dropdown-item" type="button" (click)="changeLanguage(language.code)">
+                <span class="{{ language.flag }}"></span> {{ language.label }}
+              </button>
+            </li>
+          </ul>
+        </li>
+
+        <!-- Dropdown con icona dei tre puntini -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown"
+            aria-expanded="false">
+            <mat-icon>more_vert</mat-icon>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
+            <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
+            <li><span class="dropdown-item">Version: {{ version }}</span></li>
+          </ul>
+        </li>
+
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</ng-template>

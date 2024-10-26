@@ -3,78 +3,110 @@
   background-color: #001f3f; /* Colore blu notte */
   color: white;
   padding: 1rem;
-  height: 7vh; /* Altezza della navbar */
-  min-height: 7vh; /* Altezza minima della navbar */
+  height: 7vh;
+  min-height: 7vh;
   width: 100%;
-  display: flex;
-  min-height: 100%;
 }
 
-.navbar-expand-lg{
-  background-color: #001f3f; /* Colore blu notte */
+.navbar-expand-lg {
+  background-color: #001f3f;
 }
 
 /* Colore bianco per il testo della navbar */
 .navbar-custom .navbar-brand,
 .navbar-custom .nav-link {
   color: white;
-  font-size: 1rem; /* Dimensione del testo */
+  font-size: 1rem;
 }
 
 /* Styling per il titolo con wrap text */
 .navbar-title {
-  white-space: normal; /* Forza il wrapping del testo */
-  word-wrap: break-word; /* Consente al testo di spezzarsi tra le parole lunghe */
-  overflow-wrap: break-word; /* Supporto per altre parole lunghe */
-  max-width: 100%; /* Imposta una larghezza massima, eventualmente personalizzabile */
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
 }
 
 /* Stile per il logo */
 .logo-img {
-  max-height: 40px; /* Altezza massima per il logo */
-  margin-right: 10px; /* Spazio tra il logo e il titolo */
+  max-height: 40px;
+  margin-right: 10px;
 }
 
 /* Dropdown Menu - Profilo e Lingua */
 .dropdown-menu {
-  background-color: #001f3f; /* Sfondo blu notte per il dropdown */
-  border: none; /* Rimuove il bordo del dropdown */
-  position: absolute; /* Posiziona il dropdown sopra la pagina */
-  z-index: 1050; /* Assicura che sia sovrapposto agli altri contenuti */
+  background-color: #001f3f;
+  border: none;
+  z-index: 1050;
 }
 
 .dropdown-menu .dropdown-item {
-  color: white; /* Colore delle voci del dropdown */
+  color: white;
 }
 
 .dropdown-menu .dropdown-item:hover {
-  background-color: #007bff; /* Sfondo blu al passaggio del mouse */
-  color: white; /* Colore bianco al passaggio del mouse */
+  background-color: #001f3f;
+  color: white;
 }
 
 /* Personalizzazione per l'icona del profilo */
 .mat-icon {
-  color: white; /* Colore bianco per l'icona del profilo */
+  color: white;
 }
 
 /* Dropdown per la selezione della lingua */
 .navbar-nav .dropdown-item span {
-  margin-right: 5px; /* Spazio tra la bandiera e il nome della lingua */
+  margin-right: 5px;
 }
 
+/* Layout personalizzato senza wrapping */
 .nowrap-container {
   display: flex;
   flex-wrap: nowrap;
 }
 
 .navbar-nav {
-  gap: 10px; /* Spazio tra i dropdown del profilo e della lingua */
+  gap: 10px;
 }
 
 /* Media query per telefoni e tablet (fino a 768px) */
 @media (max-width: 768px) {
-
-  .navbar-custom{
-      padding: 0.5rem;
+  /* Layout della navbar per mobile */
+  .navbar-custom {
+    padding: 0.5rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
   }
+  .dropdown-menu {
+    position: fixed; /* Posiziona il menu in overlay */
+    top: auto; /* Aggiusta la posizione verticale se necessario */
+    right: 0; /* Allinea il menu a destra dello schermo */
+    left: auto;
+    width: auto;
+    z-index: 1050; /* Assicura che sia sopra tutti gli elementi */
+}
+  /* Stile per la prima riga */
+  .first-row {
+    width: 100%;
+    background-color: #001f3f;
+    color: white;
+    display: flex;
+    align-items: center;
+  }
+
+  .second-row {
+    width: 100%;
+    background-color: #001f3f;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    position: relative; /* Forza i dropdown a rimanere all'interno del contesto */
+    overflow: visible; /* Consente al menu di apparire senza espandere la riga */
+}
+  
+  .second-row .col-6 {
+    position: relative;
+}
 }

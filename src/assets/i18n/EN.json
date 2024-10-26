@@ -1,9 +1,59 @@
 {
+    "GENERIC_LABEL": {
+        "CLOSE": "Close"
+    },
+    "UPDATE": {
+        "TITLE": "Update available",
+        "DESCRIPTION": "New version released ({{version}}). The application will be updated in 3 seconds."
+    },
+    "FIRESTORE": {
+        "DOC_REF_NULL": "The document reference is null"
+    },
     "HOME": {
         "TITLE": "Welcome",
         "DESCRIPTION": "This is the home page"
     },
-    "SYSTEM_NAVBAR":{
-        "TITLE": "TOOLS GAME MASTER"
+    "SYSTEM_NAVBAR": {
+        "TITLE": "GAME MASTER TOOLS"
+    },
+    "LOGIN": {
+        "TITLE": "Welcome back",
+        "LOGIN": "Login",
+        "DESCRIPTION": "Log in to use the Game Master tools",
+        "LOGIN_GOOGLE": "Sign in with Google",
+        "USER_NOT_AUTHENTICATED": "User not authenticated",
+        "LOGOUT_CONFIRMED": "You have been logged out"
+    },
+    "USER": {
+        "LOGOUT": "Logout",
+        "PROFILE": "Profile",
+        "SETTINGS": "Settings"
+    },
+    "SYSTEM_FOOTER": {
+        "TITLE": "BUY ME A BEER!",
+        "DESCRIPTION": "If you like this project, help me support, maintain, and update it.",
+        "TITLE_MOBILE": "BUY ME A BEER!",
+        "DESCRIPTION_MOBILE": "If you like this project, help me support, maintain, and update it.",
+        "DONATION_SUCCESS": "Thank you for your support!",
+        "DONATION_ERROR": "Something went wrong, please try again later.",
+        "CONTAINER_NOT_FOUND": "Container not found."
+    },
+    "USER_PROFILE": {
+        "TITLE": "User Profile",
+        "EMAIL": "Email",
+        "EMAIL_VERIFIED": "Email Verified",
+        "YES": "Yes",
+        "NO": "No",
+        "ROLE": "Role",
+        "LAST_DONATION": "Last Donation",
+        "NO_DONATION_RECORDED": "No donation recorded",
+        "UID": "UID",
+        "ANONYMOUS": "Anonymous"
+    },
+    "ERROR": {
+        "TITLE": "An error occurred",
+        "UNKNOWN": "Unknown error",
+        "COMPONENT_UNKNOWN": "Unknown component",
+        "CODE_ERROR_LABEL": "Error code"
     }
 }

@@ -53,12 +53,12 @@ export class AppComponent implements OnInit {
     if (this.swUpdate.isEnabled) {
       // Controlla subito se c’è un aggiornamento
       const hasUpdate = await this.swUpdate.checkForUpdate();
-      this.spinnerService.showSpinner();
 
-      if (!hasUpdate) {
-        const tiltle = await this.translationMessagew.translate('UPDATE.TITLE');
-        const message = await this.translationMessagew.translate('UPDATE.DESCRIPTION');
-        this.toastService.showInfo(message, tiltle, 3000);
+      if (hasUpdate) {
+        const title = await this.translationMessagew.translate('UPDATE.TITLE');
+        const message = await this.translationMessagew.translate('UPDATE.DESCRIPTION', { version: environment.version });
+        this.toastService.showInfo(message, title, 3000);
+        this.spinnerService.showSpinner();
         setTimeout(async () => {
           await this.swUpdate.activateUpdate();
           window.location.reload();

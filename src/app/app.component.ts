@@ -74,9 +74,8 @@ export class AppComponent implements OnInit {
           this.cacheService.setItem('sw-version', event.currentVersion.hash);
 
           const readyTitle = await this.translationMessage.translate('UPDATE.TITLE');
-          const verision = environment.version;
           const readyMessage = await this.translationMessage.translate('UPDATE.DESCRIPTION', { 
-            version: verision
+            version: this.swVersion
           });
 
           this.toastService.showInfo(readyMessage, readyTitle, 3000);

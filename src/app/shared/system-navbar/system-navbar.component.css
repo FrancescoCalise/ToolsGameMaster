@@ -1,6 +1,7 @@
 /* Stile generale della navbar */
 .navbar-custom {
-  background-color: #001f3f; /* Colore blu notte */
+  background-color: #001f3f;
+  /* Colore blu notte */
   color: white;
   padding: 1rem;
   height: 7vh;
@@ -71,6 +72,7 @@
 
 /* Media query per telefoni e tablet (fino a 768px) */
 @media (max-width: 768px) {
+
   /* Layout della navbar per mobile */
   .navbar-custom {
     padding: 0.5rem;
@@ -78,14 +80,20 @@
     display: flex;
     flex-direction: column;
   }
+
   .dropdown-menu {
-    position: fixed; /* Posiziona il menu in overlay */
-    top: auto; /* Aggiusta la posizione verticale se necessario */
-    right: 0; /* Allinea il menu a destra dello schermo */
+    position: fixed;
+    /* Posiziona il menu in overlay */
+    top: auto;
+    /* Aggiusta la posizione verticale se necessario */
+    right: 0;
+    /* Allinea il menu a destra dello schermo */
     left: auto;
     width: auto;
-    z-index: 1050; /* Assicura che sia sopra tutti gli elementi */
-}
+    z-index: 1050;
+    /* Assicura che sia sopra tutti gli elementi */
+  }
+
   /* Stile per la prima riga */
   .first-row {
     width: 100%;
@@ -102,11 +110,28 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    position: relative; /* Forza i dropdown a rimanere all'interno del contesto */
-    overflow: visible; /* Consente al menu di apparire senza espandere la riga */
-}
-  
+    position: relative;
+    /* Forza i dropdown a rimanere all'interno del contesto */
+    overflow: visible;
+    /* Consente al menu di apparire senza espandere la riga */
+  }
+
   .second-row .col-6 {
     position: relative;
+  }
 }
+
+@media (max-width: 959px) {
+  .dropdown-menu {
+    position: fixed;
+    /* Posiziona il menu in overlay */
+    top: auto;
+    /* Aggiusta la posizione verticale se necessario */
+    right: 0;
+    /* Allinea il menu a destra dello schermo */
+    left: auto;
+    width: auto;
+    z-index: 1050;
+    /* Assicura che sia sopra tutti gli elementi */
+  }
 }

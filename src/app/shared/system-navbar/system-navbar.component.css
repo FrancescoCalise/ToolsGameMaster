@@ -121,7 +121,7 @@
   }
 }
 
-@media (max-width: 959px) {
+@media (min-width: 769px) and (max-width: 959px) {
   .dropdown-menu {
     position: fixed;
     /* Posiziona il menu in overlay */
@@ -133,5 +133,13 @@
     width: auto;
     z-index: 1050;
     /* Assicura che sia sopra tutti gli elementi */
+  }
+  
+   /* Layout della navbar per mobile */
+   .navbar-custom {
+    padding: 0.5rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
   }
 }

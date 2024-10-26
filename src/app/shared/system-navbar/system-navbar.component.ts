@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { BreakpointService } from '../../services/breakpoint.service';
+import { SwUpdate } from '@angular/service-worker';
 
 
 @Component({
@@ -19,7 +20,7 @@ import { BreakpointService } from '../../services/breakpoint.service';
   ]
 })
 
-export class SystemNavBarComponent implements OnInit, AfterViewChecked {
+export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestroy {
 
   selectedLanguage: string;
   selectedFlag: string; // Flag per la lingua selezionata
@@ -40,13 +41,29 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked {
     private spinner: SpinnerService,
     private cdr: ChangeDetectorRef,
     private breakpointService: BreakpointService,
-    private router: Router
+    private router: Router,
+    private swUpdate: SwUpdate
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
     this.selectedFlag = selectedLang ? selectedLang.flag : 'fi fi-it';
     this.environment = environment.production ? 'prod' : 'test';
     this.version = environment.version;
+  }
+
+  ngOnDestroy(): void {
+    if (this.breakpointSubscription) {
+      this.breakpointSubscription.unsubscribe();
+    }
+  }
+  
+  async forceRefresh() {
+    if (this.swUpdate.isEnabled) {
+      await this.swUpdate.activateUpdate();
+      window.location.reload();
+    } else {
+      window.location.reload();
+    }
   }
 
   ngAfterViewChecked(): void {

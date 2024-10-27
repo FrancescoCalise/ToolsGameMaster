@@ -58,7 +58,7 @@
 .logo-align {
   display: flex;
   align-self: center;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
 }
 

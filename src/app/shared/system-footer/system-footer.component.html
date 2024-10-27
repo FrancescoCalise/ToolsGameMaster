@@ -1,40 +1,19 @@
-<!-- Footer fisso diviso in due colonne per la raccolta fondi -->
-<footer *ngIf="showFooter" class="footer bg-dark text-white">
-  <div *ngIf="!isMobile; else mobileTemplate">
-    <div class="row g-0 container-fluid">
-        <!-- Colonna per il titolo (4 su 12) -->
-        <div class="col-4 d-flex justify-content-center align-items-center">
-          <h4>{{ 'SYSTEM_FOOTER.TITLE' | translate }}</h4>
-        </div>
-        <!-- Colonna per la descrizione (6 su 12) -->
-        <div class="col-6 d-flex justify-content-start align-items-center">
-          <p class="mb-2">{{ 'SYSTEM_FOOTER.DESCRIPTION' | translate }}</p>
-        </div>
-        <!-- Colonna per il pulsante PayPal (2 su 12) -->
-        <div class="col-2 d-flex justify-content-start align-items-center">
-          <div id="paypal-donate-button-container"></div>
-        </div>
-      </div>
-  </div>
-</footer>
-  
-  <ng-template #mobileTemplate>
-    <div class="container-fluid text-center">
-      <div class="row g-0">
-        <div class="col-12">
-          <h4 class="mb-1">{{ 'SYSTEM_FOOTER.TITLE_MOBILE' | translate }}</h4>
-        </div>
-      </div>
-      <div class="row g-0">
-        <div class="col-12">
-          <p class="mb-2">{{ 'SYSTEM_FOOTER.DESCRIPTION_MOBILE' | translate }}</p>
-        </div>
-      </div>
-      <div class="row g-0">
-        <div class="col-12">
-          <div id="paypal-donate-button-container-mobile"></div>
-        </div>
-      </div>
+<!-- Contenuto di app-system-footer -->
+<div class="footer bg-dark text-white w-100 p-2">
+  <div class="row w-100 m-0">
+    <!-- Colonna per il titolo (3 su desktop/tablet, 12 su mobile) -->
+    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
+      <h4>{{ 'SYSTEM_FOOTER.TITLE' | translate }}</h4>
     </div>
-  </ng-template>
-  
+
+    <!-- Colonna per la descrizione (6 su desktop/tablet, 12 su mobile) -->
+    <div class="col-12 col-md-6 d-flex justify-content-start align-items-center">
+      <p class="mb-2">{{ 'SYSTEM_FOOTER.DESCRIPTION' | translate }}</p>
+    </div>
+
+    <!-- Colonna per il pulsante PayPal (3 su desktop/tablet, 12 su mobile) -->
+    <div class="col-12 col-md-3 d-flex justify-content-center align-items-center">
+      <div id="paypal-donate-button-container"></div>
+    </div>
+  </div>
+</div>

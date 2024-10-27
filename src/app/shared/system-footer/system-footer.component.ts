@@ -121,7 +121,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   clearPayPalButtonContainer(): void {
-    let idDiv = this.isMobile ? 'paypal-donate-button-container-mobile' : 'paypal-donate-button-container';
+    let idDiv = this.isMobile ? 'paypal-donate-button-container' : 'paypal-donate-button-container';
     const paypalContainer = document.getElementById(idDiv);
 
     if (paypalContainer) {
@@ -131,7 +131,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   async renderPayPalDonateButton(currentLink: string) {
-    let idDiv = this.isMobile ? 'paypal-donate-button-container-mobile' : 'paypal-donate-button-container';
+    let idDiv = this.isMobile ? 'paypal-donate-button-container' : 'paypal-donate-button-container';
 
     setTimeout(async () => {
       const container = document.getElementById(idDiv);

@@ -25,7 +25,6 @@
     bottom: 0;
     left: 0;
     width: 100%;
-    background-color: #333;
     color: white;
     display: flex;
     align-items: center;
@@ -50,9 +49,7 @@
     .header-fixed {
         height: 80px;
     }
-    .footer-fixed {
-        height: 60px;
-    }
+   
     .scrollable-content {
         margin-top: 60px;
         margin-bottom: 60px;
@@ -65,9 +62,7 @@
     .header-fixed {
         height: 70px;
     }
-    .footer-fixed {
-        height: 55px;
-    }
+   
     .scrollable-content {
         margin-top: 55px;
         margin-bottom: 55px;
@@ -79,10 +74,6 @@
 @media (max-width: 767px) {
     .header-fixed {
         height: 60px;
-    }
-
-    .footer-fixed {
-        height: 50px;
     }
 
     .scrollable-content {

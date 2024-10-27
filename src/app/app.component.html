@@ -1,12 +1,16 @@
-<div class="container-layout">
-    <app-loading></app-loading>
-    <div class="system-navbar">
-        <app-system-navbar></app-system-navbar>
-    </div>
-    <div class="router-container">
+<div class="full-screen-container">
+      <!-- Intestazione fissa -->
+    <header class="header-fixed">
+            <app-system-navbar></app-system-navbar>
+    </header>
+
+    <!-- Contenitore centrale scrollabile -->
+    <main class="scrollable-content">
         <router-outlet></router-outlet>
-    </div>
-    <div class="system-footer">
-        <app-system-footer></app-system-footer>
-    </div>
+    </main>
+
+    <!-- Piè di pagina fisso -->
+    <footer class="footer-fixed">
+            <app-system-footer></app-system-footer>
+    </footer>
 </div>

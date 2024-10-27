@@ -29,15 +29,6 @@ body {
     width: 100vw;
 }
 
-.game-navbar {
-    display: flex;
-    gap: 1rem;
-    padding: 1rem;
-}
-
-.game-navbar button {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 1rem;
+.navbar{
+    padding: 0!important;
 }

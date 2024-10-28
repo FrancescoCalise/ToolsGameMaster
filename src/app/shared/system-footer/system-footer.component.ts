@@ -31,10 +31,6 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
 
   currentLang: string = 'IT';
   private languageSubscription: Subscription = new Subscription;
-
-  isMobile: boolean = false;
-  private breakpointSubscription: Subscription = new Subscription;
-
   private userSubscription: Subscription = new Subscription;
 
   linksDonateImg: Record<string, string> = {
@@ -48,7 +44,6 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private toastService: ToastService,
     private translationMessageService: TranslationMessageService,
-    private breakpointService: BreakpointService,
     @Inject(USER_FIRESTORE_SERVICE) private firestoreUserService: FirestoreService<UserInformationSaved>
   ) {
     this.firestoreUserService.setCollectionName('users');
@@ -68,14 +63,6 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
       });
 
     this.currentLang = this.languageService.getLanguage();
-
-    this.isMobile = this.breakpointService.getIsMobile();
-    this.breakpointSubscription = this.breakpointService.subscribeToBreakpointChanges()
-      .subscribe(async (isMobile: boolean) => {
-        this.clearPayPalButtonContainer();
-        this.isMobile = isMobile;
-        await this.verifyDonationState();
-      });
 
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
       async (user: PersonalUser | null) => {
@@ -98,7 +85,15 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
       await this.toggleDonateButton();
       return;
     }
+
     this.isAuthenticating = true;
+
+    if (this.user.role === 'admin') {
+      this.toggleFooterVisibility(false);
+      this.clearPayPalButtonContainer();
+      return;
+    }
+
     const oneMonthAgo = new Date();
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // Sottrai un mese dalla data corrente
 
@@ -120,7 +115,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
   }
 
   clearPayPalButtonContainer(): void {
-    let idDiv = this.isMobile ? 'paypal-donate-button-container' : 'paypal-donate-button-container';
+    let idDiv = 'paypal-donate-button-container';
     const paypalContainer = document.getElementById(idDiv);
 
     if (paypalContainer) {
@@ -130,7 +125,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
   }
 
   async renderPayPalDonateButton(currentLink: string) {
-    let idDiv = this.isMobile ? 'paypal-donate-button-container' : 'paypal-donate-button-container';
+    let idDiv = 'paypal-donate-button-container';
 
     setTimeout(async () => {
       const container = document.getElementById(idDiv);
@@ -184,9 +179,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
     if (this.languageSubscription) {
       this.languageSubscription.unsubscribe();
     }
-    if (this.breakpointSubscription) {
-      this.breakpointSubscription.unsubscribe();
-    }
+
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
     }

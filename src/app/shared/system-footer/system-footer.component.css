@@ -1,5 +1,5 @@
 .footer {
   width: 100%;
-  padding: 0; /* Rimuove padding per evitare spazi extra */
-  margin: 0;  /* Rimuove margini per adattarsi al layout */
+  height: 100%;
+  min-height: 100%;
 }

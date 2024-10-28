@@ -1,145 +1,66 @@
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap'); /* Font futuristico */
+/* Titolo in navabar */
 
-/* Effetto glitch */
-@keyframes glitch {
-  0% { text-shadow: 2px 2px 10px rgba(125, 32, 23, 0.7), 0px 0px 5px rgba(0, 0, 0, 0.8); }
-  50% { text-shadow: -2px -2px 10px rgba(125, 32, 23, 0.6), 1px 1px 5px rgba(0, 0, 0, 0.8); }
-  100% { text-shadow: 3px 3px 12px rgba(125, 32, 23, 0.5), -1px -1px 8px rgba(0, 0, 0, 0.9); }
+/* Titolo in navabar */
+
+/* Contenitore principale */
+.main-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.game-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 2.5rem;
-  color: #7d2017;
-  text-shadow: 2px 2px 10px rgba(125, 32, 23, 0.7), 0px 0px 5px rgba(0, 0, 0, 0.8);
-  letter-spacing: 2px;
-  margin: 0;
+/* Colonna di sinistra con scroll separato */
+#site-map {
+  overflow-y: auto;
 }
 
-.title-image {
-  max-width: 100%;
-  height: auto;
+/* Colonna di destra scrollabile */
+#game-area {
+  overflow-y: auto;
 }
+
+/* Riga fissa in fondo */
+.game-footer-fixed {
+  background-color: #333;
+  color: white;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+  z-index: 10;
+  height: 100%;
+}
+
+
 
 @media (min-width: 992px) {
-  .title-image {
-    width: 200px;
+  #game-area {
+      height: calc(100% - 80px);
   }
+
+  .game-footer-fixed {
+      height: 80px;
+  }
+  
 }
 
-/* Tablet */
+/* Altezza per tablet */
 @media (min-width: 768px) and (max-width: 991px) {
-  .title-image {
-    width: 150px;
+  #game-area {
+    height: calc(100% - 70px);
+}
+  .game-footer-fixed {
+      height: 70px;
   }
 }
 
-/* Telefono */
+/* Altezza per smartphone */
 @media (max-width: 767px) {
-  .title-image {
-    width: 100px;
+  #game-area {
+    height: calc(100% - 860px);
+}
+  .game-footer-fixed {
+      height: 60px;
   }
-}
 
-
-/* Container delle feature */
-.game-features {
-  padding: 1rem;
-  text-align: center;
-}
-
-.feature-buttons button {
-  display: flex;
-  align-items: center;
-  padding: 0.5rem 1.5rem;
-  background-color: #ff6b6b; /* Colore di base accattivante */
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-  font-size: 1rem;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2); /* Effetto ombra */
-  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s ease;
-}
-
-/* Hover - leggero sollevamento */
-.feature-buttons button:hover {
-  background-color: #ff4747;
-  transform: translateY(-3px);
-  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3); /* Ombra accentuata */
-}
-
-/* Attivato - effetto di pressione */
-.feature-buttons button:active {
-  background-color: #ff3131;
-  transform: translateY(2px);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Ombra ridotta */
-}
-
-/* Personalizzazione per l'icona */
-.feature-buttons mat-icon {
-  margin-right: 0.5rem;
-  font-size: 1.2rem;
-  color: white;
-}
-
-
-/* Contenitore principale del gioco */
-.game-container {
-  padding: 1rem;
-  background-color: #f5f5f5;
-  min-height: 53vh;
-  text-align: center;
-}
-
-/* Stile generale per il footer */
-.game-footer {
-  background: linear-gradient(90deg, #2c3e50, #4a69bd); /* Sfondo sfumato */
-  color: #f1f1f1;
-  border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombra elegante */
-  font-family: 'Roboto', sans-serif;
-  padding: 1rem;
-}
-
-/* Stile per ogni colonna */
-.timer-column, .solar-death-column, .dark-icon-column {
-  padding: 1rem;
-  transition: background 0.3s, color 0.3s;
-  border-radius: 5px;
-}
-
-/* Effetti hover */
-.timer-column:hover, .solar-death-column:hover, .dark-icon-column:hover {
-  background: rgba(255, 255, 255, 0.1);
-  cursor: pointer;
-}
-
-/* Stile del timer */
-.timer-display {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #e74c3c; /* Colore rosso per enfatizzare il timer */
-}
-
-/* Stile per il testo del Test Morte Solare */
-.solar-death-column h4 {
-  font-size: 1.2rem;
-  color: #f39c12; /* Colore giallo intenso */
-}
-
-/* Stile per l'icona del buio */
-.dark-icon {
-  font-size: 2rem;
-  color: #bdc3c7; /* Colore grigio chiaro */
-  transition: transform 0.3s;
-}
-
-.dark-icon:hover {
-  transform: scale(1.2); /* Effetto di ingrandimento al passaggio del mouse */
-  color: #ecf0f1; /* Colore leggermente più chiaro */
-}
-.death-sun-timer{
-  cursor: pointer;
 }

@@ -8,6 +8,7 @@ import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { BreakpointService } from '../../services/breakpoint.service';
 import { SwUpdate } from '@angular/service-worker';
+import { NavbarService } from '../../services/navbar-service';
 
 
 @Component({
@@ -21,6 +22,10 @@ import { SwUpdate } from '@angular/service-worker';
 })
 
 export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestroy {
+
+  imgLogoGame: string = '';
+  gameTitle: string = '';
+  cssClassTitleRoot: string = '';
 
   selectedLanguage: string;
   selectedFlag: string; // Flag per la lingua selezionata
@@ -42,7 +47,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     private cdr: ChangeDetectorRef,
     private breakpointService: BreakpointService,
     private router: Router,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private navbarService: NavbarService
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
@@ -81,6 +87,10 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
         this.isMobile = isMobile;
     });
 
+    this.navbarService.imgRouteSource$.subscribe(img => this.imgLogoGame = img);
+    this.navbarService.nameRootSource$.subscribe(title => this.gameTitle = title);
+    this.navbarService.cssRootSource$.subscribe(css => this.cssClassTitleRoot = css);
+
     // Ottieni la lingua salvata nella cache o quella di default
     this.selectedLanguage = this.languageService.getLanguage();
     this.updateFlag(this.selectedLanguage); // Aggiorna la flag corrispondente
@@ -103,6 +113,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     this.authService.logout();
   }
   goToHome(): void {
+    console.log('Go to home');
     this.router.navigate(['/']); // Naviga verso la route della homepage
   }
 }

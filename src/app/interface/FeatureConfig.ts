@@ -5,4 +5,5 @@ export interface FeatureConfig {
     component: any;
     icon: string;
     tooltip?: string;
+    owner: string[];
 }

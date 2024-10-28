@@ -1,66 +1,100 @@
-/* Titolo in navabar */
-
-/* Titolo in navabar */
-
-/* Contenitore principale */
-.main-container {
+.ultima-rotta-container {
   display: flex;
   flex-direction: column;
   height: 100%;
 }
 
-/* Colonna di sinistra con scroll separato */
-#site-map {
-  overflow-y: auto;
-}
-
-/* Colonna di destra scrollabile */
-#game-area {
-  overflow-y: auto;
+.ultima-rotta-page {
+  margin-right: 0px;
 }
 
 /* Riga fissa in fondo */
-.game-footer-fixed {
-  background-color: #333;
-  color: white;
+.ultima-rotta-footer-fixed {
   position: sticky;
   bottom: 0;
   width: 100%;
   text-align: center;
   z-index: 10;
   height: 100%;
+  background: linear-gradient(90deg, #2c3e50, #4a69bd); /* Sfondo sfumato */
+  color: #f1f1f1;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombra elegante */
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Stile per ogni colonna */
+.timer-column, .solar-death-column, .dark-icon-column {
+  padding: 1rem;
+  transition: background 0.3s, color 0.3s;
+  border-radius: 5px;
+}
+
+/* Effetti hover */
+.timer-column:hover, .solar-death-column:hover, .dark-icon-column:hover {
+  background: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}
+
+/* Stile del timer */
+.timer-display {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #e74c3c; /* Colore rosso per enfatizzare il timer */
+}
+
+/* Stile per il testo del Test Morte Solare */
+.solar-death-column h4 {
+  font-size: 1.2rem;
+  color: #f39c12; /* Colore giallo intenso */
+}
+
+/* Stile per l'icona del buio */
+.dark-icon {
+  font-size: 2rem;
+  color: #bdc3c7; /* Colore grigio chiaro */
+  transition: transform 0.3s;
+}
+
+.dark-icon:hover {
+  transform: scale(1.2); /* Effetto di ingrandimento al passaggio del mouse */
+  color: #ecf0f1; /* Colore leggermente più chiaro */
+}
+.death-sun-timer{
+  cursor: pointer;
 }
 
 
-
 @media (min-width: 992px) {
-  #game-area {
-      height: calc(100% - 80px);
+  .ultima-rotta-page {
+    height: calc(100% - 80px);
   }
 
-  .game-footer-fixed {
-      height: 80px;
+  .ultima-rotta-footer-fixed {
+    height: 80px;
   }
-  
+
 }
 
 /* Altezza per tablet */
 @media (min-width: 768px) and (max-width: 991px) {
-  #game-area {
+  .ultima-rotta-page {
     height: calc(100% - 70px);
-}
-  .game-footer-fixed {
-      height: 70px;
+  }
+
+  .ultima-rotta-footer-fixed {
+    height: 70px;
   }
 }
 
 /* Altezza per smartphone */
 @media (max-width: 767px) {
-  #game-area {
+  .ultima-rotta-page {
     height: calc(100% - 860px);
-}
-  .game-footer-fixed {
-      height: 60px;
+  }
+
+  .ultima-rotta-footer-fixed {
+    height: 60px;
   }
 
 }

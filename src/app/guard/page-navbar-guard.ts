@@ -1,6 +1,6 @@
 // page-navbar.guard.ts
 import { Injectable } from '@angular/core';
-import { CanActivate, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
+import { CanActivate, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivateChild, GuardResult, MaybeAsync } from '@angular/router';
 import { NavbarService } from '../services/navbar-service';
 
 @Injectable({

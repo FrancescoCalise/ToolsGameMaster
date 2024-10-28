@@ -1,0 +1,9 @@
+<div class="game-features">
+    <div class="feature-buttons d-flex flex-wrap">
+        <button *ngFor="let feature of activeFeatures" mat-raised-button matTooltip="{{ feature.tooltip }}"
+            matTooltipPosition="above" (click)="openFeature(feature.component)">
+            <mat-icon>{{ feature.icon }}</mat-icon>
+            <span>{{ feature.description }}</span>
+        </button>
+    </div>
+</div>

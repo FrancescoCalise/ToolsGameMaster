@@ -1,23 +1,33 @@
-<div class="main-container d-flex flex-column h-100">
-    <div class="row flex-grow-1 w-100 m-0">
+<div class="ultima-rotta-container m-0 w-100">
+    <div class="ultima-rotta-page">
+        <span> page </span>
+    </div>
 
-        <!-- Colonna di sinistra (2 su 12) con scroll separato -->
-        <div id="site-map" class="col-2">
-            <p>Contenuto colonna sinistra</p>
-            <p>Altro contenuto</p>
-            <p>Contenuto aggiuntivo...</p>
-        </div>
 
-        <!-- Colonna di destra scrollabile (10 su 12) -->
-        <div id="game-area" class="col-10">
-            <div class="scrollable-content p-3">
-                <p>Contenuto scrollabile...</p>
-                <p>Altro contenuto scrollabile...</p>
+    <div class="ultima-rotta-footer-fixed d-flex justify-content-center align-items-center">
+        <div class="row w-100 m-0 p-0">
+            <div class="col-2 col-md-2 col-lg-2 d-flex justify-content-center align-items-center"  (click)="startTimer()">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <h4 class="m-0">{{ timerDisplay }}</h4>
+                </div>
+            </div>
+
+            <div class="col-9 col-md-9 col-lg-9 d-flex justify-content-center align-items-center">
+                <div class="col-4 col-md-4 col-lg-4">
+                    <h4 class="">Test Morte Solare + {{ solarDeathTestValue }}</h4>
+                </div>
+                <div class="col-8 col-md-8 col-lg-8">
+                    <p class=""> Effetto</p>
+                </div>
+
+            </div>
+
+            <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
+                <div class="col-12 col-md-12 col-lg-12">
+                    <mat-icon *ngIf="isDarkIconVisible">brightness_3</mat-icon>
+
+                </div>
             </div>
         </div>
-
-        <div class="game-footer-fixed w-100">
-            <h4 class="text-center m-0">Riga Fissa Inferiore</h4>
-          </div>
     </div>
 </div>

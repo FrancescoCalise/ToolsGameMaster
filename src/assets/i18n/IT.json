@@ -61,11 +61,13 @@
         "TITLE": "Dashboard"
     },
     "ULTIMA_ROTTA":{
-        "TITLE": "L'ultima Rotta",
-        "FEATURE_TURN_ORDER": "Gestione turni",
-        "FEATURE_TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori"
+        "TITLE": "L'ultima Rotta"
     },
     "DUNGEON_AND_DRAGONS_5E":{
         "TITLE": "Dungeon & Dragons 5E"
+    },
+    "FEATURE":{
+        "TURN_ORDER": "Gestione turni",
+        "TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori"
     }
 }

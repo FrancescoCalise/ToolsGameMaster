@@ -1,0 +1,18 @@
+/* Contenitore principale */
+.main-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  
+  /* Colonna di sinistra con scroll separato */
+  #site-map {
+    overflow-y: auto;
+    height: 100%;
+  }
+  
+  /* Colonna di destra scrollabile */
+  #game-area {
+    overflow-y: auto;
+    height: 100%;
+  }

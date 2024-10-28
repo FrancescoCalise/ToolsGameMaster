@@ -21,13 +21,10 @@ import { CacheStorageService } from '../../../services/cache-storage.service';
 
 export class UltimaRottaComponent implements OnInit {
 
-  features: FeatureConfig[] = [
-    { id: 'TURN_ORDER', description: '', component: TurnOrderComponent, icon: 'turn_slight_right' }
-  ];
-
   timerDisplay: string = '30:00';
   solarDeathTestValue = 0;
   isDarkIconVisible = true;
+
   private timeRemaining: number = 1800; // 30 minuti in secondi
   private timerInterval: any;
   private isTimerRunning = false;
@@ -40,29 +37,11 @@ export class UltimaRottaComponent implements OnInit {
   ) { }
 
   async ngOnInit(): Promise<void> {
-    this.initFromCache();
-    this.features = await Promise.all(this.features.map(async feature => {
-      feature.description = await this.translationMessageService.translate(`ULTIMA_ROTTA.FEATURE_${feature.id}`);
-      feature.tooltip = await this.translationMessageService.translate(`ULTIMA_ROTTA.FEATURE_TOOLTIP_${feature.id}`);
-      return feature;
-    }));
+   
   }
 
-  initFromCache() {
-    
-  }
 
-  openFeature(component: any, config: MatDialogConfig = {}) {
-    const dialogConfig = {
-      width: '90vw',
-      height: '90vh',
-      maxWidth: '90vw',
-      maxHeight: '90vh',
-      panelClass: 'full-screen-dialog',
-      ...config
-    };
-    this.dialog.open(component, dialogConfig);
-  }
+
 
   // Funzione per avviare il timer
   startTimer() {
@@ -83,7 +62,6 @@ export class UltimaRottaComponent implements OnInit {
         } else {
           clearInterval(this.timerInterval);
           this.isTimerRunning = false;
-          this.openDialog();
         }
       }, 1000);
     }
@@ -96,11 +74,4 @@ export class UltimaRottaComponent implements OnInit {
     this.timerDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  // Apre una dialog quando il timer raggiunge 0
-  openDialog() {
-    this.dialog.open(DeathSunComponent, {
-      width: '300px',
-      data: { message: "E' passata mezz'ora, il sole sta cambiando" }
-    });
-  }
 }

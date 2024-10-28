@@ -11,7 +11,7 @@ body {
 body {
     margin: 0;
     font-family: Arial, Helvetica, sans-serif;
-    background: #f5f5f5;
+    background: #c8b0b0;
 }
 
 .text-center {
@@ -32,3 +32,31 @@ body {
 .navbar{
     padding: 0!important;
 }
+
+/* Scrollbar generale */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  
+  /* Stile della track della scrollbar */
+  ::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 10px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Stile del pollice della scrollbar */
+  ::-webkit-scrollbar-thumb {
+    background-color: #001f3f;
+    border-radius: 15px;
+    border: 2px solid #f0f0f0; /* Colore di contrasto */
+  }
+  
+  /* Effetto hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #7554d7;
+    cursor: pointer;
+  }
+
+  

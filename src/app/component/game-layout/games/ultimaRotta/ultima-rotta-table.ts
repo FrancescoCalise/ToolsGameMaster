@@ -1,6 +1,6 @@
-import { TableConfig } from "../../../interface/TableConfig";
+import { TableConfig } from "../../../../interface/TableConfig";
 
-export const ultimaRottaTable: TableConfig[] = [
+export const ultimaRottaWeapon: TableConfig[] = [
   {
     columns: ['Armi Bianche', 'Danno', 'Distanza', 'Costo'],
     data: [
@@ -61,7 +61,11 @@ export const ultimaRottaTable: TableConfig[] = [
       { symbol: 'Note', idml: '', description: 'Bombe attacco su percesione / Danno su invariabile' },
       { symbol: 'Inermme', idml: '', description: 'Cosa fa inerme?' }
     ]
-  },
+  }
+
+];
+
+export const ultimaRottaCriticDamage: TableConfig[] = [
   {
     columns: ['Risultato', 'Area Maciullata', 'Modificatorti'],
     data: [
@@ -85,6 +89,4 @@ export const ultimaRottaTable: TableConfig[] = [
       { symbol: '->', idml: '', description: 'Da 7 a 20 Inerme +  modificatori' }
     ]
   }
-
-
-];
+]

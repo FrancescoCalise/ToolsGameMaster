@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { TableConfig } from '../../interface/TableConfig';
+import {  Router } from '@angular/router';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -14,15 +15,24 @@ import { TableConfig } from '../../interface/TableConfig';
 export class DynamicTableComponent implements OnInit {
   notesToShow: { symbol: string; description: string }[] = [];
 
-  @Input() config!: TableConfig;
+  @Input() table!: TableConfig;
+
+  constructor(private router: Router){
+    
+  }
 
   ngOnInit(): void {
+    if (this.table == null) {
+      this.router.navigate(['/']);
+      throw new Error('TableConfig is null');
+    }
+
     this.generateNotes();
   }
 
   generateNotes(): void {
     const notesMap = new Map<string, string>();
-    this.config.notes?.forEach(note => {
+    this.table.notes?.forEach(note => {
       if (note != null && note.symbol != '' && !notesMap.has(note.symbol)) {
         notesMap.set(note.symbol, note.description);
       }
@@ -31,4 +41,6 @@ export class DynamicTableComponent implements OnInit {
     // Converti in array di oggetti con simbolo e descrizione
     this.notesToShow = Array.from(notesMap, ([symbol, description]) => ({ symbol, description }));
   }
+
+
 }

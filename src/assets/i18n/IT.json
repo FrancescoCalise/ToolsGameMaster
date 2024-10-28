@@ -68,6 +68,13 @@
     },
     "FEATURE":{
         "TURN_ORDER": "Gestione turni",
-        "TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori"
+        "TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori",
+        "SHOW_WEAPONS": "Armi",
+        "TOOLTIP_SHOW_WEAPONS": "Visualizza le armi",
+        "SHOW_CRITIC_DAMAGE": "Danni critici",
+        "TOOLTIP_SHOW_CRITIC_DAMAGE": "Visualizza i danni critici",
+        "CREATE_CHARACTER_ULTIMA_ROTTA": "Generatore personaggi",
+        "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Genera un personaggio per l'ultima rotta"
+        
     }
 }

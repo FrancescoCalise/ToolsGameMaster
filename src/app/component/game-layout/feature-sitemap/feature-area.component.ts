@@ -4,7 +4,8 @@ import { FeatureConfig } from '../../../interface/FeatureConfig';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TranslationMessageService } from '../../../services/translation-message-service';
 import { ToastService } from '../../../services/toast.service';
-import { allFeatures } from '../all-features/all-features';
+import { allFeatures } from './all-features/all-features';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
@@ -18,33 +19,64 @@ import { allFeatures } from '../all-features/all-features';
 
 })
 
-export class FeatureAreaComponenet implements OnInit {
-
+export class FeatureAreaComponent implements OnInit {
     @Input() gameName: string = '';
-    activeFeatures: any;
+
+    activeFeatures: FeatureConfig[] = [];
+    activatedUrl: string = '';
 
     constructor(
         private dialog: MatDialog,
         private translationMessageService: TranslationMessageService,
         private toastService: ToastService,
-    ) {
-    }
+        private route: ActivatedRoute,
+        private router: Router
+    ) { }
 
-    ngOnInit(): void {
-        this.loadDynamicFeatures();
+    async ngOnInit(): Promise<void> {
+        await this.loadDynamicFeatures();
+        this.activatedUrl = this.router.url;
     }
 
     async loadDynamicFeatures() {
         if (this.gameName !== '') {
+            // Filtra le feature attive per il gioco specificato
             this.activeFeatures = allFeatures.filter(feature =>
-                feature.owner.includes(this.gameName as string)
+                feature.owner.includes(this.gameName)
             );
 
-            this.activeFeatures.forEach(async (feature: FeatureConfig) => {
+            // Traduzioni per `description` e `tooltip` delle feature attive
+            for (const feature of this.activeFeatures) {
                 feature.description = await this.translationMessageService.translate(`FEATURE.${feature.id}`);
                 feature.tooltip = await this.translationMessageService.translate(`FEATURE.TOOLTIP_${feature.id}`);
-            });
+            }
         }
+    }
+
+    getFeatureUrl(feature: any): string {
+        let featreUrl = `/${this.getFullPath(this.route)}/${feature.id}`
+        return featreUrl;
+    }
+
+    activateFeature(feature: FeatureConfig) {
+        if (feature.changePage) {
+            let navigateTo = `${this.getFullPath(this.route)}/${feature.id}`;
+            this.router.navigateByUrl(navigateTo);
+        } else {
+            this.openFeature(feature.component);
+        }
+    }
+
+    getFullPath(route: ActivatedRoute): string {
+        let path = route.snapshot.url.map(segment => segment.path).join('/');
+        while (route.parent) {
+            route = route.parent;
+            const parentPath = route.snapshot.url.map(segment => segment.path).join('/');
+            if (parentPath) {
+                path = `${parentPath}/${path}`;
+            }
+        }
+        return path;
     }
 
     openFeature(component: any, config: MatDialogConfig = {}) {
@@ -58,5 +90,4 @@ export class FeatureAreaComponenet implements OnInit {
         };
         this.dialog.open(component, dialogConfig);
     }
-
 }

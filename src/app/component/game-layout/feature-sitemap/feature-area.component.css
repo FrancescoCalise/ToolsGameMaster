@@ -1,25 +1,35 @@
-
-
 /* Hover - leggero sollevamento */
-.feature-buttons button:hover {
-    background-color: #ff4747;
-    transform: translateY(-3px);
-    box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3); /* Ombra accentuata */
-  }
-  
-  /* Attivato - effetto di pressione */
-  .feature-buttons button:active {
-    background-color: #ff3131;
-    transform: translateY(2px);
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Ombra ridotta */
-  }
-  
-  /* Personalizzazione per l'icona */
-  .feature-buttons mat-icon {
-    margin-right: 0.5rem;
-    font-size: 1.2rem;
-    color: white;
-  }
-  
-  
-  
+.feature-buttons button:hover,
+.feature-buttons button.active-button {
+  background-color: #001f3f; /* Colore blu */
+  transform: translateY(-3px);
+  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3); /* Ombra accentuata */
+  color: white; /* Assicura che il testo sia bianco */
+}
+
+.feature-buttons button:hover mat-icon,
+.feature-buttons button.active-button mat-icon {
+  color: white; /* L'icona diventa bianca quando il bottone è in hover o attivo */
+}
+
+/* Attivato - effetto di pressione */
+.feature-buttons button:active,
+.feature-buttons button.active-button:active {
+  background-color: #001f3f; /* Colore blu coerente */
+  transform: translateY(2px);
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Ombra ridotta */
+}
+
+/* Personalizzazione per l'icona (di default blu) */
+.feature-buttons mat-icon {
+  margin-right: 0.5rem;
+  font-size: 1.2rem;
+  color: #007bff; /* Colore blu per l'icona quando il bottone non è attivo */
+}
+
+/* Bottone attivo */
+.active-button {
+  background-color: #001f3f; /* Colore blu coerente */
+  color: white;              /* Colore del testo */
+  border: 2px solid #001f3f; /* Bordo per un ulteriore effetto */
+}

@@ -6,27 +6,18 @@ import { NotFoundComponent } from './component/notFoud/not-found.component';
 
 import { UserProfileComponent } from './component/user/profile/user-profile.component';
 import { UserSettingsComponent } from './component/user/settings/user-settings.component';
-import { DungeonAndDragons5eComponent } from './component/games/dungeonAndDragns5e/dungeonanddragons5e.component';
-import { UltimaRottaComponent } from './component/games/ultimaRotta/ultimaRotta.component';
 import { PageNavbarGuard } from './guard/page-navbar-guard';
 import { GameLayoutComponent } from './component/game-layout/game-layout.component';
+import { MultiDynamicTablesComponent } from './component/multi-dynamic-tables/multi-dynamic-tables.component';
+import { DungeonAndDragons5eComponent } from './component/game-layout/games/dungeonAndDragns5e/dungeonanddragons5e.component';
+import { UltimaRottaComponent } from './component/game-layout/games/ultimaRotta/ultimaRotta.component';
+import { ultimaRottaCriticDamage, ultimaRottaWeapon } from './component/game-layout/games/ultimaRotta/ultima-rotta-table';
+import { GenerateCharacterLurComponenet } from './component/game-layout/games/ultimaRotta/features/generate-character-lur/generate-character-lur.component';
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-
-  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
-  { path: 'dashboard', redirectTo: '/games', pathMatch: 'full' },
   {
-    path: 'games', component: DashboardComponent, canActivate: [authGuard], canDeactivate: [PageNavbarGuard], data: {
-      imgLogoGame: '',
-      rootTitle: 'DASHBOARD.TITLE',
-      cssTitleRoot: 'game-dashboard-navbar-title'
-    }
+    path:'games/ultima-rotta', redirectTo: '/games/ultima-rotta/SHOW_WEAPONS', pathMatch: 'full'
   },
-
-  { path: 'profile', component: UserProfileComponent, canActivate: [authGuard] },
-  { path: 'settings', component: UserSettingsComponent, canActivate: [authGuard] },
-
   {
     path: 'games',
     component: GameLayoutComponent,
@@ -42,7 +33,10 @@ export const routes: Routes = [
           rootTitle: 'DUNGEON_AND_DRAGONS_5E.TITLE',
           cssTitleRoot: 'dnd5e-navbar-title',
           gameName: 'Dungeon-and-dragons-5e'
-        }
+        },
+        children: [
+          // Eventuali sottorotte di Dungeon and Dragons 5e
+        ]
       },
       {
         path: 'ultima-rotta',
@@ -54,13 +48,41 @@ export const routes: Routes = [
           rootTitle: 'ULTIMA_ROTTA.TITLE',
           cssTitleRoot: 'ultima-rotta-navbar-title',
           gameName: 'Ultima-rotta'
-        }
+        },
+        children: [
+          {
+            path: 'SHOW_WEAPONS',
+            component: MultiDynamicTablesComponent,
+            data: {
+              data: ultimaRottaWeapon
+            }
+          },
+          {
+            path: 'SHOW_CRITIC_DAMAGE',
+            component: MultiDynamicTablesComponent,
+            data: {
+              data: ultimaRottaCriticDamage
+            }
+          },
+          {
+            path: 'CREATE_CHARACTER_ULTIMA_ROTTA',
+            component: GenerateCharacterLurComponenet,
+          }
+          
+        ]
       }
     ]
-  }
-  ,
-  // Aggiungi qui altre rotte protette
-
-  // Questa rotta deve essere sempre alla fine
+  },
+  { path: 'login', component: LoginComponent },
+  { path: 'profile', component: UserProfileComponent, canActivate: [authGuard] },
+  { path: 'settings', component: UserSettingsComponent, canActivate: [authGuard] },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
+  { 
+    path: 'dashboard', 
+    component: DashboardComponent, 
+    canActivate: [authGuard],
+  },
+ 
+  
   { path: '**', component: NotFoundComponent },
 ];

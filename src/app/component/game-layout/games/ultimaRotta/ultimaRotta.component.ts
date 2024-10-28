@@ -1,14 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { SharedModule } from '../../../shared/shared.module';
-import { FeatureConfig } from '../../../interface/FeatureConfig';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { TurnOrderComponent } from './features/TurnOrderComponent';
-import { TranslationMessageService } from '../../../services/translation-message-service';
-import { DeathSunComponent } from './features/DeathSunComponent';
-import { ToastService } from '../../../services/toast.service';
-import { CacheStorageService } from '../../../services/cache-storage.service';
-import { ultimaRottaTable } from './ultima-rotta-table';
-import { DynamicTableComponent } from '../../dynamic-table/dynamic-table.component';
+import { Component, OnInit, } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { SharedModule } from '../../../../shared/shared.module';
+import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
+import { FeatureAreaComponent } from '../../feature-sitemap/feature-area.component';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-game-ultima-rotta',
@@ -17,37 +12,35 @@ import { DynamicTableComponent } from '../../dynamic-table/dynamic-table.compone
   standalone: true,
   imports: [
     SharedModule,
-    DynamicTableComponent
+    DynamicTableComponent,
+    FeatureAreaComponent,
+    RouterOutlet
   ],
+  providers: [
+    FeatureAreaComponent
+  ]
 
 })
 
-export class UltimaRottaComponent implements OnInit {
+export class UltimaRottaComponent implements OnInit{
+  public gameName = 'Ultima-rotta';
 
   timerDisplay: string = '30:00';
   solarDeathTestValue = 0;
   isDarkIconVisible = true;
-
-  ultimaRottaTableData = ultimaRottaTable;
 
   private timeRemaining: number = 1800; // 30 minuti in secondi
   private timerInterval: any;
   private isTimerRunning = false;
 
   constructor(
-    private dialog: MatDialog,
-    private translationMessageService: TranslationMessageService,
     private toastService: ToastService,
-    private cacheStorageService : CacheStorageService
   ) { }
 
   async ngOnInit(): Promise<void> {
-   
+  
   }
-
-
-
-
+  
   // Funzione per avviare il timer
   startTimer() {
     if (this.isTimerRunning) {

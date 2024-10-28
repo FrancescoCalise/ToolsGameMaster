@@ -1,9 +1,7 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
-import { FeatureAreaComponenet } from './feature-sitemap/feature-area.component';
-import { GameAreaComponenet } from './game-area/game-area.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FeatureConfig } from '../../interface/FeatureConfig';
+import { FeatureAreaComponent } from './feature-sitemap/feature-area.component';
+import {  RouterOutlet } from '@angular/router';
 import { SpinnerService } from '../../services/spinner.service';
 
 
@@ -14,20 +12,15 @@ import { SpinnerService } from '../../services/spinner.service';
     standalone: true,
     imports: [
         SharedModule,
-        FeatureAreaComponenet,
-        GameAreaComponenet
+        FeatureAreaComponent,
+        RouterOutlet
     ],
 
 })
 
 export class GameLayoutComponent implements OnInit, OnDestroy {
 
-    activeFeatures: FeatureConfig[] = [];
-    gameName: string = '';
-
     constructor(
-        private route: ActivatedRoute,
-        private router: Router,
         private spinner: SpinnerService
     ) {
 
@@ -39,26 +32,7 @@ export class GameLayoutComponent implements OnInit, OnDestroy {
 
     async ngOnInit(): Promise<void> {
         this.spinner.showSpinner();
-
-        await this.setGameName();
     }
 
-    async setGameName() {
-        const children = this.route.snapshot?.routeConfig?.children;
-        const current = this.router.url.split('/').pop() as string;
-        if (children) {
-            const currentChild = children.find(child => child.path === current);
-            if (currentChild) {
-                const data = currentChild.data;
-                if (data) {
-                    this.gameName = data['gameName'];
-                    return;
-                }
-            }
-        }
-
-        if(!this.gameName)
-            this.router.navigate(['/']);
-    }
 
 }

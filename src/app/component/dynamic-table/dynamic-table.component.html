@@ -1,15 +1,13 @@
-<div class="table-container">
-  <!-- <h3 class="table-title">{{ config.title }}</h3> -->
-
-  <table class="table table-bordered">
+<div *ngIf="table" class="table-container w-100 h-100">
+  <table class=" table table-bordered">
     <thead>
       <tr>
-        <th *ngFor="let column of config.columns">{{ column }}</th>
+        <th *ngFor="let column of table.columns">{{ column }}</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let row of config.data">
-        <td *ngFor="let column of config.columns">{{ row[column] }}</td>
+      <tr *ngFor="let row of table.data">
+        <td *ngFor="let column of table.columns">{{ row[column] }}</td>
       </tr>
     </tbody>
   </table>
@@ -18,7 +16,7 @@
   <div class="table-notes" *ngIf="notesToShow.length">
     <ul>
       <li *ngFor="let note of notesToShow">
-        <strong>{{ note.symbol }}</strong>: {{ note.description }}
+        <strong>{{ note?.symbol }}</strong>: {{ note?.description }}
       </li>
     </ul>
   </div>

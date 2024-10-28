@@ -5,20 +5,26 @@ import { TurnOrderComponent } from "../../games/ultimaRotta/features/TurnOrderCo
 export const allFeatures: FeatureConfig[] = [
   {
     id: 'TURN_ORDER',
-    description: 'Gestione ordine dei turni',
     component: TurnOrderComponent,
     icon: 'turn_slight_right',
-    tooltip: 'Ordine dei turni',
-    owner: ['Ultima-rotta'],
+    owner: ['Ultima-rotta'], // gameName in route
     changePage: false
-     // gameName in route
   },
   {
     id: 'SHOW_WEAPONS',
-    description: 'Gestione ordine dei turni',
-    component: null,
     icon: 'turn_slight_right',
-    tooltip: 'Ordine dei turni',
+    owner: ['Ultima-rotta'], // gameName in route
+    changePage: true
+  },
+  {
+    id: 'SHOW_CRITIC_DAMAGE',
+    icon: 'turn_slight_right',
+    owner: ['Ultima-rotta'], // gameName in route
+    changePage: true
+  },
+  {
+    id: 'CREATE_CHARACTER_ULTIMA_ROTTA',
+    icon: 'turn_slight_right',
     owner: ['Ultima-rotta'], // gameName in route
     changePage: true
   }

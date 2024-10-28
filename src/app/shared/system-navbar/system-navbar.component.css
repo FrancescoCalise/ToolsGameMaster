@@ -46,7 +46,7 @@
 .dropdown-menu {
   background-color: #074e95;
   border: none;
-  z-index: 1050;
+  z-index: 10;
 }
 
 .dropdown-menu .dropdown-item {
@@ -100,7 +100,7 @@
     right: 0;
     left: auto;
     width: auto;
-    z-index: 1050;
+    z-index: 10;
   }
 }
 
@@ -124,7 +124,7 @@
     right: 0;
     left: auto;
     width: auto;
-    z-index: 1050;
+    z-index: 10;
   }
 }
 
@@ -164,7 +164,7 @@
     right: 0;
     left: auto;
     width: auto;
-    z-index: 1050;
+    z-index: 10;
   }
 }
 

@@ -1,0 +1,5 @@
+<div *ngIf="config" class="table-container w-100 h-100">
+  <div *ngFor="let table of config">
+    <app-dynamic-table [table]="table"></app-dynamic-table>
+  </div>
+</div>

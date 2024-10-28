@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { AuthService, PersonalUser } from '../../services/auth.service';
 import { LanguageService } from '../../services/language.service';
@@ -22,9 +22,10 @@ import { USER_FIRESTORE_SERVICE } from '../../firebase-provider';
   ]
 })
 
-export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
+export class SystemFooterComponent implements OnInit, OnDestroy {
 
-  showFooter = true;
+  @Output() showFooter: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   isAuthenticating: boolean = false;
   user: PersonalUser | null = null;
 
@@ -53,7 +54,9 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     this.firestoreUserService.setCollectionName('users');
   }
 
-
+  toggleFooterVisibility(show: boolean) {
+    this.showFooter.emit(show);
+  }
 
   async ngOnInit(): Promise<void> {
     this.languageSubscription = this.languageService.subscribeToLanguageChanges()
@@ -81,10 +84,6 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  ngAfterViewInit(): void {
-
-  }
-
   async toggleDonateButton(): Promise<void> {
     if (!this.isButtonVisibile) {
       let currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
@@ -93,9 +92,9 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  async verifyDonationState(): Promise<void>  {
+  async verifyDonationState(): Promise<void> {
     if (!this.user) {
-      this.showFooter = true;
+      this.toggleFooterVisibility(true);
       await this.toggleDonateButton();
       return;
     }
@@ -104,7 +103,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     oneMonthAgo.setMonth(oneMonthAgo.getMonth() - 1); // Sottrai un mese dalla data corrente
 
     var timeStamp = this.user?.lastDonation as Timestamp;
-    if(!timeStamp){
+    if (!timeStamp) {
       await this.toggleDonateButton();
     }
 
@@ -112,10 +111,10 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     let haveDonationValid = lastDonationDate !== undefined && lastDonationDate >= oneMonthAgo;
 
     if (!haveDonationValid) {
-      this.showFooter = true;
+      this.toggleFooterVisibility(true);
       await this.toggleDonateButton();
     } else {
-      this.showFooter = false;
+      this.toggleFooterVisibility(false);
       this.clearPayPalButtonContainer();
     }
   }
@@ -136,7 +135,7 @@ export class SystemFooterComponent implements OnInit, AfterViewInit, OnDestroy {
     setTimeout(async () => {
       const container = document.getElementById(idDiv);
       if (!container) {
-      let err = await this.translationMessageService.translate('SYSTEM_FOOTER.CONTAINER_NOT_FOUND')
+        let err = await this.translationMessageService.translate('SYSTEM_FOOTER.CONTAINER_NOT_FOUND')
         throw new Error(err);
       }
 

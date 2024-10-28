@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component,  isDevMode, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component,  isDevMode, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SystemNavBarComponent } from '../app/shared/system-navbar/system-navbar.component';
 import { LanguageService } from '../app/services/language.service';
@@ -32,7 +32,9 @@ import { CacheStorageService } from './services/cache-storage.service';
 export class AppComponent implements OnInit {
 
   private swVersion: string = '';
+  showFooter: boolean = true;
 
+ 
   constructor(
     private translationMessage: TranslationMessageService,
     private translate: TranslateService,
@@ -40,7 +42,8 @@ export class AppComponent implements OnInit {
     private spinnerService: SpinnerService,
     private swUpdate: SwUpdate,
     private toastService: ToastService,
-    private cacheService: CacheStorageService
+    private cacheService: CacheStorageService,
+    private cdr: ChangeDetectorRef
   ) {
     console.log('Environment: ', environment);
     spinnerService.showSpinner();
@@ -87,5 +90,10 @@ export class AppComponent implements OnInit {
         }
       });
     }
+  }
+
+  onShowFooterChange(show: boolean) {
+    this.showFooter = show;
+    this.cdr.detectChanges();
   }
 }  

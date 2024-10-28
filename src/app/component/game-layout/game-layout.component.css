@@ -1,68 +1,8 @@
 /* Contenitore principale */
 .main-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  /* Imposta l'altezza totale della viewport */
-  overflow: hidden;
-  /* Nasconde lo scroll esterno */
-}
-
-/* Colonna di sinistra (fissa) */
-#site-map {
   height: 100%;
+  overflow: auto;
   padding-top: 1rem;
-  padding-left: 0px;
-  padding-bottom: 0;
-  padding-right: 0;
-}
-
-/* Colonna di destra scrollabile */
-#game-area {
-  overflow-y: auto;
-  height: 100%;
-  padding-top: 1rem;
-  padding-left: 0px;
-  padding-bottom: 0;
-  padding-right: 0;
-}
-
-/* Stili per altezza responsive della colonna di sinistra */
-@media (min-width: 1367px) {
-  #site-map {
-    max-height: calc(100vh - 200px);
-  }
-  #game-area {
-    max-height: calc(100vh - 200px);
-  }
-}
-
-@media (min-width: 992px) and (max-width: 1366px) {
-  #site-map {
-    height: calc(100vh - 180px);
-  }
-  #game-area {
-    max-height: calc(100vh - 180px);
-  }
-}
-
-/* Altezza per tablet */
-@media (min-width: 768px) and (max-width: 991px) {
-  #site-map {
-    height: calc(100vh - 165px);
-  }
-  #game-area {
-    max-height: calc(100vh - 165px);
-  }
-}
-
-/* Altezza per smartphone */
-@media (max-width: 767px) {
-  #site-map {
-    height: calc(100vh - 350px);
-  }
-  #game-area {
-    max-height: calc(100vh - 350px);
-  }
+  padding-bottom: 1rem;
 }
 

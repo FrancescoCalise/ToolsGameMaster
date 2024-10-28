@@ -32,13 +32,23 @@
     z-index: 10;
 }
 
-.scrollable-content {
+.main-container-no-footer {
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: hidden;
     box-sizing: border-box;
     background-color: #f5f5f5;
     width: 100%;
-    height: calc(100vh - 110px); /* 100vh meno l'altezza totale di header e footer */
+    height: 100%;
+}
+
+.main-container-with-footer {
+    flex-grow: 1;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    width: 100%;
+    height: 100%;
+    /* 100vh meno l'altezza totale di header e footer */
 }
 
 /* Altezza per desktop */
@@ -46,11 +56,17 @@
     .header-fixed {
         height: 100px;
     }
+
     .footer-fixed {
         height: 100px;
     }
 
-    .scrollable-content {
+    .main-container-no-footer {
+        margin-top: 100px;
+        height: calc(100vh - 100px);
+    }
+
+    .main-container-with-footer {
         margin-top: 100px;
         margin-bottom: 100px;
         height: calc(100vh - 200px);
@@ -66,7 +82,12 @@
         height: 80px;
     }
 
-    .scrollable-content {
+    .main-container-no-footer {
+        margin-top: 100px;
+        height: calc(100vh - 100px);
+    }
+
+    .main-container-with-footer {
         margin-top: 100px;
         margin-bottom: 80px;
         height: calc(100vh - 180px);
@@ -78,11 +99,17 @@
     .header-fixed {
         height: 100px;
     }
-   .footer-fixed {
+
+    .footer-fixed {
         height: 65px;
     }
 
-    .scrollable-content {
+    .main-container-no-footer {
+        margin-top: 100px;
+        height: calc(100vh - 100px);
+    }
+
+    .main-container-with-footer {
         margin-top: 100px;
         margin-bottom: 65px;
         height: calc(100vh - 165px);
@@ -96,10 +123,15 @@
     }
 
     .footer-fixed {
-            height: 150px;
+        height: 150px;
     }
 
-    .scrollable-content {
+    .main-container-no-footer {
+        margin-top: 100px;
+        height: calc(100vh - 200px);
+    }
+
+    .main-container-with-footer {
         margin-top: 200px;
         margin-bottom: 150px;
         height: calc(100vh - 350px);

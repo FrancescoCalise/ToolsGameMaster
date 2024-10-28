@@ -5,12 +5,12 @@
     </header>
 
     <!-- Contenitore centrale scrollabile -->
-    <main class="scrollable-content">
+    <main [ngClass]="showFooter ? 'main-container-with-footer' : 'main-container-no-footer'">
         <router-outlet class="w-100 h-100"></router-outlet>
     </main>
 
     <!-- Piè di pagina fisso -->
-    <div class="footer-fixed w-100">
-            <app-system-footer class="w-100 h-100"></app-system-footer>
+    <div *ngIf="showFooter" class="footer-fixed w-100">
+        <app-system-footer (showFooter)="onShowFooterChange($event)" class="w-100 h-100"></app-system-footer>
     </div>
 </div>

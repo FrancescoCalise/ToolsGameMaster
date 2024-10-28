@@ -1,5 +1,5 @@
-import { FeatureConfig } from "../../../../interface/FeatureConfig";
-import { TurnOrderComponent } from "../../games/ultimaRotta/features/TurnOrderComponent";
+import { FeatureConfig } from "../../../interface/FeatureConfig";
+import { TurnOrderComponent } from "../games/ultimaRotta/features/TurnOrderComponent";
 
 
 export const allFeatures: FeatureConfig[] = [

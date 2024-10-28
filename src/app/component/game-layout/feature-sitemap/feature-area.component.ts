@@ -61,6 +61,7 @@ export class FeatureAreaComponent implements OnInit {
     activateFeature(feature: FeatureConfig) {
         if (feature.changePage) {
             let navigateTo = `${this.getFullPath(this.route)}/${feature.id}`;
+            this.activatedUrl = navigateTo;
             this.router.navigateByUrl(navigateTo);
         } else {
             this.openFeature(feature.component);

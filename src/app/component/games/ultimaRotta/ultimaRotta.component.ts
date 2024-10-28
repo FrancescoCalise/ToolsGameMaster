@@ -7,6 +7,8 @@ import { TranslationMessageService } from '../../../services/translation-message
 import { DeathSunComponent } from './features/DeathSunComponent';
 import { ToastService } from '../../../services/toast.service';
 import { CacheStorageService } from '../../../services/cache-storage.service';
+import { ultimaRottaTable } from './ultima-rotta-table';
+import { DynamicTableComponent } from '../../dynamic-table/dynamic-table.component';
 
 @Component({
   selector: 'app-game-ultima-rotta',
@@ -14,7 +16,8 @@ import { CacheStorageService } from '../../../services/cache-storage.service';
   styleUrl: './ultimaRotta.component.css',
   standalone: true,
   imports: [
-    SharedModule
+    SharedModule,
+    DynamicTableComponent
   ],
 
 })
@@ -24,6 +27,8 @@ export class UltimaRottaComponent implements OnInit {
   timerDisplay: string = '30:00';
   solarDeathTestValue = 0;
   isDarkIconVisible = true;
+
+  ultimaRottaTableData = ultimaRottaTable;
 
   private timeRemaining: number = 1800; // 30 minuti in secondi
   private timerInterval: any;

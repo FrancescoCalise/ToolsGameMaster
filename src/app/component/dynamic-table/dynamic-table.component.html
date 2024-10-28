@@ -1,0 +1,25 @@
+<div class="table-container">
+  <!-- <h3 class="table-title">{{ config.title }}</h3> -->
+
+  <table class="table table-bordered">
+    <thead>
+      <tr>
+        <th *ngFor="let column of config.columns">{{ column }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let row of config.data">
+        <td *ngFor="let column of config.columns">{{ row[column] }}</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Se le note sono presenti, visualizzale sotto la tabella -->
+  <div class="table-notes" *ngIf="notesToShow.length">
+    <ul>
+      <li *ngFor="let note of notesToShow">
+        <strong>{{ note.symbol }}</strong>: {{ note.description }}
+      </li>
+    </ul>
+  </div>
+</div>

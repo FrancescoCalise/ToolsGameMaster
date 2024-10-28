@@ -1,13 +1,13 @@
 <div class="main-container d-flex flex-column h-100">
-    <div class="row flex-grow-1 w-100 m-0">
+    <div class="row flex-grow-1 h.100 w-100 m-0">
 
         <!-- Colonna di sinistra (2 su 12) con scroll separato -->
-        <div id="site-map" class="col-2 m-0 p-0">
+        <div id="site-map" class="col-2">
             <app-feature-area [gameName]="gameName" class="w-100"></app-feature-area>
         </div>
 
         <!-- Colonna di destra scrollabile (10 su 12) -->
-        <div id="game-area" class="col-10 m-0 p-0">
+        <div id="game-area" class="col-10 overflow-auto">
             <app-game-area [gameName]="gameName" class="w-100"></app-game-area>
         </div>
     </div>

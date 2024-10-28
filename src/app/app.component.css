@@ -42,7 +42,7 @@
 }
 
 /* Altezza per desktop */
-@media (min-width: 1037) {
+@media (min-width: 1367px) {
     .header-fixed {
         height: 100px;
     }
@@ -57,23 +57,7 @@
     }
 }
 
-/* Altezza per desktop */
-@media (min-width: 1025px) and (max-width: 10366px) {
-    .header-fixed {
-        height: 100px;
-    }
-    .footer-fixed {
-        height: 80px;
-    }
-
-    .scrollable-content {
-        margin-top: 100px;
-        margin-bottom: 80px;
-        height: calc(100vh - 180px);
-    }
-}
-
-@media (min-width: 992px) and (max-width: 1024px) {
+@media (min-width: 992px) and (max-width: 1366px) {
     .header-fixed {
         height: 100px;
     }

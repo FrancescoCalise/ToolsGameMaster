@@ -11,4 +11,12 @@ export const allFeatures: FeatureConfig[] = [
     tooltip: 'Ordine dei turni',
     owner: ['Ultima-rotta'] // gameName in route
   },
+  {
+    id: 'TURN_ORDER_2',
+    description: 'Gestione ordine dei turni',
+    component: TurnOrderComponent,
+    icon: 'turn_slight_right',
+    tooltip: 'Ordine dei turni',
+    owner: ['Ultima-rotta'] // gameName in route
+  }
 ];

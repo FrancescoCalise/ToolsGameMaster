@@ -6,9 +6,9 @@ import { ToastService } from './toast.service';
 @Injectable({
   providedIn: 'root',
 })
-export class BreakpointService  {
+export class BreakpointService {
 
-  private breakpointChangeSubject = new Subject<boolean>();
+  private breakpointChangeSubject = new Subject<string>();
   private currentBreakpoint: string = '';
   private breakpointMap = new Map<string, string>([
     [Breakpoints.Handset, 'Handset'], // Smartphone
@@ -19,9 +19,13 @@ export class BreakpointService  {
     ['(min-width: 960px) and (max-width: 1279.98px)', 'LargeTablet'], // Tablet grande
     ['(min-width: 1280px)', 'LargeScreen'] // Desktop o schermo grande
   ]);
+  
+  public currentDeviceType = this.currentBreakpoint;
 
-  public isMobile: boolean = false;
   public firstInit: boolean = true;
+
+  public readonly smallDeviceBreakpoint: string[] = ['Handset', 'HandsetPortrait', 'SmallTablet'];
+  public readonly largeDeviceBreakpoint: string[] = ['Tablet', 'LargeTablet', 'LargeScreen', 'Web'];
 
   constructor(private breakpointObserver: BreakpointObserver, private toastService: ToastService) {
     this.initBreakpointListener();
@@ -34,15 +38,15 @@ export class BreakpointService  {
     ).subscribe((breakpoint: string) => {
       if (this.currentBreakpoint !== breakpoint) {
         this.currentBreakpoint = breakpoint;
-        this.isMobile = breakpoint === 'Handset' || breakpoint === 'HandsetPortrait';
+        this.currentDeviceType = breakpoint;
         if (this.firstInit) {
           this.firstInit = false;
-        }else{
+        } else {
           this.toastService.showInfo('Breakpoint changed to: ' + breakpoint);
         }
-        
+
         console.log('Breakpoint changed to: ', breakpoint);
-        this.breakpointChangeSubject.next(this.isMobile);
+        this.breakpointChangeSubject.next(breakpoint);
       }
     });
   }
@@ -55,13 +59,16 @@ export class BreakpointService  {
     }
     return 'Unknown';
   }
-
-  getIsMobile(): boolean {
-    return this.isMobile;
+  
+  isSmallDevice(deviceType: string): boolean {
+    if (this.smallDeviceBreakpoint.includes(deviceType)) {
+      return true;
+    } else {
+      return false;
+    }
   }
-
   // Metodo a cui i componenti possono sottoscriversi per ricevere aggiornamenti di breakpoint
-  subscribeToBreakpointChanges(): Observable<boolean> {
+  subscribeToBreakpointChanges(): Observable<string> {
     return this.breakpointChangeSubject.asObservable();
   }
 

@@ -1,36 +1,72 @@
-<div class="container-fluid m-0 w-100 h-100">
-    <div class="row h-100 m-0">
+<div class="container-fluid m-0 p-0 w-100 h-100">
+
+    <div *ngIf="!isSmallDevice()" class="row h-100 m-0">
 
         <div [ngClass]="showSiteMap ? 'site-map-open' : 'site-map-closed'">
-            <app-feature-area [gameName]="gameName" class="w-100"  (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
+            <app-feature-area [gameConfig]="gameConfig" class="w-100"
+                (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
         </div>
 
-        <div  [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
-                <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center">
-                    <div class="row w-100 p-1">
-                        <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center"
-                            (click)="startTimer()">
-                            <div class="col-12 col-md-12 col-lg-12">
-                                <h4 class="m-0">{{ timerDisplay }}</h4>
-                            </div>
+        <div class="p-2" [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
+            <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center">
+                <div class="row w-100 p-1">
+                    <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center"
+                        (click)="startTimer()">
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <h4 class="m-0">{{ timerDisplay }}</h4>
                         </div>
-                        <div class="col-10 col-md-10 col-lg-10 d-flex justify-content-center align-items-center">
-                            <div class="col-3 col-md-3 col-lg-3">
-                                <h4>Test Morte Solare + {{ solarDeathTestValue }}</h4>
-                            </div>
-                            <div class="col-9 col-md-9 col-lg-9">
-                                <p>Effetto</p>
-                            </div>
+                    </div>
+                    <div class="col-10 col-md-10 col-lg-10 d-flex justify-content-center align-items-center">
+                        <div class="col-3 col-md-3 col-lg-3">
+                            <h4>Test Morte Solare + {{ solarDeathTestValue }}</h4>
                         </div>
-        
-                        <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
-                            <div class="col-12 col-md-12 col-lg-12">
-                                <mat-icon *ngIf="isDarkIconVisible">brightness_3</mat-icon>
-                            </div>
+                        <div class="col-9 col-md-9 col-lg-9">
+                            <p>Effetto</p>
+                        </div>
+                    </div>
+
+                    <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <mat-icon *ngIf="isDarkIconVisible">brightness_3</mat-icon>
                         </div>
                     </div>
                 </div>
+            </div>
             <!-- Seconda Riga Scrollabile -->
+            <div class="row w-100 flex-grow-1 overflow-auto mt-3">
+                <router-outlet class="w-100"></router-outlet>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isSmallDevice()">
+        <div [ngClass]="showSiteMap ? 'site-map-open-small-device' : 'site-map-closed-small-device'">
+            <app-feature-area [gameConfig]="gameConfig" class="w-100 d-flex justify-content-center align-items-center"
+                (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
+        </div>
+
+        <div class="p-2"
+            [ngClass]="showSiteMap ? 'game-area-with-site-map-open-small-device' : 'game-area-with-site-map-closed-small-device'">
+            <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center p-0 m-0">
+                <div class="flex-row w-100 d-flex justify-content-center align-items-center p-1">
+                    
+                    <div class="col-2 col-md-2 col-lg-2 d-flex justify-content-center align-items-center"
+                        (click)="startTimer()">
+                        <div class="col-12 col-md-12 col-lg-12">
+                            <h4 class="m-0">{{ timerDisplay }}</h4>
+                        </div>
+                    </div>
+
+                    <div class="col-9 col-md-9 col-lg-9 d-flex flex-row justify-content-center align-items-center">
+                            <h4>Test Morte Solare + {{ solarDeathTestValue }}</h4>
+                    </div>
+
+                    <div class="col-1 col-md-1 col-lg-1">
+                        <mat-icon *ngIf="isDarkIconVisible">brightness_3</mat-icon>
+                    </div>
+                </div>
+            </div>
+
             <div class="row w-100 flex-grow-1 overflow-auto mt-3">
                 <router-outlet class="w-100"></router-outlet>
             </div>

@@ -1,8 +1,7 @@
 
 /* Barra Informazioni Fissa in Alto */
 .ultima-rotta-info-bar {
-  width: 95%;
-  padding-left: 1rem;
+  width: 100%;
   color: white;
   position: sticky;
   /* Fissa in cima all'interno del contenitore */
@@ -15,8 +14,6 @@
   /* Ombra elegante */
   font-family: 'Roboto', sans-serif;
 }
-
-
 
 /* Stile per ogni colonna */
 .timer-column,

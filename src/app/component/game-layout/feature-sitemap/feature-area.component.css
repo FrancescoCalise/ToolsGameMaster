@@ -1,59 +1,166 @@
-/* Hover - leggero sollevamento */
-.feature-buttons button:hover,
-.feature-buttons button.active-button {
-  background-color: #001f3f; /* Colore blu */
-  transform: translateY(-3px);
-  box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.3); /* Ombra accentuata */
-  color: white; /* Assicura che il testo sia bianco */
+.game-features {
+  padding-top: 1rem;
 }
 
-.feature-buttons button:hover mat-icon,
-.feature-buttons button.active-button mat-icon {
-  color: white; /* L'icona diventa bianca quando il bottone è in hover o attivo */
+/* Contenitore generale per i bottoni della sitemap */
+.feature-buttons {
+  width: 100%;
+  padding-top: 1rem;
 }
 
-/* Attivato - effetto di pressione */
-.feature-buttons button:active,
-.feature-buttons button.active-button:active {
-  background-color: #001f3f; /* Colore blu coerente */
-  transform: translateY(2px);
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2); /* Ombra ridotta */
+/* Stile per ciascun bottone della sitemap */
+.feature-buttons button {
+  width: 100%;
+  background: none;
+  border: none;
+  box-shadow: none;
+  cursor: pointer;
+  color: #001f3f; /* Blu scuro per un buon contrasto */
+  padding: 0.75rem 1rem; /* Spazio per fare sembrare il bottone un elemento interattivo */
+  font: inherit;
+  text-align: left; /* Allinea il testo a sinistra */
+  display: flex;
+  align-items: center; /* Allinea verticalmente al centro */
+  transition: background-color 0.3s ease, color 0.3s ease;
+  outline: none; /* Rimuove il contorno */
 }
 
-/* Personalizzazione per l'icona (di default blu) */
+/* Stile per l'icona all'interno del bottone */
 .feature-buttons mat-icon {
-  margin-right: 0.5rem;
+  margin-right: 0.75rem;
   font-size: 1.2rem;
-  color: #007bff; /* Colore blu per l'icona quando il bottone non è attivo */
+  color: #007bff; /* Blu chiaro per l'icona */
 }
 
-/* Bottone attivo */
-.active-button {
-  background-color: #001f3f; /* Colore blu coerente */
-  color: white;              /* Colore del testo */
-  border: 2px solid #001f3f; /* Bordo per un ulteriore effetto */
+/* Hover - indicazione di interattività */
+.feature-buttons button:hover {
+  background-color: #f0f0f0; /* Sfondo grigio chiaro al passaggio del mouse */
+  color: #005cbf; /* Cambia leggermente il colore del testo al passaggio del mouse */
 }
 
-.header {
-  background-color: #f8f9fa; /* Colore chiaro per l'intestazione */
+/* Bottone attivo - effetto pressione */
+.feature-buttons button:active {
+  background-color: #e0e0e0; /* Sfondo leggermente più scuro quando cliccato */
+  transform: translateY(1px); /* Leggero effetto di pressione */
 }
 
+/* Bottone attivo e in uso - indica quale sezione è attiva */
+.feature-buttons button.active-button {
+  background-color: #d0e4ff; /* Colore di sfondo per indicare la sezione attiva */
+  border-left: 4px solid #001f3f; /* Bordo sinistro per evidenziare la sezione attiva */
+  color: #001f3f; /* Mantiene il colore del testo coerente */
+}
+
+/* Rimuove il contorno quando il bottone è focalizzato */
+button:focus {
+  outline: none;
+}
+
+/* Toggle del menu */
 .toggle-menu-button {
   font-size: 1.5rem;
 }
 
 /* Menu aperto e chiuso */
 .menu-open {
-  width: 100%; /* Larghezza del menu quando è aperto */
+  width: 100%;
   transition: width 0.3s ease-in-out;
 }
 
 .menu-closed {
-  width: 50px; /* Larghezza ridotta del menu quando è chiuso */
+  width: 50px;
   transition: width 0.3s ease-in-out;
 }
 
-/* Stile icona */
+/* Stile per l'icona con transizione */
 .mat-icon {
   transition: transform 0.3s ease;
+}
+
+.route-image {
+  max-height: 120px;
+  object-fit: contain;
+}
+
+/* Effetto glitch per il titolo */
+@keyframes glitch-ultima-rotta {
+  0% {
+    text-shadow: 2px 2px 10px rgba(125, 32, 23, 0.7), 0px 0px 5px rgba(0, 0, 0, 0.8);
+  }
+  20% {
+    text-shadow: -2px -2px 10px rgba(125, 32, 23, 0.6), 1px 1px 5px rgba(0, 0, 0, 0.8);
+  }
+  40% {
+    text-shadow: 3px 3px 12px rgba(125, 32, 23, 0.5), -1px -1px 8px rgba(0, 0, 0, 0.9);
+  }
+  60% {
+    text-shadow: 1px -1px 10px rgba(125, 32, 23, 0.7), -1px 1px 6px rgba(0, 0, 0, 0.8);
+  }
+  80% {
+    text-shadow: -3px 3px 8px rgba(125, 32, 23, 0.6), 2px -2px 10px rgba(0, 0, 0, 0.9);
+  }
+  100% {
+    text-shadow: 2px 2px 10px rgba(125, 32, 23, 0.5), 0px 0px 5px rgba(0, 0, 0, 0.8);
+  }
+}
+
+/* Stile del titolo con effetto glitch */
+.ultima-rotta-navbar-title {
+  font-family: 'Orbitron', sans-serif;
+  color: #7d2017;
+  text-shadow: 2px 2px 10px rgba(125, 32, 23, 0.7), 0px 0px 5px rgba(0, 0, 0, 0.8);
+  letter-spacing: 2px;
+  margin: 0;
+  animation: glitch-ultima-rotta 1.5s infinite alternate;
+}
+
+/* Media query per dispositivi grandi */
+@media (min-width: 1367px) {
+  .ultima-rotta-navbar-title {
+    font-size: 1.5rem;
+  }
+}
+
+/* Media query per tablet e desktop medi */
+@media (min-width: 992px) and (max-width: 1366px) {
+  .ultima-rotta-navbar-title {
+    font-size: 1rem;
+  }
+  .route-image {
+    max-height: 50px !important;
+  }
+}
+
+/* Media query per tablet */
+@media (min-width: 768px) and (max-width: 991px) {
+  .ultima-rotta-navbar-title {
+    font-size: 0.8rem;
+  }
+  .route-image {
+    max-height: 50px !important;
+  }
+  .feature-buttons button {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+/* Media query per smartphone */
+@media (max-width: 767px) {
+  .ultima-rotta-navbar-title {
+    font-size: 0.5rem;
+  }
+  .route-image {
+    max-height: 80px !important;
+  }
+  .logo-align {
+    display: flex;
+    align-self: center !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+  .feature-buttons button {
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+  }
 }

@@ -1,11 +1,13 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { FeatureConfig } from '../../../interface/FeatureConfig';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TranslationMessageService } from '../../../services/translation-message-service';
 import { ToastService } from '../../../services/toast.service';
-import { allFeatures } from './all-features/all-features';
 import { ActivatedRoute, Router } from '@angular/router';
+import { GameConfig } from '../../../interface/GameConfig';
+import { BreakpointService } from '../../../services/breakpoint.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -19,45 +21,65 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 })
 
-export class FeatureAreaComponent implements OnInit {
+export class FeatureAreaComponent implements OnInit, OnDestroy {
 
-    @Input() gameName: string = '';
+    @Input() gameConfig: GameConfig = {} as GameConfig;
     @Output() toggoleSiteMap: EventEmitter<boolean> = new EventEmitter<boolean>();
-    
+
     activeFeatures: FeatureConfig[] = [];
     activatedUrl: string = '';
     menuOpen: boolean = true;
-
+    deviceType: string = '';
+    private deviceTypeSub: Subscription = new Subscription;
+    public hideLabel: boolean = false;
 
     constructor(
         private dialog: MatDialog,
         private translationMessageService: TranslationMessageService,
         private toastService: ToastService,
         private route: ActivatedRoute,
-        private router: Router
+        private router: Router,
+        private breakPointService: BreakpointService
     ) { }
 
-    async ngOnInit(): Promise<void> {
-        await this.loadDynamicFeatures();
-        this.activatedUrl = this.router.url;
-    }
-
-    async loadDynamicFeatures() {
-        if (this.gameName !== '') {
-            // Filtra le feature attive per il gioco specificato
-            this.activeFeatures = allFeatures.filter(feature =>
-                feature.owner.includes(this.gameName)
-            );
-
-            // Traduzioni per `description` e `tooltip` delle feature attive
-            for (const feature of this.activeFeatures) {
-                feature.description = await this.translationMessageService.translate(`FEATURE.${feature.id}`);
-                feature.tooltip = await this.translationMessageService.translate(`FEATURE.TOOLTIP_${feature.id}`);
-            }
+    ngOnDestroy(): void {
+        if (this.deviceTypeSub) {
+            this.deviceTypeSub.unsubscribe();
         }
     }
 
+    async ngOnInit(): Promise<void> {
+        this.deviceType = this.breakPointService.currentDeviceType;
+        this.deviceTypeSub = this.breakPointService.subscribeToBreakpointChanges().subscribe(
+            (deviceType) => {
+                this.deviceType = deviceType;
+            });
+
+        if (!this.gameConfig.id) {
+            throw new Error('GameConfig is required');
+        }
+
+        await this.translateGameConfig();
+        this.activatedUrl = this.router.url;
+    }
+
+    isSmallDevice(): boolean {
+       return this.breakPointService.isSmallDevice(this.deviceType);
+    }
+
+    async translateGameConfig() {
+
+        this.gameConfig.title = await this.translationMessageService.translate(`${this.gameConfig.title}`);
+        this.activeFeatures = this.gameConfig.features;
+        for (const feature of this.activeFeatures) {
+            feature.description = await this.translationMessageService.translate(`FEATURE.${feature.id}`);
+            feature.tooltip = await this.translationMessageService.translate(`FEATURE.TOOLTIP_${feature.id}`);
+        }
+
+    }
+
     toggleMenu() {
+        console.log('toggleMenu');
         this.menuOpen = !this.menuOpen;
         this.toggoleSiteMap.emit(this.menuOpen);
     }

@@ -6,7 +6,6 @@ import { NotFoundComponent } from './component/notFoud/not-found.component';
 
 import { UserProfileComponent } from './component/user/profile/user-profile.component';
 import { UserSettingsComponent } from './component/user/settings/user-settings.component';
-import { PageNavbarGuard } from './guard/page-navbar-guard';
 import { GameLayoutComponent } from './component/game-layout/game-layout.component';
 import { MultiDynamicTablesComponent } from './component/multi-dynamic-tables/multi-dynamic-tables.component';
 import { DungeonAndDragons5eComponent } from './component/game-layout/games/dungeonAndDragns5e/dungeonanddragons5e.component';
@@ -26,12 +25,7 @@ export const routes: Routes = [
       {
         path: 'dungeon-and-dragons-5e',
         component: DungeonAndDragons5eComponent,
-        canActivate: [PageNavbarGuard],
-        canDeactivate: [PageNavbarGuard],
         data: {
-          imgRoot: 'URL_TO_IMAGE',
-          rootTitle: 'DUNGEON_AND_DRAGONS_5E.TITLE',
-          cssTitleRoot: 'dnd5e-navbar-title',
           gameName: 'Dungeon-and-dragons-5e'
         },
         children: [
@@ -41,8 +35,6 @@ export const routes: Routes = [
       {
         path: 'ultima-rotta',
         component: UltimaRottaComponent,
-        canActivate: [PageNavbarGuard],
-        canDeactivate: [PageNavbarGuard],
         data: {
           imgRoot: 'https://static.wixstatic.com/media/5738c7_b85f94f134a14da2918869dfe0bd7f6c~mv2.png/v1/fill/w_502,h_278,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20lur_edited.png',
           rootTitle: 'ULTIMA_ROTTA.TITLE',

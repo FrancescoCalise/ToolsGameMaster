@@ -1,19 +1,23 @@
-<div class="game-features container-fluid h-100 d-flex flex-column align-items-center">
+<div class="game-features h-100 d-flex flex-column align-items-center">
   <div *ngIf="menuOpen">
-    <div class="header d-flex align-items-center justify-content-between border-bottom">
-      <h3 class="m-0">Game Features</h3>
+
+    <div *ngIf="gameConfig.img" class="d-flex justify-content-center align-items-center">
+      <img [src]="gameConfig.img" [alt]="gameConfig.title" class="route-image">
+    </div>
+
+    <div class="d-flex justify-content-center align-items-center">
+      <span [ngClass]="gameConfig.css"> {{gameConfig.title}} </span>
       <button (click)="toggleMenu()" class="toggle-menu-button btn btn-link">
         <mat-icon>{{ menuOpen ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
     </div>
 
-
     <!-- Pulsanti delle Funzionalità (Menu) -->
-    <div class="feature-buttons w-100 d-flex flex-column align-items-center p-1">
-      <div class="w-100 mb-3" *ngFor="let feature of activeFeatures">
-        <button mat-raised-button matTooltip="{{ feature.tooltip }}" matTooltipPosition="above"
-          (click)="activateFeature(feature)" [ngClass]="{'active-button': getFeatureUrl(feature) === activatedUrl}"
-          class="w-100 d-flex justify-content-center align-items-center">
+    <div class="feature-buttons w-100 d-flex flex-column">
+      <div class="button-feature mb-2" *ngFor="let feature of activeFeatures">
+        <button mat-button (click)="activateFeature(feature)"
+          [ngClass]="{'active-button': getFeatureUrl(feature) === activatedUrl}"
+          class="justify-content-start">
           <mat-icon>{{ feature.icon }}</mat-icon>
           <span>{{ feature.description }}</span>
         </button>
@@ -21,10 +25,12 @@
     </div>
   </div>
 
-  <div *ngIf="!menuOpen">
-    <button (click)="toggleMenu()" class="toggle-menu-button btn btn-link">
-      <mat-icon>{{ menuOpen ? 'menu_open' : 'menu' }}</mat-icon>
-    </button>
+  <div *ngIf="!menuOpen" class="h-100 d-flex flex-column align-items-center">
+    <div class="h-100 w-100 justify-content-center align-items-center">
+      <button (click)="toggleMenu()" class="toggle-menu-button btn btn-link">
+        <mat-icon>{{ menuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+    </div>
   </div>
 
 </div>

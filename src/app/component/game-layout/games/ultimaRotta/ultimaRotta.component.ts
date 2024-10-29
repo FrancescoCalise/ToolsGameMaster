@@ -1,9 +1,12 @@
 import { ChangeDetectorRef, Component, OnInit, } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
 import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
 import { FeatureAreaComponent } from '../../feature-sitemap/feature-area.component';
 import { ToastService } from '../../../../services/toast.service';
+import { GameConfig } from '../../../../interface/GameConfig';
+import { ultimeRottaConfig } from './ultime-rotta-config';
+import { BreakpointService } from '../../../../services/breakpoint.service';
 
 @Component({
   selector: 'app-game-ultima-rotta',
@@ -23,24 +26,41 @@ import { ToastService } from '../../../../services/toast.service';
 })
 
 export class UltimaRottaComponent implements OnInit{
-  public gameName = 'Ultima-rotta';
-  showSiteMap = true;
+  public gameName = '';
+  public gameConfig: GameConfig = {} as GameConfig;
 
+  showSiteMap = true;
   timerDisplay: string = '30:00';
   solarDeathTestValue = 0;
   isDarkIconVisible = true;
+  deviceType = '';
 
   private timeRemaining: number = 1800; // 30 minuti in secondi
   private timerInterval: any;
   private isTimerRunning = false;
-
+  
   constructor(
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private route: ActivatedRoute,
+    private breakPointService: BreakpointService
   ) { }
 
   async ngOnInit(): Promise<void> {
+    this.gameName = this.route.snapshot.data['gameName'];
+    if(!this.gameName){
+      throw new Error('route is not properly configured');
+    }
+    this.gameConfig = ultimeRottaConfig;
+    this.deviceType = this.breakPointService.currentDeviceType;
+    this.breakPointService.subscribeToBreakpointChanges().subscribe(
+      (deviceType) => {
+        this.deviceType = deviceType;
+      });
+  }
   
+  isSmallDevice(): boolean {
+    return this.breakPointService.isSmallDevice(this.deviceType);
   }
   
   // Funzione per avviare il timer

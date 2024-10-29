@@ -1,14 +1,11 @@
-import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {  AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
-import { SpinnerService } from '../../services/spinner.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
-import { BreakpointService } from '../../services/breakpoint.service';
 import { SwUpdate } from '@angular/service-worker';
-import { NavbarService } from '../../services/navbar-service';
 
 
 @Component({
@@ -23,9 +20,6 @@ import { NavbarService } from '../../services/navbar-service';
 
 export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestroy {
 
-  imgLogoGame: string = '';
-  gameTitle: string = '';
-  cssClassTitleRoot: string = '';
 
   selectedLanguage: string;
   selectedFlag: string; // Flag per la lingua selezionata
@@ -37,18 +31,14 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
 
   environment: string = '';
   version: string = '';
-  isMobile: boolean = false;
   private breakpointSubscription: Subscription = new Subscription;
-  
+
   constructor(
     private languageService: LanguageService,
     private authService: AuthService,
-    private spinner: SpinnerService,
     private cdr: ChangeDetectorRef,
-    private breakpointService: BreakpointService,
     private router: Router,
-    private swUpdate: SwUpdate,
-    private navbarService: NavbarService
+    private swUpdate: SwUpdate
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
@@ -62,7 +52,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
       this.breakpointSubscription.unsubscribe();
     }
   }
-  
+
   async forceRefresh() {
     if (this.swUpdate.isEnabled) {
       await this.swUpdate.activateUpdate();
@@ -81,15 +71,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   ngOnInit(): void {
-    this.isMobile = this.breakpointService.getIsMobile();
-    this.breakpointSubscription = this.breakpointService.subscribeToBreakpointChanges()
-      .subscribe((isMobile: boolean) => {
-        this.isMobile = isMobile;
-    });
 
-    this.navbarService.imgRouteSource$.subscribe(img => this.imgLogoGame = img);
-    this.navbarService.nameRootSource$.subscribe(title => this.gameTitle = title);
-    this.navbarService.cssRootSource$.subscribe(css => this.cssClassTitleRoot = css);
 
     // Ottieni la lingua salvata nella cache o quella di default
     this.selectedLanguage = this.languageService.getLanguage();
@@ -98,6 +80,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
 
   // Funzione chiamata quando si cambia la lingua
   changeLanguage(languageCode: string): void {
+    console.log('Cambio lingua:', languageCode);
     this.selectedLanguage = languageCode;
     this.languageService.setLanguage(languageCode); // Salva la lingua nel servizio
     this.updateFlag(languageCode); // Aggiorna la bandiera quando cambia la lingua

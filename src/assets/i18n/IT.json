@@ -25,9 +25,13 @@
         "LOGOUT_CONFIRMED": "Sei stato disconnesso"
     },
     "USER": {
+        "PROFILE_SECTION": "Gestione Profilo",
         "LOGOUT": "Esci",
         "PROFILE": "Profilo",
-        "SETTINGS": "Impostazioni"
+        "SETTINGS": "Impostazioni",
+        "SELECT_LANGUAGE": "Seleziona la lingua",
+        "INFORMATION": "Informationi di sistema"
+
     },
     "SYSTEM_FOOTER": {
         "TITLE": "OFFRIMI UNA BIRRA!",

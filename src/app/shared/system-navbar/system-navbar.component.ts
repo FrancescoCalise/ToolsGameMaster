@@ -1,4 +1,4 @@
-import {  AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
@@ -7,7 +7,6 @@ import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
 
-
 @Component({
   selector: 'app-system-navbar',
   templateUrl: './system-navbar.component.html',
@@ -15,12 +14,10 @@ import { SwUpdate } from '@angular/service-worker';
   standalone: true,
   imports: [
     SharedModule
-  ]
+  ],
 })
 
 export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestroy {
-
-
   selectedLanguage: string;
   selectedFlag: string; // Flag per la lingua selezionata
   languages = [
@@ -84,6 +81,14 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     this.selectedLanguage = languageCode;
     this.languageService.setLanguage(languageCode); // Salva la lingua nel servizio
     this.updateFlag(languageCode); // Aggiorna la bandiera quando cambia la lingua
+
+    const offcanvasElement = document.querySelector('#offcanvasNavbar');
+    if (offcanvasElement) {
+      const btnClose = offcanvasElement.querySelector('.btn-close');
+      if (btnClose) {
+        (btnClose as HTMLElement).click();
+      }
+    }
   }
 
   // Aggiorna la bandiera in base alla lingua selezionata

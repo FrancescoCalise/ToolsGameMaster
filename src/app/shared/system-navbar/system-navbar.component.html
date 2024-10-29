@@ -1,85 +1,101 @@
 <nav class="navbar navbar-expand-lg navbar-custom">
-  <div class="container-fluid p-1">
-
-    <!-- App area  -->
-
-    <div class="col-12 col-md-4 col-lg-4 d-flex justify-content-center align-items-center">
-      <div class="row w-100 m-1">
-        <!-- Logo -->
-        <div class="col-3 col-md-3 col-lg-3 logo-align">
-          <img src="assets/icons/logo-app.png" alt="logo-app" class="logo-img" style="cursor: pointer;"
-            (click)="goToHome()">
-        </div>
-        <!-- Titolo -->
-        <div class="col-9 col-md-9 col-lg-9 d-flex justify-content-center align-items-center" (click)="goToHome()" style="cursor: pointer;">
-            <h2 class="text-wrap app-title">{{ 'SYSTEM_NAVBAR.TITLE' | translate }}</h2>
-        </div>
-      </div>
+  <div class="container-fluid">
+    <!-- App Area -->
+    <div class="d-flex align-items-center">
+      <!-- Logo -->
+      <img src="assets/icons/logo-app.png" alt="logo-app" class="logo-img me-2" (click)="goToHome()" style="cursor: pointer;">
+      <!-- Title -->
+      <h2 class="mb-0 app-title" (click)="goToHome()" style="cursor: pointer;">
+        {{ 'SYSTEM_NAVBAR.TITLE' | translate }}
+      </h2>
     </div>
 
-    <!-- Route area -->
-     
-    <!-- Option area dropdown -->
-    <div class="col-12 col-md-3 col-lg-3 d-flex justify-content-center align-items-center">
-      <div class="row w-100">
-        <!-- Dropdown Profilo (solo se autenticato) -->
-        <div class="col-4 col-md-4 col-lg-4 d-flex justify-content-center align-items-center">
+    <!-- Toggle for Small Devices (Mobile Only) -->
+    <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-expanded="false" aria-label="Toggle navigation" style="color: white;">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-          <ul class="navbar-nav me-3">
-            <li *ngIf="isAuthenticating" class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <mat-icon>person</mat-icon>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
-                <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
-                <li>
-                  <hr class="dropdown-divider">
-                </li>
-                <li><button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
-              </ul>
+    <!-- Navbar Content (Desktop Only) -->
+    <div class="collapse navbar-collapse d-none d-lg-block" id="navbarContent">
+      <ul class="navbar-nav ms-auto">
+        <!-- Profile Dropdown -->
+        <li *ngIf="isAuthenticating" class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <mat-icon>person</mat-icon>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
+            <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><button class="dropdown-item" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
+          </ul>
+        </li>
+
+        <!-- Language Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
+            <li *ngFor="let language of languages">
+              <button class="dropdown-item" type="button" (click)="changeLanguage(language.code)">
+                <span class="{{ language.flag }}"></span> {{ language.label }}
+              </button>
             </li>
           </ul>
-          
-        </div>
+        </li>
 
-        <div class="col-4 col-md-4 col-lg-4 d-flex justify-content-center align-items-center">
-          <!-- Dropdown Lingua -->
-          <ul class="navbar-nav me-3">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <span class="{{ selectedFlag }}"></span> {{ selectedLanguage }}
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="languageDropdown">
-                <li *ngFor="let language of languages">
-                  <button class="dropdown-item" type="button" (click)="changeLanguage(language.code)">
-                    <span class="{{ language.flag }}"></span> {{ language.label }}
-                  </button>
-                </li>
-              </ul>
-            </li>
+        <!-- Information Dropdown -->
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <mat-icon>more_vert</mat-icon>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
+            <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
+            <li><span class="dropdown-item" (click)="forceRefresh()">Version: {{ version }}</span></li>
           </ul>
-        </div>
-
-        <div class="col-4 col-md-4 col-lg-4 d-flex justify-content-center align-items-center">
-          <!-- Dropdown Informazioni -->
-          <ul class="navbar-nav me-3">
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="infoDropdown" role="button" data-bs-toggle="dropdown"
-                aria-expanded="false">
-                <mat-icon>more_vert</mat-icon>
-              </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
-                <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
-                <li><span class="dropdown-item" (click)="forceRefresh()">Version: {{ version }}</span></li>
-              </ul>
-            </li>
-          </ul>
-        </div>
-      </div>
+        </li>
+      </ul>
     </div>
-
   </div>
 </nav>
+
+<!-- Offcanvas Menu for Small Devices (Mobile Only) -->
+<div class="offcanvas offcanvas-top d-lg-none" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel" style="width: 100%; height: auto;">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">{{ 'SYSTEM_NAVBAR.TITLE' | translate }}</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="list-unstyled">
+      <!-- Profile Section -->
+      <li *ngIf="isAuthenticating" class="mb-4">
+        <h6 class="text-uppercase">{{ 'USER.PROFILE_SECTION' | translate }}</h6>
+        <ul class="list-unstyled ms-3">
+          <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
+          <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
+          <li><button class="dropdown-item mt-2" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
+        </ul>
+      </li>
+      <!-- Language Selection -->
+      <li class="mb-4">
+        <h6 class="text-uppercase">{{ 'USER.SELECT_LANGUAGE' | translate }}</h6>
+        <ul class="list-unstyled ms-3">
+          <li *ngFor="let language of languages">
+            <button class="dropdown-item" type="button" (click)="changeLanguage(language.code)">
+              <span class="{{ language.flag }}"></span> {{ language.label }}
+            </button>
+          </li>
+        </ul>
+      </li>
+      <!-- Information Section -->
+      <li>
+        <h6 class="text-uppercase">{{ 'USER.INFORMATION' | translate }}</h6>
+        <ul class="list-unstyled ms-3">
+          <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
+          <li><span class="dropdown-item" (click)="forceRefresh()">Version: {{ version }}</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

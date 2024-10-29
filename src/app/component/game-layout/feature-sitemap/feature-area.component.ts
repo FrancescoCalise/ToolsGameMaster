@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { FeatureConfig } from '../../../interface/FeatureConfig';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
@@ -20,10 +20,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 
 export class FeatureAreaComponent implements OnInit {
-    @Input() gameName: string = '';
 
+    @Input() gameName: string = '';
+    @Output() toggoleSiteMap: EventEmitter<boolean> = new EventEmitter<boolean>();
+    
     activeFeatures: FeatureConfig[] = [];
     activatedUrl: string = '';
+    menuOpen: boolean = true;
+
 
     constructor(
         private dialog: MatDialog,
@@ -52,6 +56,12 @@ export class FeatureAreaComponent implements OnInit {
             }
         }
     }
+
+    toggleMenu() {
+        this.menuOpen = !this.menuOpen;
+        this.toggoleSiteMap.emit(this.menuOpen);
+    }
+
 
     getFeatureUrl(feature: any): string {
         let featreUrl = `/${this.getFullPath(this.route)}/${feature.id}`

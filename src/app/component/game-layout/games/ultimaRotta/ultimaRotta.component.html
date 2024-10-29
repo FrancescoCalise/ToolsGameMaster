@@ -1,13 +1,11 @@
-<div class="ultima-rotta-container container-fluid m-0 w-100 h-100">
+<div class="container-fluid m-0 w-100 h-100">
     <div class="row h-100 m-0">
-        <!-- Colonna Sinistra per il Site Map (non scrollabile) -->
-        <div id="site-map" class="col-2 p-0 h-100 position-fixed">
-            <app-feature-area [gameName]="gameName" class="w-100"></app-feature-area>
+
+        <div [ngClass]="showSiteMap ? 'site-map-open' : 'site-map-closed'">
+            <app-feature-area [gameName]="gameName" class="w-100"  (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
         </div>
 
-        <!-- Colonna Destra divisa in due righe -->
-        <div id="game-area" class="col-10 offset-2 d-flex flex-column p-0 h-100">
-            <!-- Prima Riga Fissa in Alto (non scrollabile) -->
+        <div  [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
                 <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center">
                     <div class="row w-100 p-1">
                         <div class="col-1 col-md-1 col-lg-1 d-flex justify-content-center align-items-center"
@@ -32,8 +30,6 @@
                         </div>
                     </div>
                 </div>
-            
-
             <!-- Seconda Riga Scrollabile -->
             <div class="row w-100 flex-grow-1 overflow-auto mt-3">
                 <router-outlet class="w-100"></router-outlet>

@@ -1,4 +1,4 @@
-import { Component, OnInit, } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
 import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
@@ -24,6 +24,7 @@ import { ToastService } from '../../../../services/toast.service';
 
 export class UltimaRottaComponent implements OnInit{
   public gameName = 'Ultima-rotta';
+  showSiteMap = true;
 
   timerDisplay: string = '30:00';
   solarDeathTestValue = 0;
@@ -35,6 +36,7 @@ export class UltimaRottaComponent implements OnInit{
 
   constructor(
     private toastService: ToastService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   async ngOnInit(): Promise<void> {
@@ -72,4 +74,9 @@ export class UltimaRottaComponent implements OnInit{
     this.timerDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
+  
+  onToggleSiteMap(show: boolean) {
+    this.showSiteMap = show;
+    this.cdr.detectChanges();
+  }
 }

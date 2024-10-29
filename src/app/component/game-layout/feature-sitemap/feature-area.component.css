@@ -33,3 +33,27 @@
   color: white;              /* Colore del testo */
   border: 2px solid #001f3f; /* Bordo per un ulteriore effetto */
 }
+
+.header {
+  background-color: #f8f9fa; /* Colore chiaro per l'intestazione */
+}
+
+.toggle-menu-button {
+  font-size: 1.5rem;
+}
+
+/* Menu aperto e chiuso */
+.menu-open {
+  width: 100%; /* Larghezza del menu quando è aperto */
+  transition: width 0.3s ease-in-out;
+}
+
+.menu-closed {
+  width: 50px; /* Larghezza ridotta del menu quando è chiuso */
+  transition: width 0.3s ease-in-out;
+}
+
+/* Stile icona */
+.mat-icon {
+  transition: transform 0.3s ease;
+}

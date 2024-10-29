@@ -58,5 +58,35 @@ body {
     background-color: #7554d7;
     cursor: pointer;
   }
-
+  
+  .site-map-open {
+    width: 16.6667%;
+    padding: 0;
+    height: 100%;
+    position: relative;
+  }
+  
+  .site-map-closed {
+    width: 2%;
+    padding: 0;
+    height: 100%;
+    position: relative;
+  
+  }
+  
+  .game-area-with-site-map-open {
+    width: 83.3333%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+  }
+  
+  .game-area-with-site-map-closed {
+    width: 98%;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    height: 100%;
+  }
   

@@ -1,51 +1,36 @@
-.ultima-rotta-container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 
 /* Barra Informazioni Fissa in Alto */
 .ultima-rotta-info-bar {
   width: 95%;
   padding-left: 1rem;
   color: white;
-  position: sticky; /* Fissa in cima all'interno del contenitore */
+  position: sticky;
+  /* Fissa in cima all'interno del contenitore */
   top: 0;
   z-index: 2;
-  background: linear-gradient(90deg, #2c3e50, #4a69bd); /* Sfondo sfumato */
+  background: linear-gradient(90deg, #2c3e50, #4a69bd);
+  /* Sfondo sfumato */
   border-radius: 8px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Ombra elegante */
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  /* Ombra elegante */
   font-family: 'Roboto', sans-serif;
 }
 
-/* Contenuto Scrollabile */
-.ultima-rotta-page {
-  flex-grow: 1;
-  overflow-y: auto;
-}
-
-.ultima-rotta-page {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.table-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
 
 
 /* Stile per ogni colonna */
-.timer-column, .solar-death-column, .dark-icon-column {
+.timer-column,
+.solar-death-column,
+.dark-icon-column {
   padding: 1rem;
   transition: background 0.3s, color 0.3s;
   border-radius: 5px;
 }
 
 /* Effetti hover */
-.timer-column:hover, .solar-death-column:hover, .dark-icon-column:hover {
+.timer-column:hover,
+.solar-death-column:hover,
+.dark-icon-column:hover {
   background: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
@@ -54,26 +39,32 @@
 .timer-display {
   font-size: 1.5rem;
   font-weight: bold;
-  color: #e74c3c; /* Colore rosso per enfatizzare il timer */
+  color: #e74c3c;
+  /* Colore rosso per enfatizzare il timer */
 }
 
 /* Stile per il testo del Test Morte Solare */
 .solar-death-column h4 {
   font-size: 1.2rem;
-  color: #f39c12; /* Colore giallo intenso */
+  color: #f39c12;
+  /* Colore giallo intenso */
 }
 
 /* Stile per l'icona del buio */
 .dark-icon {
   font-size: 2rem;
-  color: #bdc3c7; /* Colore grigio chiaro */
+  color: #bdc3c7;
+  /* Colore grigio chiaro */
   transition: transform 0.3s;
 }
 
 .dark-icon:hover {
-  transform: scale(1.2); /* Effetto di ingrandimento al passaggio del mouse */
-  color: #ecf0f1; /* Colore leggermente più chiaro */
+  transform: scale(1.2);
+  /* Effetto di ingrandimento al passaggio del mouse */
+  color: #ecf0f1;
+  /* Colore leggermente più chiaro */
 }
-.death-sun-timer{
+
+.death-sun-timer {
   cursor: pointer;
 }

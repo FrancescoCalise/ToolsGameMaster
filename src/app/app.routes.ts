@@ -11,11 +11,12 @@ import { MultiDynamicTablesComponent } from './component/multi-dynamic-tables/mu
 import { DungeonAndDragons5eComponent } from './component/game-layout/games/dungeonAndDragns5e/dungeonanddragons5e.component';
 import { UltimaRottaComponent } from './component/game-layout/games/ultimaRotta/ultimaRotta.component';
 import { ultimaRottaCriticDamage, ultimaRottaWeapon } from './component/game-layout/games/ultimaRotta/ultima-rotta-table';
-import { GenerateCharacterLurComponenet } from './component/game-layout/games/ultimaRotta/features/generate-character-lur/generate-character-lur.component';
+import { SessionManagerComponenet } from './component/session-manager/session-manger.component';
+import { GenerateCharacterLurComponent } from './component/game-layout/games/ultimaRotta/features/generate-character-lur/generate-character-lur.component';
 
 export const routes: Routes = [
   {
-    path:'games/ultima-rotta', redirectTo: '/games/ultima-rotta/SHOW_WEAPONS', pathMatch: 'full'
+    path:'games/ultima-rotta', redirectTo: '/games/ultima-rotta/SESSION_MANAGER', pathMatch: 'full'
   },
   {
     path: 'games',
@@ -43,6 +44,10 @@ export const routes: Routes = [
         },
         children: [
           {
+            path: 'SESSION_MANAGER',
+            component: SessionManagerComponenet
+          },
+          {
             path: 'SHOW_WEAPONS',
             component: MultiDynamicTablesComponent,
             data: {
@@ -58,7 +63,7 @@ export const routes: Routes = [
           },
           {
             path: 'CREATE_CHARACTER_ULTIMA_ROTTA',
-            component: GenerateCharacterLurComponenet,
+            component: GenerateCharacterLurComponent,
           }
           
         ]

@@ -1,0 +1,41 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Session Manager</h2>
+    <button class="btn btn-primary" (click)="toggleForm()">Create New Session</button>
+  </div>
+
+  <div *ngIf="showForm" class="mb-4">
+    <form #sessionForm="ngForm" (ngSubmit)="createNewSession()">
+      <div class="mb-3">
+        <label for="sessionName" class="form-label">Session Name</label>
+        <input type="text" id="sessionName" class="form-control" [(ngModel)]="newSession.sessionName" name="sessionName" required>
+      </div>
+      <button type="submit" class="btn btn-success" [disabled]="!sessionForm.valid">Save Session</button>
+      <button type="button" class="btn btn-secondary ms-2" (click)="toggleForm()">Cancel</button>
+    </form>
+  </div>
+  
+  <div *ngIf="sessions.length > 0; else noSessions" class="row">
+    <div *ngFor="let session of sessions" class="col-12 col-md-6 col-lg-4 mb-4">
+      <div class="card h-100" [ngClass]="{'active-card': session.default}">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-start">
+            <div>
+              <h5 class="card-title">{{ session.sessionName }}</h5>
+              <p class="card-text text-muted">Game: {{ session.gameName }}</p>
+            </div>
+            <div class="btn-group" role="group">
+              <button class="btn btn-sm btn-outline-secondary" (click)="editSession(session)">Edit</button>
+              <button class="btn btn-sm btn-outline-danger" (click)="deleteSession(session)">Delete</button>
+              <button class="btn btn-sm btn-outline-primary" [ngClass]="{'btn-primary': session.default}" (click)="setAsDefault(session)">Set Default</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #noSessions>
+    <div class="alert alert-info text-center">No sessions available. Click "Create New Session" to add one.</div>
+  </ng-template>
+</div>

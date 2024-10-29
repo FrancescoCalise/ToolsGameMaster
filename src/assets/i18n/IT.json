@@ -31,7 +31,6 @@
         "SETTINGS": "Impostazioni",
         "SELECT_LANGUAGE": "Seleziona la lingua",
         "INFORMATION": "Informationi di sistema"
-
     },
     "SYSTEM_FOOTER": {
         "TITLE": "OFFRIMI UNA BIRRA!",
@@ -60,17 +59,77 @@
         "COMPONENT_UNKNOWN": "Componente sconosciuto",
         "CODE_ERROR_LABEL": "Codice errore"
     },
-    "DASHBOARD":
-    {
+    "DASHBOARD": {
         "TITLE": "Dashboard"
     },
-    "ULTIMA_ROTTA":{
-        "TITLE": "L'ultima Rotta"
+    "ULTIMA_ROTTA": {
+        "TITLE": "L'ultima Rotta",
+        "ROLE": {
+            "LEADER": "Leader",
+            "SOLDATO": "Soldato",
+            "CANAGLIA": "Canaglia",
+            "RICOGNITORE": "Ricognitore",
+            "ARCANISTA": "Arcanista",
+            "DISCEPOLO_OSCURO": "Discepolo Oscuro"
+        },
+        "ABILITY": {
+            "ADDESTRAMENTO_MILITARE": "Addestramento Militare",
+            "AUTOCONTROLLO": "Autocontrollo",
+            "COMPETENZE_UNIVERSALI": "Competenze Universali",
+            "IMPARTIRE_COMANDI": "Impartire Comandi",
+            "NESSUNA_PAURA": "Nessuna Paura!",
+            "RESISTERE": "Resistere!",
+            "STRATEGIA_E_TATTICA": "Strategia e Tattica",
+            "UFFICIALE_SCIENTIFICO": "Ufficiale Scientifico",
+            "ULTIMO_BASTIONE": "Ultimo Bastione"
+        },
+        "GENETIC": {
+            "BIOS": "Bios",
+            "NOMADE": "Nomade",
+            "UMANOIDE": "Umanoide"
+        },
+        "SHEET": {
+            "CHARACTER_CREATION": "Creazione del Personaggio",
+            "CREATE_NEW_CHARACTER": "Crea Nuovo Personaggio",
+            "NAME": "Nome",
+            "GENETIC": "Genetica",
+            "ROLE": "Ruolo",
+            "EXCELLENCE": "Eccellenza",
+            "ATTRIBUTES": "Attributi",
+            "VALUE": "Valore",
+            "BONUS": "Bonus",
+            "STATS": "Statistiche",
+            "MAX_MANA": "Mana Massimo",
+            "MAX_LIFE": "Vita Massima",
+            "ARMOR": "Armatura",
+            "ADVENTURE_POINTS": "Punti Avventura",
+            "SCRAP": "Rottame",
+            "ABILITY": "Abilità",
+            "INVENTORY": "Inventario",
+            "BACKGROUND": "Storia",
+            "SAVE_CHARACTER": "Salva Personaggio",
+            "CANCEL": "Annulla",
+            "EDIT": "Modifica",
+            "DELETE": "Elimina",
+            "NO_CHARACTERS": "Nessun personaggio disponibile. Clicca su \"Crea Nuovo Personaggio\" per aggiungerne uno."
+        },
+        "ATTRIBUTES": {
+            "AGILITY": "Agilità",
+            "COURAGE": "Coraggio",
+            "STRENGTH": "Forza",
+            "INTELLIGENCE": "Intelligenza",
+            "MAGIC": "Magia",
+            "MANUALITY": "Manualità",
+            "PERCEPTION": "Percezione",
+            "SOCIALITY": "Socialità"
+        }
     },
-    "DUNGEON_AND_DRAGONS_5E":{
+    "DUNGEON_AND_DRAGONS_5E": {
         "TITLE": "Dungeon & Dragons 5E"
     },
-    "FEATURE":{
+    "FEATURE": {
+        "SESSION_MANAGER": "Gestione sessioni",
+        "TOOLTIP_SESSION_MANAGER": "Gestisci le sessioni di gioco",
         "TURN_ORDER": "Gestione turni",
         "TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori",
         "SHOW_WEAPONS": "Armi",
@@ -79,6 +138,5 @@
         "TOOLTIP_SHOW_CRITIC_DAMAGE": "Visualizza i danni critici",
         "CREATE_CHARACTER_ULTIMA_ROTTA": "Generatore personaggi",
         "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Genera un personaggio per l'ultima rotta"
-        
     }
 }

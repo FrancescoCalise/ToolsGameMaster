@@ -1,0 +1,13 @@
+.active-card {
+  border: 2px solid #007bff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+}
+
+
+.btn-outline-primary.active {
+  background-color: #007bff;
+}
+
+.btn-primary {
+  color: white;
+}

@@ -63,10 +63,10 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
     }
   }
 
-  async getItemsWhere(where: QueryFieldFilterConstraint): Promise<T[]> {
+  async getItemsWhere(where: QueryFieldFilterConstraint[]): Promise<T[]> {
     this.spinner.showSpinner();
     const colRef = collection(this.firestore, this.collectionName);
-    const q = query(colRef, where);
+    const q = query(colRef, ...where);
     const querySnapshot = await getDocs(q);
     this.spinner.hideSpinner();
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];

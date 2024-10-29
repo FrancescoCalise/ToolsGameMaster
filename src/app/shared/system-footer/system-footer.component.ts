@@ -32,6 +32,8 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
   currentLang: string = 'IT';
   private languageSubscription: Subscription = new Subscription;
   private userSubscription: Subscription = new Subscription;
+  private breakPoiintSub: Subscription = new Subscription;
+  deviceType: string = '';
 
   linksDonateImg: Record<string, string> = {
     "IT": "https://www.paypalobjects.com/it_IT/IT/i/btn/btn_donate_LG.gif",
@@ -44,6 +46,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
     private languageService: LanguageService,
     private toastService: ToastService,
     private translationMessageService: TranslationMessageService,
+    private breakpointService: BreakpointService,
     @Inject(USER_FIRESTORE_SERVICE) private firestoreUserService: FirestoreService<UserInformationSaved>
   ) {
     this.firestoreUserService.setCollectionName('users');
@@ -54,6 +57,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit(): Promise<void> {
+    this.deviceType = this.breakpointService.currentDeviceType;
     this.languageSubscription = this.languageService.subscribeToLanguageChanges()
       .subscribe(async (newLang: string) => {
         this.currentLang = newLang;
@@ -61,7 +65,12 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
         this.clearPayPalButtonContainer();
         await this.renderPayPalDonateButton(currentLink);
       });
-
+    this.breakPoiintSub = this.breakpointService.subscribeToBreakpointChanges().subscribe(
+      (deviceType) => {
+        this.deviceType = deviceType;
+        this.clearPayPalButtonContainer();
+        this.renderPayPalDonateButton(this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'])
+      });
     this.currentLang = this.languageService.getLanguage();
 
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
@@ -126,41 +135,41 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
 
   async renderPayPalDonateButton(currentLink: string) {
     let idDiv = 'paypal-donate-button-container';
-
+  
     setTimeout(async () => {
       const container = document.getElementById(idDiv);
       if (!container) {
-        let err = await this.translationMessageService.translate('SYSTEM_FOOTER.CONTAINER_NOT_FOUND')
+        let err = await this.translationMessageService.translate('SYSTEM_FOOTER.CONTAINER_NOT_FOUND');
         throw new Error(err);
       }
-
+  
       // @ts-ignore
       PayPal.Donation.Button({
         env: 'production', // Usa 'production' per la modalità di produzione
         hosted_button_id: 'DHARMWSVJYYL2',
         style: {
           layout: 'vertical', // Mostra il pulsante in layout verticale senza le carte
-          color: 'blue', // Colore del pulsante
-          shape: 'rect', // Forma rettangolare del pulsante
           label: 'donate' // Etichetta del pulsante (donate)
         },
         image: {
           src: currentLink
         },
         onComplete: async (details: any) => {
-          await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_SUCCESS')
+          await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_SUCCESS');
           console.log('Donation completed: ', details);
           await this.saveLastDonation();
         },
         onError: async (err: any) => {
-          await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_ERROR')
+          await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_ERROR');
           throw new Error(err);
         }
       })
-        .render(`#${idDiv}`);
+      .render(`#${idDiv}`);   
       this.isButtonVisibile = true;
     }, 0);
   }
+  
+
 
   async saveLastDonation() {
     if (!this.isAuthenticating) return;

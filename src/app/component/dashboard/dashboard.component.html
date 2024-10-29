@@ -1,13 +1,10 @@
-<div class="container">
-    <div class="row g-0 row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-      <div *ngFor="let game of games" class="col">
-        <div class="card h-100 game-card" (click)="navigateToGame(game.route)">
-          <img [src]="game.image" class="card-img-top" [alt]="game.name">
-          <div class="card-body text-center">
-            <h5 class="card-title">{{ game.name }}</h5>
-          </div>
-        </div>
+<div class="container d-flex flex-wrap justify-content-center">
+  <div *ngFor="let game of games" class="d-flex align-items-stretch m-2">
+    <div class="card h-100 game-card" (click)="navigateToGame(game.route)" style="width: 18rem;">
+      <img [src]="game.image" class="card-img-top" [alt]="game.name">
+      <div class="card-body text-center d-flex flex-column justify-content-between">
+        <h5 class="card-title">{{ game.name }}</h5>
       </div>
     </div>
   </div>
-  
+</div>

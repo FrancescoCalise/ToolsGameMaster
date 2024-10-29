@@ -54,7 +54,7 @@
 /* Altezza per desktop */
 @media (min-width: 1367px) {
     .header-fixed {
-        height: 70px;
+        height: 50px;
     }
 
     .footer-fixed {
@@ -62,14 +62,14 @@
     }
 
     .main-container-no-footer {
-        margin-top: 70px;
-        height: calc(100vh - 70px);
+        margin-top: 50px;
+        height: calc(100vh - 50px);
     }
 
     .main-container-with-footer {
-        margin-top: 70px;
+        margin-top: 50px;
         margin-bottom: 70px;
-        height: calc(100vh - 140px);
+        height: calc(100vh - 120px);
     }
 }
 
@@ -97,7 +97,7 @@
 /* Altezza per tablet */
 @media (min-width: 768px) and (max-width: 991px) {
     .header-fixed {
-        height: 50px;
+        height: 60px;
     }
 
     .footer-fixed {
@@ -105,21 +105,21 @@
     }
 
     .main-container-no-footer {
-        margin-top: 50px;
-        height: calc(100vh - 50px);
+        margin-top: 60px;
+        height: calc(100vh - 60px);
     }
 
     .main-container-with-footer {
-        margin-top: 50px;
+        margin-top: 60px;
         margin-bottom: 50px;
-        height: calc(100vh - 100px);
+        height: calc(100vh - 110px);
     }
 }
 
 /* Altezza per smartphone */
 @media (max-width: 767px) {
     .header-fixed {
-        height: 120px;
+        height: 80px;
     }
 
     .footer-fixed {
@@ -127,13 +127,13 @@
     }
 
     .main-container-no-footer {
-        margin-top: 120px;
-        height: calc(100vh - 120px);
+        margin-top: 80px;
+        height: calc(100vh - 80px);
     }
 
     .main-container-with-footer {
-        margin-top: 120px;
+        margin-top: 80px;
         margin-bottom: 120px;
-        height: calc(100vh - 240px);
+        height: calc(100vh - 200px);
     }
 }

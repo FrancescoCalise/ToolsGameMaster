@@ -27,9 +27,6 @@ import { MatSelectModule } from '@angular/material/select';
   imports: [
     SharedModule,
     SessionManagerWidgetComponent,
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule, MatSelectModule, MatInputModule
   ],
 })
 export class GenerateCharacterLurComponent implements OnInit {
@@ -37,7 +34,6 @@ export class GenerateCharacterLurComponent implements OnInit {
   defaultSession: SessionManager = {};
   gameName = '';
 
-  test = 'test';
   readonly rolesDefaultData = UtilitiesCreateCharacterLur.rolesDefaultData;
   readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
@@ -53,9 +49,6 @@ export class GenerateCharacterLurComponent implements OnInit {
 
   selectedGenes: string[] = ['', '', '']
   selectedAbilities: Ability[] = [];
-  onModalShown() {
-    this.cdr.detectChanges();
-  }
   @ViewChild('characterForm') characterForm!: NgForm;
   @ViewChild('characterModal') characterModal!: ElementRef<HTMLDivElement>;
 

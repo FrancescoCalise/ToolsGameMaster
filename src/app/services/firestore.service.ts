@@ -72,7 +72,7 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];
   }
 
-  async addItem(item: T, forceId?: string): Promise<boolean> {
+  async addItem(item: T, forceId?: string): Promise<string> {
     this.spinner.showSpinner();
     try {
       const colRef = collection(this.firestore, this.collectionName);
@@ -83,24 +83,40 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
       let docRef: any = null;
 
       if (haveId) {
-        docRef = doc(colRef, forceId)
+        docRef = doc(colRef, forceId);
       } else {
         docRef = doc(colRef);
       }
+
       if (docRef === null) {
         const message = await this.translationMessageService.translate("FIRESTORE.DOC_REF_NULL");
         throw new Error(message);
       }
 
-      await setDoc(docRef, { ...item });
-      return true;
+      this.convertUndefinedToNull(item);
+
+      await setDoc(docRef, item);
+      return docRef.id;
     } catch (e) {
       throw e;
-    }
-    finally {
+    } finally {
       this.spinner.hideSpinner();
     }
   }
+
+  // Convertire tutte le proprietà undefined in null (anche negli oggetti annidati)
+  private convertUndefinedToNull(obj: any): any {
+    for (const key in obj) {
+      if (obj[key] === undefined) {
+        obj[key] = null;
+      } else if (typeof obj[key] === 'object' && obj[key] !== null) {
+        // Se il valore è un oggetto, esegui la funzione ricorsivamente
+        this.convertUndefinedToNull(obj[key]);
+      }
+    }
+    return obj;
+  }
+
 
   async updateItem(item: T): Promise<boolean> {
     this.spinner.showSpinner();

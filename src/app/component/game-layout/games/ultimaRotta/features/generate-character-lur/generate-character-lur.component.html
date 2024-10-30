@@ -1,104 +1,68 @@
-<div class="container mt-4">
+<div class="w-100 h-100 p-3">
     <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2>{{ 'ULTIMA_ROTTA.SHEET.CHARACTER_CREATION' | translate }}</h2>
-        <button class="btn btn-primary btn-sm" (click)="toggleForm()">{{ 'ULTIMA_ROTTA.SHEET.CREATE_NEW_CHARACTER' | translate }}</button>
+        <div class="d-flex align-items-center">
+            <app-session-manager-widget (sessionLoaded)="onSessionLoaded($event)"></app-session-manager-widget>
+            <h2 class="page-title ms-3">{{ 'ULTIMA_ROTTA.CREATE_CHARACTER.CHARACTER_CREATION' | translate }}</h2>
+        </div>
+
+        <div class="d-flex">
+            <button class="btn btn-secondary btn-sm me-2" (click)="generateRandom()">
+                {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.GENERATE_RANDOM' | translate }}
+            </button>
+            <button class="btn btn-primary btn-sm me-2" (click)="printRandom()">
+                {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.PRINT_RANDOM' | translate }}
+            </button>
+            <button class="btn btn-primary btn-sm" (click)="toggleForm()">
+                {{ showForm ? ('ULTIMA_ROTTA.CREATE_CHARACTER.CLOSE_FORM' | translate) :
+                ('ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_NEW_CHARACTER' | translate) }}
+            </button>
+        </div>
     </div>
 
-    <div *ngIf="showForm" class="mb-4">
-        <form #characterForm="ngForm" (ngSubmit)="saveCharacter()">
-            <div class="row g-1 mb-3">
-                <div class="col-6 col-md-3">
-                    <label for="name" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.NAME' | translate }}</label>
-                    <input type="text" id="name" class="form-control form-control-sm" [(ngModel)]="character.name" name="name" required>
-                </div>
-                <div class="col-6 col-md-3">
-                    <label for="genetic" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}</label>
-                    <select id="genetic" class="form-select form-select-sm" [(ngModel)]="character.genetic" name="genetic" required>
-                        <option *ngFor="let option of genetic" [ngValue]="option.code">{{ option.description }}</option>
-                    </select>
-                </div>
-                <div class="col-6 col-md-3">
-                    <label for="role" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.ROLE' | translate }}</label>
-                    <select id="role" class="form-select form-select-sm" [(ngModel)]="character.role" name="role" required>
-                        <option *ngFor="let option of roles" [ngValue]="option.code">{{ option.description }}</option>
-                    </select>
-                </div>
-                <div class="col-6 col-md-3">
-                    <label for="excellence" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.EXCELLENCE' | translate }}</label>
-                    <input type="text" id="excellence" class="form-control form-control-sm" [(ngModel)]="character.excellence" name="excellence" required>
-                </div>
-            </div>
 
-            <h4>{{ 'ULTIMA_ROTTA.SHEET.ATTRIBUTES' | translate }}</h4>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-1 mb-3">
-                <div *ngFor="let attribute of attributeKeys" class="col mb-2">
-                    <label [for]="attribute.code" class="form-label text-center w-100">{{ 'ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code | translate }}</label>
-                    <div class="d-flex justify-content-between align-items-center">
-                        <input type="number" class="form-control form-control-sm me-1 w-50" [(ngModel)]="attributeValues[attribute.code].value" 
-                               [name]="attribute.code + 'Value'" (ngModelChange)="updateAttributeHelper(attribute.code, 'value', $event)" 
-                               placeholder="{{ 'ULTIMA_ROTTA.SHEET.VALUE' | translate }}" required>
-                        <input type="number" class="form-control form-control-sm w-50" [(ngModel)]="attributeValues[attribute.code].bonus" 
-                               [name]="attribute.code + 'Bonus'" (ngModelChange)="updateAttributeHelper(attribute.code, 'bonus', $event)" 
-                               placeholder="{{ 'ULTIMA_ROTTA.SHEET.BONUS' | translate }}" required>
-                    </div>
+    <!-- Modal Structure -->
+    <div class="modal fade" id="characterModal" #characterModal tabindex="-1" aria-labelledby="characterModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen custom-centered-modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="characterModalLabel">{{
+                        'ULTIMA_ROTTA.CREATE_CHARACTER.CHARACTER_CREATION' |
+                        translate }}</h5>
+                    <button type="button" class="btn-close" (click)="toggleForm()" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ng-container *ngTemplateOutlet="characterFormTemplate"></ng-container>
                 </div>
             </div>
-
-            <h4>{{ 'ULTIMA_ROTTA.SHEET.STATS' | translate }}</h4>
-            <div class="row g-1 mb-3">
-                <div class="col-4 col-md-2">
-                    <label for="maxMana" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.MAX_MANA' | translate }}</label>
-                    <input type="number" id="maxMana" class="form-control form-control-sm" [(ngModel)]="character.maxMana" name="maxMana">
-                </div>
-                <div class="col-4 col-md-2">
-                    <label for="maxLife" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.MAX_LIFE' | translate }}</label>
-                    <input type="number" id="maxLife" class="form-control form-control-sm" [(ngModel)]="character.maxLife" name="maxLife">
-                </div>
-                <div class="col-4 col-md-2">
-                    <label for="armor" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.ARMOR' | translate }}</label>
-                    <input type="number" id="armor" class="form-control form-control-sm" [(ngModel)]="character.armor" name="armor">
-                </div>
-                <div class="col-4 col-md-2">
-                    <label for="point_adventure" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.ADVENTURE_POINTS' | translate }}</label>
-                    <input type="number" id="point_adventure" class="form-control form-control-sm" [(ngModel)]="character.point_adventure" name="point_adventure">
-                </div>
-                <div class="col-4 col-md-2">
-                    <label for="scrap" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.SCRAP' | translate }}</label>
-                    <input type="number" id="scrap" class="form-control form-control-sm" [(ngModel)]="character.scrap" name="scrap">
-                </div>
-            </div>
-
-            <div class="row g-1 mb-3">
-                <div class="col-md-6">
-                    <label for="ability" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.ABILITY' | translate }}</label>
-                    <textarea id="ability" class="form-control form-control-sm" [(ngModel)]="character.ability" name="ability"></textarea>
-                </div>
-                <div class="col-md-6">
-                    <label for="inventory" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.INVENTORY' | translate }}</label>
-                    <textarea id="inventory" class="form-control form-control-sm" [(ngModel)]="character.inventory" name="inventory"></textarea>
-                </div>
-                <div class="col-md-12">
-                    <label for="background" class="form-label">{{ 'ULTIMA_ROTTA.SHEET.BACKGROUND' | translate }}</label>
-                    <textarea id="background" class="form-control form-control-sm" [(ngModel)]="character.background" name="background"></textarea>
-                </div>
-            </div>
-
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-success btn-sm me-2" [disabled]="!characterForm.valid">{{ 'ULTIMA_ROTTA.SHEET.SAVE_CHARACTER' | translate }}</button>
-                <button type="button" class="btn btn-secondary btn-sm" (click)="toggleForm()">{{ 'ULTIMA_ROTTA.SHEET.CANCEL' | translate }}</button>
-            </div>
-        </form>
+        </div>
     </div>
+
 
     <div *ngIf="characters.length > 0; else noCharacters" class="row g-2">
         <div *ngFor="let character of characters" class="col-12 col-md-6 col-lg-4">
             <div class="card h-100">
                 <div class="card-body">
                     <h5 class="card-title">{{ character.name }}</h5>
-                    <p class="card-text">{{ 'ULTIMA_ROTTA.SHEET.ROLE' | translate }}: {{ character.role }}</p>
+                    <div class="d-flex flex-row">
+                        <div class="col-2">
+                            <p class="card-text">
+                                <strong>{{ 'ULTIMA_ROTTA.SHEET.ROLE' | translate }}</strong> : {{
+                                character.role?.description }}
+                            </p>
+                        </div>
+                        <div class="col-2">
+                            <p class="card-text">
+                                <strong>{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}</strong> : {{
+                                character.genetic.description }}
+                            </p>
+                        </div>
+                    </div>
                     <div class="btn-group" role="group">
-                        <button class="btn btn-sm btn-outline-secondary" (click)="editCharacter(character)">{{ 'ULTIMA_ROTTA.SHEET.EDIT' | translate }}</button>
-                        <button class="btn btn-sm btn-outline-danger" (click)="deleteCharacter(character)">{{ 'ULTIMA_ROTTA.SHEET.DELETE' | translate }}</button>
+                        <button class="btn btn-sm btn-outline-secondary" (click)="editCharacter(character)">{{
+                            'ULTIMA_ROTTA.SHEET.EDIT' | translate }}</button>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteCharacter(character)">{{
+                            'ULTIMA_ROTTA.SHEET.DELETE' | translate }}</button>
                     </div>
                 </div>
             </div>
@@ -106,6 +70,214 @@
     </div>
 
     <ng-template #noCharacters>
-        <div class="alert alert-info text-center">{{ 'ULTIMA_ROTTA.SHEET.NO_CHARACTERS' | translate }}</div>
+        <div class="alert alert-info text-center">{{ 'ULTIMA_ROTTA.CREATE_CHARACTER.NO_CHARACTERS' | translate }}</div>
     </ng-template>
 </div>
+
+
+<ng-template #characterFormTemplate>
+    <form #characterForm="ngForm" (ngSubmit)="saveCharacter()">
+        <div class="row g-1 mb-3">
+
+            <div class="col-12 col-sm-4 col-md-3">
+                <label for="name" class="form-label text-muted fw-semibold">{{ 'ULTIMA_ROTTA.SHEET.NAME'
+                    | translate
+                    }}</label>
+                <input type="text" id="name" class="form-control form-control-sm" [(ngModel)]="character.name"
+                    name="name" required>
+            </div>
+
+            <div class="col-12 col-sm-3 col-md-3">
+                <label for="genetic" class="form-label text-muted fw-semibold">{{
+                    'ULTIMA_ROTTA.SHEET.GENETIC' |
+                    translate }}</label>
+                <select id="genetic" class="form-select form-select-sm" [(ngModel)]="character.genetic" name="genetic"
+                    required (change)="onChangeGenetic(character.genetic)" [compareWith]="compareById">
+                    <option *ngFor="let option of geneticDefaultData" [ngValue]="option">{{
+                        option.description }}
+                    </option>
+                </select>
+            </div>
+
+            <div class="col-12 col-sm-3 col-md-3">
+                <label for="role" class="form-label text-muted fw-semibold">{{ 'ULTIMA_ROTTA.SHEET.ROLE' | translate
+                    }}</label>
+                <select id="role" class="form-select form-select-sm" [(ngModel)]="character.role" name="role" required
+                    (change)="onChangeRole(character.role)" [compareWith]="compareById">
+                    <option *ngFor="let option of rolesDefaultData" [ngValue]="option">{{ option.description }}</option>
+                </select>
+            </div>
+
+
+            <div class="col-12 col-sm-2 col-md-3">
+                <label for="excellence" class="form-label text-muted fw-semibold">{{
+                    'ULTIMA_ROTTA.SHEET.EXCELLENCE'
+                    | translate }}</label>
+                <select id="excellence" class="form-select form-select-sm" [(ngModel)]="character.excellence"
+                    name="excellence">
+                    <option *ngFor="let attribute of character.attributes" [ngValue]="attribute.description">{{
+                        attribute.description }}</option>
+                </select>
+            </div>
+        </div>
+
+
+        <div class="row g-1 mb-3 d-flex justify-content-center align-items-center">
+            <div *ngIf="currentGeneticHaveGenes()" class="col-12 col-sm-12 col-md-6 mt-3">
+                <label class="form-label">{{ 'ULTIMA_ROTTA.SHEET.SELECT_GENES' | translate }}</label>
+                <div class="d-flex">
+                    <!-- Dropdown for each gene selection -->
+                    <div class="col-4" *ngFor="let index of [0, 1, 2]">
+                        <select class="form-select form-select-sm" [(ngModel)]="selectedGenes[index]"
+                            [ngModelOptions]="{standalone: true}" name="selectedGene{{ index }}" required
+                            (change)="onSelectGenes(selectedGenes[index], index)">
+                            <option *ngFor="let gene of getDefaultGenes(character.genetic.code)" [ngValue]="gene">{{
+                                gene }}</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class=" mt-4 mb-4">
+            <div class="row h-100 w-100">
+                <!-- Left Column: Attributes -->
+                <div class="col-3 col-md-2 col-lg-2 h-100">
+                    <h4 class="section-title text-center">{{ 'ULTIMA_ROTTA.SHEET.ATTRIBUTES' | translate }}</h4>
+                    <div class="row g-1 p-3 border">
+                        <div *ngFor="let attribute of character.attributes" class="col-12 mb-2">
+                            <label [for]="attribute.code" class="form-label text-muted fw-semibold w-100 text-center">{{
+                                'ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code | translate }}</label>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <input type="number" class="form-control form-control-sm text-center me-1 w-50"
+                                    [(ngModel)]="attribute.value" [name]="attribute.code + 'Value'"
+                                    (ngModelChange)="updateAttribute(attribute.code, 'value', $event)" step="1">
+                                <label class="form-label text-center mx-1 text-muted fw-semibold">D</label>
+                                <input type="number" class="form-control form-control-sm text-center w-50"
+                                    [(ngModel)]="attribute.bonus" [name]="attribute.code + 'Bonus'"
+                                    (ngModelChange)="updateAttribute(attribute.code, 'bonus', $event)" step="1">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Right Column: Stats and Additional Information -->
+                <div class="col-9 col-md-10 col-lg-10 d-flex flex-column h-100">
+                    <!-- STATS Section -->
+                    <div class="mb-3">
+                        <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.STATS' | translate }}</h4>
+                        <div class="row g-1 p-3 border">
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <label for="mana" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.MAX_MANA' | translate
+                                    }}</label>
+                                <input type="number" id="mana" class="form-control form-control-sm"
+                                    [(ngModel)]="character.mana" name="mana">
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <label for="life" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.MAX_LIFE' | translate
+                                    }}</label>
+                                <input type="number" id="life" class="form-control form-control-sm"
+                                    [(ngModel)]="character.life" name="life">
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <label for="armor" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.ARMOR' | translate
+                                    }}</label>
+                                <input type="number" id="armor" class="form-control form-control-sm"
+                                    [(ngModel)]="character.armor" name="armor">
+                            </div>
+                            <div class="col-4 col-md-4 col-lg-4">
+                                <label for="point_adventure" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.ADVENTURE_POINTS' | translate }}</label>
+                                <input type="number" id="point_adventure" class="form-control form-control-sm"
+                                    [(ngModel)]="character.point_adventure" name="point_adventure">
+                            </div>
+                            <div class="col-2 col-md-2 col-lg-2">
+                                <label for="scrap" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.SCRAP' | translate
+                                    }}</label>
+                                <input type="number" id="scrap" class="form-control form-control-sm"
+                                    [(ngModel)]="character.scrap" name="scrap">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- ADDITIONAL INFO Section -->
+                    <div class="h-100 w-100 d-flex flex-column">
+                        <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.ADDITIONAL_INFO' | translate }}
+                        </h4>
+                        <div class="row g-1 p-3 border h-100 flex-grow-1">
+
+                            <div class="col-md-6 d-flex flex-column h-100">
+                                <label for="ability" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.ABILITY' | translate }}</label>
+                                <label *ngIf="!character.role">{{ 'ULTIMA_ROTTA.SHEET.SELECT_ROLE_FIRST' | translate
+                                    }}</label>
+
+                                <div *ngIf="character.role" id="ability" class="ability-checkboxes">
+                                    <div class="row">
+                                        <!-- Left Column -->
+                                        <div class="col-6">
+                                            <ng-container
+                                                *ngFor="let ability of getAbilityOption(character.role.code); let i = index">
+                                                <div class="form-check" *ngIf="i % 2 === 0">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        [id]="'ability_' + ability.code"
+                                                        [checked]="isAbilitySelected(ability)"
+                                                        (change)="toggleAbilitySelection(ability)">
+                                                    <label class="form-check-label" [for]="'ability_' + ability.code">{{
+                                                        ability.description }}</label>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+
+                                        <!-- Right Column -->
+                                        <div class="col-6">
+                                            <ng-container
+                                                *ngFor="let ability of getAbilityOption(character.role.code); let i = index">
+                                                <div class="form-check" *ngIf="i % 2 !== 0">
+                                                    <input type="checkbox" class="form-check-input"
+                                                        [id]="'ability_' + ability.code"
+                                                        [checked]="isAbilitySelected(ability)"
+                                                        (change)="toggleAbilitySelection(ability)">
+                                                    <label class="form-check-label" [for]="'ability_' + ability.code">{{
+                                                        ability.description }}</label>
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6 d-flex flex-column h-100">
+                                <label for="inventory" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.INVENTORY' |
+                                    translate }}</label>
+                                <textarea id="inventory" class="form-control form-control-lg flex-grow-1"
+                                    [(ngModel)]="character.inventory" name="inventory"></textarea>
+                            </div>
+                            <div class="col-md-12 d-flex flex-column flex-grow-1 h-100">
+                                <label for="background" class="form-label text-muted fw-semibold">{{
+                                    'ULTIMA_ROTTA.SHEET.BACKGROUND' |
+                                    translate }}</label>
+                                <textarea id="background" class="form-control form-control-lg flex-grow-1"
+                                    [(ngModel)]="character.background" name="background"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-success btn-sm me-2" [disabled]="!characterForm.valid">{{
+                'ULTIMA_ROTTA.SHEET.SAVE_CHARACTER' | translate }}</button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="toggleForm()">{{
+                'ULTIMA_ROTTA.SHEET.CANCEL' | translate }}</button>
+        </div>
+    </form>
+</ng-template>

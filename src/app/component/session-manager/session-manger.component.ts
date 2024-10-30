@@ -39,7 +39,9 @@ export class SessionManagerComponenet implements OnInit, AfterViewInit {
     private cacheService: CacheStorageService,
     @Inject(SESSION_MANAGER_SERVICE) private firestoreSessionManagerService: FirestoreService<SessionManager>
 
-  ) { }
+  ) { 
+    this.firestoreSessionManagerService.setCollectionName('session-manager');
+  }
 
   ngAfterViewInit(): void {
     this.spinnerService.hideSpinner();
@@ -71,7 +73,7 @@ export class SessionManagerComponenet implements OnInit, AfterViewInit {
     if (this.sessions.length > 0) {
       var defaultSession = this.sessions.find(s => s.default);
       if (defaultSession) {
-        this.cacheService.setItem('defaultSession', defaultSession);
+        this.cacheService.setItem(this.cacheService.defaultSession, defaultSession);
       }
     }
   }
@@ -98,7 +100,9 @@ export class SessionManagerComponenet implements OnInit, AfterViewInit {
     } else {
       if (this.newSession.sessionName) {
         this.newSession.gameName = this.gameName;
-        await this.firestoreSessionManagerService.addItem(this.newSession);
+        
+        var id = await this.firestoreSessionManagerService.addItem(this.newSession);
+        this.newSession.id = id;
         this.sessions.push({ ...this.newSession });
       }
     }

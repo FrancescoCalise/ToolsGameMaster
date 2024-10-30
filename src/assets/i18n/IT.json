@@ -88,9 +88,15 @@
             "NOMADE": "Nomade",
             "UMANOIDE": "Umanoide"
         },
-        "SHEET": {
+        "CREATE_CHARACTER":{
+            "PRINT_RANDOM": "Stampa personaggio casuale",
+            "GENERATE_RANDOM": "Genera Casuale",
             "CHARACTER_CREATION": "Creazione del Personaggio",
             "CREATE_NEW_CHARACTER": "Crea Nuovo Personaggio",
+            "NO_CHARACTERS": "Nessun personaggio disponibile. Clicca su \"Crea Nuovo Personaggio\" per aggiungerne uno.",
+            "CLOSE_FORM": "Chiudi la crezione del personaggio"
+        },
+        "SHEET": {
             "NAME": "Nome",
             "GENETIC": "Genetica",
             "ROLE": "Ruolo",
@@ -99,8 +105,8 @@
             "VALUE": "Valore",
             "BONUS": "Bonus",
             "STATS": "Statistiche",
-            "MAX_MANA": "Mana Massimo",
-            "MAX_LIFE": "Vita Massima",
+            "MAX_MANA": "Mana",
+            "MAX_LIFE": "Salute",
             "ARMOR": "Armatura",
             "ADVENTURE_POINTS": "Punti Avventura",
             "SCRAP": "Rottame",
@@ -111,7 +117,9 @@
             "CANCEL": "Annulla",
             "EDIT": "Modifica",
             "DELETE": "Elimina",
-            "NO_CHARACTERS": "Nessun personaggio disponibile. Clicca su \"Crea Nuovo Personaggio\" per aggiungerne uno."
+            "SELECT_GENES": "Seleziona Genetica",
+            "ADDITIONAL_INFO": "Informazioni Aggiuntive",
+            "SELECT_ROLE_FIRST": "Seleziona prima il ruolo"
         },
         "ATTRIBUTES": {
             "AGILITY": "Agilità",
@@ -122,6 +130,19 @@
             "MANUALITY": "Manualità",
             "PERCEPTION": "Percezione",
             "SOCIALITY": "Socialità"
+        },
+        "SESSION_MANAGER": {
+            "TITLE": "Gestione Sessioni",
+            "CREATE_NEW_SESSION": "Crea Nuova Sessione",
+            "SESSION_NAME_LABEL": "Nome della Sessione",
+            "SAVE_SESSION": "Salva Sessione",
+            "CANCEL": "Annulla",
+            "GAME_LABEL": "Gioco",
+            "EDIT": "Modifica",
+            "DELETE": "Elimina",
+            "SET_ACTIVE": "Imposta come Attiva",
+            "NO_SESSIONS_AVAILABLE": "Nessuna sessione disponibile. Clicca 'Crea Nuova Sessione' per aggiungerne una.",
+            "ACTIVE_SESSION": "Sessione Attiva"
         }
     },
     "DUNGEON_AND_DRAGONS_5E": {

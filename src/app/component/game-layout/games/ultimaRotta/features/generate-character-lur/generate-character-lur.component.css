@@ -1,32 +1,79 @@
-.container {
-    max-width: 1200px;
+.card {
+  transition: transform 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.btn-group {
+  margin-top: 10px;
+}
+
+form {
+  background: #f8f9fa;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+  display: flex;
+  gap: 10px;
+}
+
+.page-title {
+  color: #6c757d; /* Bootstrap Primary Color */
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  font-size: 1.75rem;
+}
+
+.section-title {
+  color: #6c757d; /* Bootstrap Secondary Color */
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.25rem;
+}
+
+.custom-centered-modal {
+  max-width: 60vw; /* 80% of viewport width */
+  max-height: 90vh; /* 80% of viewport height */
+  margin: auto; /* Centers the modal horizontally and vertically */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3rem;
+}
+
+.modal-content {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+    /* For smaller screens, reduce min-height to avoid excessive space usage */
+    .row.flex-grow-1 .col-md-6,
+    .row.flex-grow-1 .col-md-12 {
+        min-height: 18.8vh;
+    }
+}
+
+@media (min-width: 769px) and (max-width: 991px) {
+  /* For smaller screens, reduce min-height to avoid excessive space usage */
+  .row.flex-grow-1 .col-md-6,
+  .row.flex-grow-1 .col-md-12 {
+      min-height: 22.8vh;
   }
-  
-  .card {
-    transition: transform 0.2s ease-in-out;
-  }
-  
-  .card:hover {
-    transform: scale(1.05);
-  }
-  
-  .btn-group {
-    margin-top: 10px;
-  }
-  
-  form {
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  h4 {
-    margin-top: 20px;
-  }
-  
-  .input-group {
-    display: flex;
-    gap: 10px;
-  }
-  
+}
+
+@media (min-width: 992px) {
+    /* For larger screens, allow a bit more space */
+    .row.flex-grow-1 .col-md-6,
+    .row.flex-grow-1 .col-md-12 {
+        min-height: 18.8vh;
+    }
+}

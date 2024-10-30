@@ -1,10 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { SharedModule } from '../../../../../../shared/shared.module';
-import { ToastService } from '../../../../../../services/toast.service';
-import { CharacterAttribute, CharacterSheetLUR, Attribute, Role, Genetic } from './charachter-sheet-lur';
+import { Ability, CharacterSheetLUR, Genetic, Role } from './charachter-sheet-lur';
 import { TranslationMessageService } from '../../../../../../services/translation-message-service';
-import { attributeKeys, genetic, roles } from './data-sheet-lur';
-
+import { NgForm } from '@angular/forms';
+import { FirestoreService } from '../../../../../../services/firestore.service';
+import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
+import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
+import { SessionManager } from '../../../../../../interface/Document/SessionManager';
+import { CacheStorageService } from '../../../../../../services/cache-storage.service';
+import { ActivatedRoute } from '@angular/router';
+import { SpinnerService } from '../../../../../../services/spinner.service';
+import * as bootstrap from 'bootstrap';
+import { SessionManagerWidgetComponent } from '../../../../../session-manager-widget/session-manager-widget.component';
+import { UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
+import { RandomNameService } from '../../../../../../services/randomNameService';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -13,142 +22,223 @@ import { attributeKeys, genetic, roles } from './data-sheet-lur';
   standalone: true,
   imports: [
     SharedModule,
+    SessionManagerWidgetComponent,
   ],
 })
 export class GenerateCharacterLurComponent implements OnInit {
-  attributeKeys: Attribute[] = attributeKeys;
+  sessionLoaded = false;
+  defaultSession: SessionManager = {};
+  gameName = '';
 
-  attributeValues: { [key: string]: CharacterAttribute } = {};
+  readonly rolesDefaultData = UtilitiesCreateCharacterLur.rolesDefaultData;
+  readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
+  readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
+
   characters: CharacterSheetLUR[] = [];
-  character: CharacterSheetLUR = this.initializeCharacter();
-  showForm: boolean = false;
+  showForm = false;
+  character: CharacterSheetLUR = {
+    genetic: {} as Genetic,
+    attributes: []
+  };
 
-  roles = roles;
-  genetic = genetic;
+  selectedGenes: string[] = ['', '', '']
+  selectedAbilities: Ability[] = [];
 
-  constructor(private toastService: ToastService, private translationMessageService: TranslationMessageService) { }
+  @ViewChild('characterForm') characterForm!: NgForm;
+  @ViewChild('characterModal') characterModal!: ElementRef<HTMLDivElement>;
 
-  async ngOnInit(): Promise<void> {
-    this.characters = this.getCharacters();
-    this.initializeAttributeValues();
+  constructor(private translationMessageService: TranslationMessageService,
+    @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLUR>,
+    private cacheService: CacheStorageService,
+    private route: ActivatedRoute,
+    private spineerService: SpinnerService,
+    private randomNameService: RandomNameService) 
+  {
+    firestoreLurSheetService.setCollectionName('character-sheet-lur');
+  }
+
+  onSessionLoaded(loadedSession: SessionManager) {
+    this.defaultSession = loadedSession;
+    this.sessionLoaded = true;
+    this.ngOnInit();
+  }
+
+  async ngOnInit() {
+    this.spineerService.showSpinner();
+
     await this.setDescriptionsLanguages();
+    await this.loadCharacters();
+
+    this.character = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id); //Sempre dopo le traduzioni
+    this.spineerService.hideSpinner();
   }
 
-  async setDescriptionsLanguages() {
-    this.roles.forEach(async role => {
-      let codeIDML = 'ULTIMA_ROTTA.ROLE.' + role.code;
-      role.description = await this.translationMessageService.translate(codeIDML);
+  async loadCharacters(): Promise<void> {
+    if (!this.defaultSession) return;
+    let sessionId = this.defaultSession?.id;
+    let whereConditions: QueryFieldFilterConstraint[] = [];
+    whereConditions.push(where('sessionId', '==', sessionId));
+    this.characters = await this.firestoreLurSheetService.getItemsWhere(whereConditions);
+
+  }
+
+  async setDescriptionsLanguages(): Promise<void> {
+    for (const role of UtilitiesCreateCharacterLur.rolesDefaultData) {
+      role.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ROLE.' + role.code);
       if (role.abilities) {
-        role.abilities.forEach(async ability => {
-          let codeIDML = 'ULTIMA_ROTTA.ABILITY.' + ability.code;
-          ability.description = await this.translationMessageService.translate(codeIDML);
-        });
+        for (const ability of role.abilities) {
+          ability.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ABILITY.' + ability.code);
+        }
       }
-    });
-    this.genetic.forEach(async genetic => {
-      let codeIDML = 'ULTIMA_ROTTA.GENETIC.' + genetic.code;
-      genetic.description = await this.translationMessageService.translate(codeIDML);
-    });
-    this.attributeKeys.forEach(async attribute => {
-      let codeIDML = 'ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code;
-      attribute.description = await this.translationMessageService.translate(codeIDML);
-    });
+    }
+
+    for (const g of UtilitiesCreateCharacterLur.geneticDefaultData) {
+      g.description = await this.translationMessageService.translate('ULTIMA_ROTTA.GENETIC.' + g.code);
+    }
+
+    for (const attribute of UtilitiesCreateCharacterLur.attributeKeys) {
+      attribute.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code);
+    }
   }
 
-  initializeAttributeValues(): void {
-    this.attributeKeys.forEach(attribute => {
-      this.attributeValues[attribute.code] = { value: 0, bonus: 0 };
-    });
-  }
-
-  getCharacters(): CharacterSheetLUR[] {
-    return []; // Replace with actual service call to fetch characters
-  }
-
-  toggleForm(): void {
+  toggleForm() {
     this.showForm = !this.showForm;
-    if (!this.showForm) {
-      this.character = this.initializeCharacter();
-      this.initializeAttributeValues();
+    if (this.showForm) {
+      const modalElement = this.characterModal.nativeElement;
+      const bootstrapModal = new bootstrap.Modal(modalElement);
+      bootstrapModal.show();
+    } else {
+      const modalElement = this.characterModal.nativeElement;
+      const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+      bootstrapModal?.hide();
     }
   }
 
-  initializeCharacter(): CharacterSheetLUR {
-    const attributes: {
-      agility: CharacterAttribute;
-      courage: CharacterAttribute;
-      strength: CharacterAttribute;
-      intelligence: CharacterAttribute;
-      magic: CharacterAttribute;
-      manuality: CharacterAttribute;
-      perception: CharacterAttribute;
-      sociality: CharacterAttribute;
-    } = {
-      agility: { value: 0, bonus: 0 },
-      courage: { value: 0, bonus: 0 },
-      strength: { value: 0, bonus: 0 },
-      intelligence: { value: 0, bonus: 0 },
-      magic: { value: 0, bonus: 0 },
-      manuality: { value: 0, bonus: 0 },
-      perception: { value: 0, bonus: 0 },
-      sociality: { value: 0, bonus: 0 },
-    };
+  async saveCharacter(): Promise<void> {
+    let newCharacter = this.character as CharacterSheetLUR;
 
-    return {
-      name: '',
-      attributes: attributes,
-      maxMana: 0,
-      maxLife: 0,
-      armor: 0,
-      ability: '',
-      inventory: '',
-      scrap: '',
-      point_adventure: 0,
-      background: '',
-    };
+    if (newCharacter.id) {
+      const index = this.characters.findIndex(char => char.id === newCharacter.id);
+      if (index !== -1) this.characters[index] = newCharacter;
+    } else {
+      var id = await this.firestoreLurSheetService.addItem(newCharacter);
+      newCharacter.id = id;
+      this.characters.push(newCharacter);
+    }
+    this.resetForm();
+
   }
 
-  saveCharacter(): void {
-    if (this.character.name) {
-      const existingCharacterIndex = this.characters.findIndex(char => char.name === this.character.name);
-      if (existingCharacterIndex !== -1) {
-        this.characters[existingCharacterIndex] = { ...this.character };
-      } else {
-        this.characters.push({ ...this.character });
-      }
-    }
+  editCharacter(character: CharacterSheetLUR) {
+    this.character = character;
     this.toggleForm();
   }
 
-  editCharacter(character: CharacterSheetLUR): void {
-    this.character = { ...character };
-
-    if (character.attributes) {
-      this.attributeKeys.forEach(attribute => {
-        const key = attribute.code as keyof typeof character.attributes;
-        this.attributeValues[attribute.code] = {
-          value: character.attributes[key]?.value ?? 0,
-          bonus: character.attributes[key]?.bonus ?? 0,
-        };
-      });
-    } else {
-      this.initializeAttributeValues();
+  async deleteCharacter(character: CharacterSheetLUR): Promise<void> {
+    if (character.id !== undefined) {
+      await this.firestoreLurSheetService.deleteItem(character.id);
+      this.characters = this.characters.filter(char => char.id !== character.id);
     }
-
-    this.showForm = true;
   }
 
-  updateAttributeHelper(attributeCode: string, type: 'value' | 'bonus', value: number): void {
-    this.updateAttribute(attributeCode as keyof CharacterSheetLUR['attributes'], type, value);
-  }
-  
-  updateAttribute(attributeCode: keyof CharacterSheetLUR['attributes'], type: 'value' | 'bonus', value: number): void {
-    this.attributeValues[attributeCode][type] = value;
-    this.character.attributes[attributeCode][type] = value;
+  updateAttribute(code: string, key: 'value' | 'bonus', value: number) {
+    if (this.character && this.character.attributes) {
+      const attribute = this.character.attributes.find(attr => attr.code === code);
+      if (attribute) {
+        attribute[key] = Math.floor(value); // Ensures only integers are saved
+      }
+    }
   }
 
+  toggleAbilitySelection(ability: Ability) {
+    if (this.character.role && this.character.role.abilities) {
+      const index = this.character.role.abilities.findIndex(a => a.code === ability.code);
+      if (index === -1) {
+        // Add ability if not already selected
+        this.character.role.abilities = [...this.character.role.abilities, ability];
+      } else {
+        // Remove ability if already selected
+        this.character.role.abilities = this.character.role.abilities.filter(a => a.code !== ability.code);
+      }
+    }
+  }
 
-  deleteCharacter(character: CharacterSheetLUR): void {
-    this.characters = this.characters.filter(char => char !== character);
+  isAbilitySelected(ability: Ability): boolean {
+    if (this.character.role && this.character.role.abilities) {
+      return this.character.role?.abilities.some(a => a.code === ability.code) || false;
+    }
+    return false;
+  }
+
+  getAbilityOption(roleId: string): Ability[] {
+    const role = UtilitiesCreateCharacterLur.rolesDefaultData.find(r => r.code === roleId);
+    return role ? role.abilities as Ability[] : [];
+  }
+
+  getDefaultGenes(geneticId: string): string[] {
+    const genetic = UtilitiesCreateCharacterLur.geneticDefaultData.find(r => r.code === geneticId);
+    return genetic ? genetic.genes as string[] : [];
+  }
+
+  roleSelected(role: Role) {
+    if (role) {
+      return UtilitiesCreateCharacterLur.rolesDefaultData.find(r => r.code === role.code);
+    } return undefined;
+  }
+
+  onChangeRole(selectedRole: Role | undefined) {
+    if (selectedRole) {
+      this.character.role = { ...selectedRole, abilities: [] };
+      this.selectedAbilities = [];
+    } else {
+      this.character.role = undefined;
+      this.selectedAbilities = [];
+    }
+  }
+
+  onChangeGenetic(selectedGenetic: Genetic | undefined) {
+    if (selectedGenetic) {
+      this.character.genetic = { ...selectedGenetic, genes: [] };
+      this.selectedGenes = [];
+    } else {
+      this.character.role = undefined;
+      this.selectedGenes = [];
+    }
+  }
+
+  currentGeneticHaveGenes(): boolean {
+    let currentGenetic = UtilitiesCreateCharacterLur.geneticDefaultData.find(g => g.code === this.character.genetic?.code);
+    if (currentGenetic && currentGenetic.genes) {
+      return currentGenetic.genes.length > 0;
+    }
+    return false;
+  }
+
+  onSelectGenes(genes: string, index: number) {
+    this.selectedGenes[index] = genes;
+    if (this.character.genetic) {
+      this.character.genetic.genes = this.selectedGenes;
+    }
+  }
+
+  compareById<T extends { id?: any }>(obj1: T, obj2: T): boolean {
+    return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
+  }
+
+  private resetForm() {
+    this.character = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
+    if (this.characterForm) this.characterForm.resetForm();
+    this.toggleForm();
+  }
+
+  async generateRandom() {
+    let newChar = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
+    
+    newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService);
+    console.log(newChar);
+  }
+
+  printRandom() {
+
   }
 }

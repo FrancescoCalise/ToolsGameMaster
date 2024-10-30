@@ -5,7 +5,8 @@ import { Injectable } from '@angular/core';
 })
 export class CacheStorageService {
   public readonly userInfoKey = 'UserInfo';
-  
+  public readonly defaultSession = 'DefaultSession';
+
   constructor() { }
 
   public setItem(key: string, value: any) {

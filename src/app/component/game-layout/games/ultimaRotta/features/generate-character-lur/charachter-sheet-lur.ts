@@ -1,58 +1,43 @@
 import { BaseDocument } from '../../../../../../interface/Document/BaseModel';
 
-export interface CharacterAttribute {
-    value: number;
-    bonus: number;
-}
 
 export interface CharacterSheetLUR extends BaseDocument {
     name?: string;
-    genetic?: string;
+    genetic: Genetic;
     excellence?: string;
-    role?: string;
-    attributes: {
-        agility: CharacterAttribute;
-        courage: CharacterAttribute;
-        strength: CharacterAttribute;
-        intelligence: CharacterAttribute;
-        magic: CharacterAttribute;
-        manuality: CharacterAttribute;
-        perception: CharacterAttribute;
-        sociality: CharacterAttribute;
-    };
-    maxMana?: number;
-    currentMana?: number;
-    maxLife?: number;
-    currentLife?: number;
+    role?: Role;
+    attributes: Attribute[];
+    mana?: number;
+    life?: number;
     armor?: number;
-    ability?: string;
     inventory?: string;
-    scrap?: string;
+    scrap?: number;
     point_adventure?: number;
     background?: string;
+    sessionId?: string;
 }
 
 export interface Attribute {
-    id: number;
     code: string;
-    description: string;
+    description?: string;
+    value?: number;
+    bonus?: number; 
 }
 
 export interface Ability {
-    id: number;
-    description: string;
+    description?: string;
     code: string;
 }
 
 export interface Role {
-    id: number;
-    description: string;
+    description?: string;
     code: string;
-    abilities?: Ability[];
+    abilities: Ability[];
 }
 
 export interface Genetic {
-    id: number;
-    description: string;
+    description?: string;
     code: string;
+    abilities: Ability[];
+    genes?: string[];
 }

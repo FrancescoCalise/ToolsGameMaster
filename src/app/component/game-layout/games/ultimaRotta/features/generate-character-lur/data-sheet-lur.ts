@@ -2,141 +2,157 @@ import { Attribute, Genetic, Role } from "./charachter-sheet-lur";
 
 export const attributeKeys = [
     {
-        id: 1,
         code: 'AGILITY',
-        description: '',
     },
     {
-        id: 2,
         code: 'COURAGE',
-        description: '',
     },
     {
-        id: 3,
         code: 'STRENGTH',
-        description: '',
     },
     {
-        id: 4,
         code: 'INTELLIGENCE',
-        description: '',
     },
     {
-        id: 5,
         code: 'MAGIC',
-        description: '',
     },
     {
-        id: 6,
         code: 'MANUALITY',
-        description: '',
     },
     {
-        id: 7,
         code: 'PERCEPTION',
-        description: '',
     },
     {
-        id: 8,
         code: 'SOCIALITY',
-        description: '',
     },
 ] as Attribute[];
 
 export const roles = [
     {
-        id: 1,
-        description: '',
         code: 'LEADER',
-        abiliies: [
+        abilities: [
             {
-                id: 1,
-                description: '',
                 code: 'ADDESTRAMENTO_MILITARE',
             },
             {
-                id: 2,
-                description: '',
                 code: 'AUTOCONTROLLO',
             },
             {
-                id: 3,
-                description: '',
+
                 code: 'COMPETENZE_UNIVERSALI',
             },
             {
-                id: 4,
-                description: '',
                 code: 'IMPARTIRE_COMANDI',
             },
             {
-                id: 5,
-                description: '',
                 code: 'NESSUNA_PAURA',
             },
             {
-                id: 6,
-                description: '',
-                code: 'RESISTE',
+                code: 'RESISTERE',
             },
             {
-                id: 7,
-                description: '',
                 code: 'STRATEGIA_E_TATTICA',
             },
             {
-                id: 8,
-                description: '',
                 code: 'UFFICIALE_SCIENTIFICO',
             },
             {
-                id: 9,
-                description: '',
                 code: 'ULTIMO_BASTIONE',
             }
         ]
     },
     {
-        id: 2,
-        description: '',
         code: 'SOLDATO',
     },
     {
-        id: 3,
-        description: '',
         code: 'CANAGLIA',
     },
     {
-        id: 4,
-        description: '',
         code: 'RICOGNITORE',
     },
     {
-        id: 5,
-        description: '',
         code: 'ARCANISTA',
     },
     {
-        id: 6,
-        description: '',
         code: 'DISCEPOLO_OSCURO'
     }
 ] as Role[];
 
 export const genetic = [
     {
-        id: 1,
-        description: '',
         code: 'BIOS',
+        abilities: [
+            {
+                code: 'ARMATURA_NATURALE'
+            },
+            {
+                code: 'ARTIFICIALE'
+            },
+            {
+                code: 'NANOMACCHINE'
+            },
+            {
+                code: 'PROTOCOLLO_OPERATIVO_VARIABILE'
+            }
+        ]
     },
     {
-        id: 2,
-        description: '',
         code: 'NOMADE',
+        abilities: [
+            {
+                code: 'IGNORATO_DALLA_MORTE'
+            },
+            {
+                code: 'SECONDA_SCORTA'
+            },
+            {
+                code: 'SUSSURRI'
+            }
+        ]
     },
     {
-        id: 3,
-        description: '',
         code: 'UMANOIDE',
+        genes: ['U', 'E', 'N'],
+        abilities:
+        [
+            {
+                code: 'FORTUNA'       
+            },
+            {
+                code: 'SUPERARE_LIMITE'
+            },
+            {
+                code: 'IMMUNITA'
+            },
+            {
+                code: 'MANA_SELVAGGIO'
+            },
+            {
+                code: 'SANGUE_GIOVANE'
+            },
+            {
+                code: 'COMBATTENTE_GRANITICO'
+            },
+            {
+                code: 'TEMPRATO'
+            },
+            {
+                code: 'STIMARE'
+            }
+        ]
     }
 ] as Genetic[];
+
+
+export const mapIdGenetic: { [key: string]: number[] } = {
+    "BIOS": [1, 2],
+    "NOMADE": [3, 4],
+    "UMANOIDE": [5, 6]
+};
+
+export const geneticTraceMapping: { [key: string]: number[] } = {
+    'E': [1, 2],
+    'N': [3, 4],
+    'U': [5, 6]
+};
+

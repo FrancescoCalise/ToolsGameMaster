@@ -15,6 +15,7 @@ export interface CharacterSheetLUR extends BaseDocument {
     point_adventure?: number;
     background?: string;
     sessionId?: string;
+    traits?: Trait[];
 }
 
 export interface Attribute {
@@ -27,6 +28,7 @@ export interface Attribute {
 export interface Ability {
     description?: string;
     code: string;
+    id: number;
 }
 
 export interface Role {
@@ -40,4 +42,9 @@ export interface Genetic {
     code: string;
     abilities: Ability[];
     genes?: string[];
+}
+
+export interface Trait {
+    description?: string;
+    code: string;
 }

@@ -76,7 +76,7 @@
 
 
 <ng-template #characterFormTemplate>
-    <form #characterForm="ngForm" (ngSubmit)="saveCharacter()">
+    <form #characterForm="ngForm" (ngSubmit)="saveCharacter(true)">
         <div class="row g-1 mb-3">
 
             <div class="col-12 col-sm-4 col-md-3">
@@ -169,21 +169,21 @@
                     <div class="mb-3">
                         <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.STATS' | translate }}</h4>
                         <div class="row g-1 p-3 border">
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-1 col-md-1 col-lg-1">
                                 <label for="mana" class="form-label text-muted fw-semibold">{{
                                     'ULTIMA_ROTTA.SHEET.MAX_MANA' | translate
                                     }}</label>
                                 <input type="number" id="mana" class="form-control form-control-sm"
                                     [(ngModel)]="character.mana" name="mana">
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-1 col-md-1 col-lg-1">
                                 <label for="life" class="form-label text-muted fw-semibold">{{
                                     'ULTIMA_ROTTA.SHEET.MAX_LIFE' | translate
                                     }}</label>
                                 <input type="number" id="life" class="form-control form-control-sm"
                                     [(ngModel)]="character.life" name="life">
                             </div>
-                            <div class="col-2 col-md-2 col-lg-2">
+                            <div class="col-1 col-md-1 col-lg-1">
                                 <label for="armor" class="form-label text-muted fw-semibold">{{
                                     'ULTIMA_ROTTA.SHEET.ARMOR' | translate
                                     }}</label>
@@ -202,6 +202,40 @@
                                     }}</label>
                                 <input type="number" id="scrap" class="form-control form-control-sm"
                                     [(ngModel)]="character.scrap" name="scrap">
+                            </div>
+
+                            <div class="col-3 col-md-3 col-lg-3">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-label text-muted fw-semibold">{{ 'ULTIMA_ROTTA.SHEET.TRAITS'
+                                            | translate }}</label>
+
+                                        <!-- Left Column for Traits -->
+                                        <div *ngFor="let trait of traits; let i = index">
+                                            <div class="form-check" *ngIf="i % 2 === 0">
+                                                <input type="checkbox" class="form-check-input"
+                                                    [id]="'trait_' + trait.code" [checked]="isTraitSelected(trait)"
+                                                    (change)="toggleTraitSelection(trait)">
+                                                <label class="form-check-label" [for]="'trait_' + trait.code">{{
+                                                    trait.description }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Right Column for Traits -->
+                                    <div class="col-md-6">
+                                        <div *ngFor="let trait of traits; let i = index">
+                                            <div class="form-check" *ngIf="i % 2 !== 0">
+                                                <input type="checkbox" class="form-check-input"
+                                                    [id]="'trait_' + trait.code" [checked]="isTraitSelected(trait)"
+                                                    (change)="toggleTraitSelection(trait)">
+                                                <label class="form-check-label" [for]="'trait_' + trait.code">{{
+                                                    trait.description }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>

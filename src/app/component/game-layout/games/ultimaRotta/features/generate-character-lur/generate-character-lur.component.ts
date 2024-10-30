@@ -1,8 +1,8 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
 import { SharedModule } from '../../../../../../shared/shared.module';
-import { Ability, CharacterSheetLUR, Genetic, Role } from './charachter-sheet-lur';
+import { Ability, CharacterSheetLUR, Genetic, Role, Trait } from './charachter-sheet-lur';
 import { TranslationMessageService } from '../../../../../../services/translation-message-service';
-import { NgForm } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { FirestoreService } from '../../../../../../services/firestore.service';
 import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
@@ -14,6 +14,10 @@ import * as bootstrap from 'bootstrap';
 import { SessionManagerWidgetComponent } from '../../../../../session-manager-widget/session-manager-widget.component';
 import { UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
 import { RandomNameService } from '../../../../../../services/randomNameService';
+import { CommonModule } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -23,6 +27,9 @@ import { RandomNameService } from '../../../../../../services/randomNameService'
   imports: [
     SharedModule,
     SessionManagerWidgetComponent,
+    CommonModule,
+    FormsModule,
+    MatFormFieldModule, MatSelectModule, MatInputModule
   ],
 })
 export class GenerateCharacterLurComponent implements OnInit {
@@ -30,9 +37,12 @@ export class GenerateCharacterLurComponent implements OnInit {
   defaultSession: SessionManager = {};
   gameName = '';
 
+  test = 'test';
   readonly rolesDefaultData = UtilitiesCreateCharacterLur.rolesDefaultData;
   readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
+  readonly traits = UtilitiesCreateCharacterLur.traitsDefaultData;
+  translatedTraitMessage$ = this.translationMessageService.translate('ULTIMA_ROTTA.SHEET.SELECT_TRAITS');
 
   characters: CharacterSheetLUR[] = [];
   showForm = false;
@@ -43,7 +53,9 @@ export class GenerateCharacterLurComponent implements OnInit {
 
   selectedGenes: string[] = ['', '', '']
   selectedAbilities: Ability[] = [];
-
+  onModalShown() {
+    this.cdr.detectChanges();
+  }
   @ViewChild('characterForm') characterForm!: NgForm;
   @ViewChild('characterModal') characterModal!: ElementRef<HTMLDivElement>;
 
@@ -52,8 +64,9 @@ export class GenerateCharacterLurComponent implements OnInit {
     private cacheService: CacheStorageService,
     private route: ActivatedRoute,
     private spineerService: SpinnerService,
-    private randomNameService: RandomNameService) 
-  {
+    private randomNameService: RandomNameService,
+    private cdr: ChangeDetectorRef
+  ) {
     firestoreLurSheetService.setCollectionName('character-sheet-lur');
   }
 
@@ -99,6 +112,9 @@ export class GenerateCharacterLurComponent implements OnInit {
     for (const attribute of UtilitiesCreateCharacterLur.attributeKeys) {
       attribute.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code);
     }
+    for (const trait of UtilitiesCreateCharacterLur.traitsDefaultData) {
+      trait.description = await this.translationMessageService.translate('ULTIMA_ROTTA.TRAITS.' + trait.code);
+    }
   }
 
   toggleForm() {
@@ -110,11 +126,12 @@ export class GenerateCharacterLurComponent implements OnInit {
     } else {
       const modalElement = this.characterModal.nativeElement;
       const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
+      this.resetForm(false);
       bootstrapModal?.hide();
     }
   }
 
-  async saveCharacter(): Promise<void> {
+  async saveCharacter(toggleForm: boolean): Promise<void> {
     let newCharacter = this.character as CharacterSheetLUR;
 
     if (newCharacter.id) {
@@ -125,11 +142,11 @@ export class GenerateCharacterLurComponent implements OnInit {
       newCharacter.id = id;
       this.characters.push(newCharacter);
     }
-    this.resetForm();
+    this.resetForm(toggleForm);
 
   }
 
-  editCharacter(character: CharacterSheetLUR) {
+  async editCharacter(character: CharacterSheetLUR) {
     this.character = character;
     this.toggleForm();
   }
@@ -186,6 +203,26 @@ export class GenerateCharacterLurComponent implements OnInit {
     } return undefined;
   }
 
+  isTraitSelected(trait: Trait): boolean {
+    debugger;
+    if(this.character.traits){
+      return this.character.traits?.some(selectedTrait => selectedTrait.code === trait.code);
+    }
+    return false;
+  }
+
+  toggleTraitSelection(trait: Trait) {
+    debugger;
+  }
+
+  getSelectedTraitsDescription(): string {
+    let defaultTraits = this.traits;
+    if (this.character.traits) {
+      return this.character.traits.map(trait => defaultTraits.find(t => t.code === trait.code)?.description).join(', ');
+    }
+    return "";
+  }
+
   onChangeRole(selectedRole: Role | undefined) {
     if (selectedRole) {
       this.character.role = { ...selectedRole, abilities: [] };
@@ -225,17 +262,26 @@ export class GenerateCharacterLurComponent implements OnInit {
     return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
   }
 
-  private resetForm() {
+  private resetForm(toggleForm: boolean) {
     this.character = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
     if (this.characterForm) this.characterForm.resetForm();
-    this.toggleForm();
+
+    if (toggleForm) {
+      this.toggleForm();
+    }
   }
 
   async generateRandom() {
     let newChar = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
-    
+
+    this.spineerService.showSpinner();
     newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService);
-    console.log(newChar);
+    if (newChar) {
+      this.character = newChar;
+      this.characters
+      this.saveCharacter(false);
+    }
+
   }
 
   printRandom() {

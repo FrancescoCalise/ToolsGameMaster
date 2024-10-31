@@ -2,22 +2,17 @@ import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } f
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { Ability, CharacterSheetLUR, Genetic, Role, Trait } from './charachter-sheet-lur';
 import { TranslationMessageService } from '../../../../../../services/translation-message-service';
-import { FormsModule, NgForm } from '@angular/forms';
+import { NgForm } from '@angular/forms';
 import { FirestoreService } from '../../../../../../services/firestore.service';
 import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { SessionManager } from '../../../../../../interface/Document/SessionManager';
-import { CacheStorageService } from '../../../../../../services/cache-storage.service';
-import { ActivatedRoute } from '@angular/router';
 import { SpinnerService } from '../../../../../../services/spinner.service';
-import * as bootstrap from 'bootstrap';
 import { SessionManagerWidgetComponent } from '../../../../../session-manager-widget/session-manager-widget.component';
 import { UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
 import { RandomNameService } from '../../../../../../services/randomNameService';
-import { CommonModule } from '@angular/common';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { CharacterDialogComponent } from './character-dialog-form/character-dialog.component';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -30,37 +25,63 @@ import { MatSelectModule } from '@angular/material/select';
   ],
 })
 export class GenerateCharacterLurComponent implements OnInit {
-  sessionLoaded = false;
-  defaultSession: SessionManager = {};
-  gameName = '';
-
   readonly rolesDefaultData = UtilitiesCreateCharacterLur.rolesDefaultData;
   readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
   readonly traits = UtilitiesCreateCharacterLur.traitsDefaultData;
   translatedTraitMessage$ = this.translationMessageService.translate('ULTIMA_ROTTA.SHEET.SELECT_TRAITS');
 
+  sessionLoaded = false;
+  defaultSession: SessionManager = {};
   characters: CharacterSheetLUR[] = [];
-  showForm = false;
-  character: CharacterSheetLUR = {
-    genetic: {} as Genetic,
-    attributes: []
-  };
-
-  selectedGenes: string[] = ['', '', '']
-  selectedAbilities: Ability[] = [];
-  @ViewChild('characterForm') characterForm!: NgForm;
-  @ViewChild('characterModal') characterModal!: ElementRef<HTMLDivElement>;
+  character: CharacterSheetLUR = { genetic: {} as Genetic, attributes: [] };
 
   constructor(private translationMessageService: TranslationMessageService,
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLUR>,
-    private cacheService: CacheStorageService,
-    private route: ActivatedRoute,
     private spineerService: SpinnerService,
     private randomNameService: RandomNameService,
-    private cdr: ChangeDetectorRef
+    private dialog: MatDialog
   ) {
     firestoreLurSheetService.setCollectionName('character-sheet-lur');
+  }
+
+  openCharacterDialog(character?: CharacterSheetLUR) {
+    const isMobile = window.innerWidth < 768;
+    const dialogRef = this.dialog.open(CharacterDialogComponent, {
+      width: isMobile ? '100%' : '80%',
+      height: isMobile ? '100%' : '50%',
+      minHeight: '80%',
+      data: {
+        character: character ? { ...character } : UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id),
+        geneticDefaultData: UtilitiesCreateCharacterLur.geneticDefaultData,
+        rolesDefaultData: UtilitiesCreateCharacterLur.rolesDefaultData,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((result: CharacterSheetLUR | undefined) => {
+      if (result) {
+        character ? this.updateCharacter(result) : this.addCharacter(result);
+      }
+    });
+  }
+
+  addCharacter(newCharacter: CharacterSheetLUR) {
+    this.firestoreLurSheetService.addItem(newCharacter).then((id) => {
+      newCharacter.id = id;
+      this.characters.push(newCharacter);
+    });
+  }
+
+  deleteCharacter(character: CharacterSheetLUR) {
+    this.firestoreLurSheetService.deleteItem(character.id as string).then(() => {
+      const index = this.characters.findIndex((char) => char.id === character.id);
+      if (index !== -1) this.characters.splice(index, 1);
+    });
+  }
+
+  updateCharacter(updatedCharacter: CharacterSheetLUR) {
+    const index = this.characters.findIndex((char) => char.id === updatedCharacter.id);
+    if (index !== -1) this.characters[index] = updatedCharacter;
   }
 
   onSessionLoaded(loadedSession: SessionManager) {
@@ -100,6 +121,11 @@ export class GenerateCharacterLurComponent implements OnInit {
 
     for (const g of UtilitiesCreateCharacterLur.geneticDefaultData) {
       g.description = await this.translationMessageService.translate('ULTIMA_ROTTA.GENETIC.' + g.code);
+      if (g.abilities) {
+        for (const ability of g.abilities) {
+          ability.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ABILITY.' + ability.code);
+        }
+      }
     }
 
     for (const attribute of UtilitiesCreateCharacterLur.attributeKeys) {
@@ -107,160 +133,6 @@ export class GenerateCharacterLurComponent implements OnInit {
     }
     for (const trait of UtilitiesCreateCharacterLur.traitsDefaultData) {
       trait.description = await this.translationMessageService.translate('ULTIMA_ROTTA.TRAITS.' + trait.code);
-    }
-  }
-
-  toggleForm() {
-    this.showForm = !this.showForm;
-    if (this.showForm) {
-      const modalElement = this.characterModal.nativeElement;
-      const bootstrapModal = new bootstrap.Modal(modalElement);
-      bootstrapModal.show();
-    } else {
-      const modalElement = this.characterModal.nativeElement;
-      const bootstrapModal = bootstrap.Modal.getInstance(modalElement);
-      this.resetForm(false);
-      bootstrapModal?.hide();
-    }
-  }
-
-  async saveCharacter(toggleForm: boolean): Promise<void> {
-    let newCharacter = this.character as CharacterSheetLUR;
-
-    if (newCharacter.id) {
-      const index = this.characters.findIndex(char => char.id === newCharacter.id);
-      if (index !== -1) this.characters[index] = newCharacter;
-    } else {
-      var id = await this.firestoreLurSheetService.addItem(newCharacter);
-      newCharacter.id = id;
-      this.characters.push(newCharacter);
-    }
-    this.resetForm(toggleForm);
-
-  }
-
-  async editCharacter(character: CharacterSheetLUR) {
-    this.character = character;
-    this.toggleForm();
-  }
-
-  async deleteCharacter(character: CharacterSheetLUR): Promise<void> {
-    if (character.id !== undefined) {
-      await this.firestoreLurSheetService.deleteItem(character.id);
-      this.characters = this.characters.filter(char => char.id !== character.id);
-    }
-  }
-
-  updateAttribute(code: string, key: 'value' | 'bonus', value: number) {
-    if (this.character && this.character.attributes) {
-      const attribute = this.character.attributes.find(attr => attr.code === code);
-      if (attribute) {
-        attribute[key] = Math.floor(value); // Ensures only integers are saved
-      }
-    }
-  }
-
-  toggleAbilitySelection(ability: Ability) {
-    if (this.character.role && this.character.role.abilities) {
-      const index = this.character.role.abilities.findIndex(a => a.code === ability.code);
-      if (index === -1) {
-        // Add ability if not already selected
-        this.character.role.abilities = [...this.character.role.abilities, ability];
-      } else {
-        // Remove ability if already selected
-        this.character.role.abilities = this.character.role.abilities.filter(a => a.code !== ability.code);
-      }
-    }
-  }
-
-  isAbilitySelected(ability: Ability): boolean {
-    if (this.character.role && this.character.role.abilities) {
-      return this.character.role?.abilities.some(a => a.code === ability.code) || false;
-    }
-    return false;
-  }
-
-  getAbilityOption(roleId: string): Ability[] {
-    const role = UtilitiesCreateCharacterLur.rolesDefaultData.find(r => r.code === roleId);
-    return role ? role.abilities as Ability[] : [];
-  }
-
-  getDefaultGenes(geneticId: string): string[] {
-    const genetic = UtilitiesCreateCharacterLur.geneticDefaultData.find(r => r.code === geneticId);
-    return genetic ? genetic.genes as string[] : [];
-  }
-
-  roleSelected(role: Role) {
-    if (role) {
-      return UtilitiesCreateCharacterLur.rolesDefaultData.find(r => r.code === role.code);
-    } return undefined;
-  }
-
-  isTraitSelected(trait: Trait): boolean {
-    debugger;
-    if(this.character.traits){
-      return this.character.traits?.some(selectedTrait => selectedTrait.code === trait.code);
-    }
-    return false;
-  }
-
-  toggleTraitSelection(trait: Trait) {
-    debugger;
-  }
-
-  getSelectedTraitsDescription(): string {
-    let defaultTraits = this.traits;
-    if (this.character.traits) {
-      return this.character.traits.map(trait => defaultTraits.find(t => t.code === trait.code)?.description).join(', ');
-    }
-    return "";
-  }
-
-  onChangeRole(selectedRole: Role | undefined) {
-    if (selectedRole) {
-      this.character.role = { ...selectedRole, abilities: [] };
-      this.selectedAbilities = [];
-    } else {
-      this.character.role = undefined;
-      this.selectedAbilities = [];
-    }
-  }
-
-  onChangeGenetic(selectedGenetic: Genetic | undefined) {
-    if (selectedGenetic) {
-      this.character.genetic = { ...selectedGenetic, genes: [] };
-      this.selectedGenes = [];
-    } else {
-      this.character.role = undefined;
-      this.selectedGenes = [];
-    }
-  }
-
-  currentGeneticHaveGenes(): boolean {
-    let currentGenetic = UtilitiesCreateCharacterLur.geneticDefaultData.find(g => g.code === this.character.genetic?.code);
-    if (currentGenetic && currentGenetic.genes) {
-      return currentGenetic.genes.length > 0;
-    }
-    return false;
-  }
-
-  onSelectGenes(genes: string, index: number) {
-    this.selectedGenes[index] = genes;
-    if (this.character.genetic) {
-      this.character.genetic.genes = this.selectedGenes;
-    }
-  }
-
-  compareById<T extends { id?: any }>(obj1: T, obj2: T): boolean {
-    return obj1 && obj2 ? obj1.id === obj2.id : obj1 === obj2;
-  }
-
-  private resetForm(toggleForm: boolean) {
-    this.character = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
-    if (this.characterForm) this.characterForm.resetForm();
-
-    if (toggleForm) {
-      this.toggleForm();
     }
   }
 
@@ -272,7 +144,7 @@ export class GenerateCharacterLurComponent implements OnInit {
     if (newChar) {
       this.character = newChar;
       this.characters
-      this.saveCharacter(false);
+      this.addCharacter(newChar);
     }
 
   }

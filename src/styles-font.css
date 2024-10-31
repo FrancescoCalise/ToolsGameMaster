@@ -6,11 +6,17 @@
 body {
     font-family: Arial, sans-serif;
     line-height: 1.6;
-    color: #333;
+    color: black;
     margin: 0;
 }
 
+.form-label{
+    color: #000;
+}
 /* Titoli */
+h1, h2, h3, h4, h5, h6 {
+    color: black; /* Colore nero per tutti i tag h */
+}
 
 /* h1 */
 h1 {
@@ -45,7 +51,7 @@ span {
 /* Small text */
 small {
     font-size: 0.65rem;
-    color: #6c757d;
+    color: black;
 }
 
 /* Citazione */

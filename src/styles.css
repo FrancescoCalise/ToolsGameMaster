@@ -164,3 +164,26 @@ body {
     padding: 0;
     height: 100%;
   }
+
+
+
+  mat-hint {
+    color: #77108b; /* Cambia colore del testo in verde */
+    font-size: 1rem; /* Dimensione del font */
+    font-style: italic; /* Stile corsivo per i suggerimenti */
+    margin-top: 4px; /* Spazio superiore per separare dal campo */
+}
+.cdk-overlay-pane.mat-mdc-dialog-panel{
+  max-width: 100%!important;
+  max-height: 100%!important;
+}
+
+.mat-mdc-dialog-content
+{
+  max-width: 100%!important;
+  max-height: 100%!important;
+}
+
+.mat-label{
+  color:black;
+}

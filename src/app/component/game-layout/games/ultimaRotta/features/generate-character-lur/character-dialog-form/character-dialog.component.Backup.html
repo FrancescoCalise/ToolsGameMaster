@@ -5,7 +5,7 @@
 <div mat-dialog-content class="w-100 h-100">
     <form #characterForm="ngForm" (ngSubmit)="save(characterForm)">
 
-        <div class="d-flex flex-column border">
+        <div id="printable-container" class="d-flex flex-column border">
             <div class="container-fluid d-flex p-2">
                 <div class="d-flex flex-column col-8">
                     <div class="p-2 col-12 ">
@@ -33,8 +33,7 @@
                             </div>
                             <div class="col-10">
                                 <mat-form-field appearance="fill" class="w-100">
-                                    <mat-select [(ngModel)]="character.genetic" name="genetic" required
-                                        placeholder="{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}">
+                                    <mat-select [(ngModel)]="character.genetic" name="genetic" required placeholder="{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}" [compareWith]="compareCode">
                                         <mat-option *ngFor="let option of geneticDefaultData" [value]="option">
                                             {{ option.description }}
                                         </mat-option>
@@ -85,7 +84,7 @@
                                 <div class="col-10">
                                     <mat-form-field appearance="fill" class="w-100">
                                         <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ROLE' | translate }}</mat-label>
-                                        <mat-select [(ngModel)]="character.role" name="role" required>
+                                        <mat-select [(ngModel)]="character.role" name="role" required [compareWith]="compareCode">
                                             <mat-option *ngFor="let option of rolesDefaultData" [value]="option">
                                                 {{ option.description }}
                                             </mat-option>
@@ -297,18 +296,21 @@
                         <label for="point-adventure">
                             <strong>{{ 'ULTIMA_ROTTA.SHEET.ADVENTURE_POINTS' | translate }}</strong>
                         </label>
-                        <input matInput type="number" [(ngModel)]="character.point_adventure" name="point-adventure" required  placeholder="{{ 'ULTIMA_ROTTA.SHEET.ADVENTURE_POINTS' | translate }}">
+                        <input matInput type="number" [(ngModel)]="character.point_adventure" name="point-adventure"  placeholder="{{ 'ULTIMA_ROTTA.SHEET.ADVENTURE_POINTS' | translate }}">
                     </mat-form-field>
                 </div>
             </div>
         </div>
 
         <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-success btn-sm me-2" [disabled]="!characterForm.valid">{{
-                'ULTIMA_ROTTA.SHEET.SAVE_CHARACTER' | translate }}</button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="close()">{{ 'ULTIMA_ROTTA.SHEET.CANCEL'
-                |
-                translate }}</button>
+            <button [disabled]="!characterForm.valid"> Genera PDF</button>
+
+            <button type="submit" class="btn btn-success btn-sm me-2" [disabled]="!characterForm.valid">
+                {{'ULTIMA_ROTTA.SHEET.SAVE_CHARACTER' | translate }}
+            </button>
+            <button type="button" class="btn btn-secondary btn-sm" (click)="close()">
+                {{ 'ULTIMA_ROTTA.SHEET.CANCEL'| translate }}
+            </button>
         </div>
 
     </form>

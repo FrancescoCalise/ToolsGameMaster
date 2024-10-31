@@ -13,7 +13,7 @@ import { SharedFieldsInputModule } from '../../../../../../../shared/shared-fiel
     standalone: true,
     imports: [
         SharedModule,
-        SharedFieldsInputModule 
+        SharedFieldsInputModule
     ]
 })
 export class CharacterDialogComponent implements OnInit {
@@ -91,6 +91,9 @@ export class CharacterDialogComponent implements OnInit {
         this.dialogRef.close();
     }
 
+    compareCode = (o1: any, o2: any) => {
+        return o1 && o2 &&    o1.code === o2.code 
+    };
 
     getAbilityOption(roleId: string): Ability[] {
         const role = UtilitiesCreateCharacterLur.rolesDefaultData.find(r => r.code === roleId);

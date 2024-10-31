@@ -1,13 +1,13 @@
 import { RandomNameService } from '../../../../../../../services/randomNameService';
 import { Ability, Attribute, CharacterSheetLUR, Genetic, Role, Trait, } from '../charachter-sheet-lur';
-import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, } from '../data-sheet-lur';
+import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails } from '../data-sheet-lur';
 
 export class UtilitiesCreateCharacterLur {
     static readonly rolesDefaultData = roles;
     static readonly geneticDefaultData = genetic;
     static readonly attributeKeys = attributeKeys;
     static readonly traitsDefaultData = traits;
-
+    static readonly armorDetails = armorDetails;
     constructor() { }
 
     private static generateRandomNumber(max: number): number {
@@ -70,20 +70,20 @@ export class UtilitiesCreateCharacterLur {
         let abilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Bios)?.abilities as Ability[];
         newChar.genetic.abilities = structuredClone(abilities);
 
-        newChar.inventory =  newChar.inventory + "Arma 1 - Equpaggiamento 1 \n";
+        newChar.inventory = newChar.inventory + "Arma 1 - Equpaggiamento 1 \n";
     }
 
     private static applyNomadeGenetics(newChar: CharacterSheetLUR): void {
         const randomStats = this.getTwoDistinctRandomNumbers(8);
         randomStats.forEach((statIndex) => {
-            const attribute = newChar.attributes?.[statIndex -1];
+            const attribute = newChar.attributes?.[statIndex - 1];
             attribute.bonus = (attribute.bonus ?? 0) + 1;
         });
 
         let nomadeAbilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Nomade)?.abilities as Ability[];
         newChar.genetic.abilities = structuredClone(nomadeAbilities);
 
-        newChar.inventory =  newChar.inventory + "Abiti - Arma 1";
+        newChar.inventory = newChar.inventory + "Abiti - Arma 1";
     }
 
     private static getTwoDistinctRandomNumbers(max: number): number[] {
@@ -110,7 +110,7 @@ export class UtilitiesCreateCharacterLur {
         );
         newChar.genetic.genes = genes;
 
-        newChar.inventory =  newChar.inventory + "Abiti - Sostentamento \n";
+        newChar.inventory = newChar.inventory + "Abiti - Sostentamento \n";
     }
 
     private static generateGenes(): string[] {
@@ -243,6 +243,7 @@ export class UtilitiesCreateCharacterLur {
             mana: undefined,
             life: undefined,
             armor: undefined,
+            armorDetails: structuredClone(this.armorDetails),
             inventory: '',
             scrap: undefined,
             point_adventure: undefined,
@@ -327,14 +328,14 @@ export class UtilitiesCreateCharacterLur {
         }
 
 
-        let persistedRoleAbility = newChar.role?.abilities ? structuredClone(newChar.role?.abilities as Ability[]): [];
+        let persistedRoleAbility = newChar.role?.abilities ? structuredClone(newChar.role?.abilities as Ability[]) : [];
         newChar.role = roleToSet;
         newChar.role.abilities = persistedRoleAbility;
 
-        
+
 
         let skillAlreadLearned = newChar.role.abilities ? newChar.role.abilities.map((a) => a.code) : [];
-        let randomIdAbility = this.generateRandomNumber(10) -1;
+        let randomIdAbility = this.generateRandomNumber(10) - 1;
         let ability = roleDefaultData?.abilities[randomIdAbility] as Ability;
         if (ability) {
             while (skillAlreadLearned.includes(ability.code)) {
@@ -567,7 +568,7 @@ export class UtilitiesCreateCharacterLur {
 
     private static getMaxRandomValue(max: number, times: number, bonus: number): number {
         let highestValue = 0;
-        if(times === 0) {
+        if (times === 0) {
             times = 1;
         }
 
@@ -581,7 +582,7 @@ export class UtilitiesCreateCharacterLur {
         return highestValue;
     }
 
-    private static getKeyByValue = (dictionary: { [key: string]: any },input: number ): number | string | undefined => {
+    private static getKeyByValue = (dictionary: { [key: string]: any }, input: number): number | string | undefined => {
         let d = Object.entries(dictionary).find(([, value]) =>
             Array.isArray(value) ? value.includes(input) : value === input
         )?.[0] as number | string | undefined;

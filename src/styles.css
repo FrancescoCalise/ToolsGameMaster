@@ -187,3 +187,15 @@ body {
 .mat-label{
   color:black;
 }
+
+/* Rimuove le frecce in Chrome, Safari e Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Rimuove le frecce in Firefox */
+input[type="number"] {
+    -moz-appearance: textfield;
+}

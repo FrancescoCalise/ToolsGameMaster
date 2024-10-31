@@ -1,0 +1,13 @@
+<mat-card class="image-upload-container" (click)="!imageSrc && triggerFileInput()" [ngStyle]="{ 'max-width': maxWidth, 'max-height': maxHeight }">
+    <ng-container *ngIf="!imageSrc">
+        <mat-icon class="upload-icon">cloud_upload</mat-icon>
+        <span class="upload-label">{{ 'FIELDS_LABEL.LOAD_PHOTO' | translate}}</span>
+    </ng-container>
+    <ng-container *ngIf="imageSrc">
+        <img [src]="imageSrc" alt="Image Preview" class="img-fluid rounded">
+        <button mat-icon-button color="warn" class="remove-icon" (click)="removeImage($event)">
+            <mat-icon>close</mat-icon>
+        </button>
+    </ng-container>
+    <input type="file" #fileInput (change)="onImageSelected($event)" accept="image/jpeg, image/png" class="d-none">
+</mat-card>

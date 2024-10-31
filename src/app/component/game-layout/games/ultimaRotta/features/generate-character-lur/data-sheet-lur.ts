@@ -1,4 +1,4 @@
-import { Attribute, Genetic, Role, Trait } from "./charachter-sheet-lur";
+import { ArmorDetails, Attribute, Genetic, Role, Trait } from "./charachter-sheet-lur";
 
 export const attributeKeys = [
     {
@@ -45,7 +45,7 @@ export const roles = [
                 code: 'IMPARTIRE_COMANDI',
             },
             {
-                code:'ADDESTRAMENTO_MEDICO'
+                code: 'ADDESTRAMENTO_MEDICO'
             },
             {
                 code: 'NESSUNA_PAURA',
@@ -81,7 +81,7 @@ export const roles = [
                 code: 'RIFLESSI',
             },
             {
-                code:'SCUDO_UMANO',
+                code: 'SCUDO_UMANO',
             },
             {
                 code: 'FISICO_POSSENTE',
@@ -117,7 +117,7 @@ export const roles = [
                 code: 'FULMINEO',
             },
             {
-                code:'IMPREVEDIBILE'
+                code: 'IMPREVEDIBILE'
             },
             {
                 code: 'INAFFERRABILE',
@@ -153,7 +153,7 @@ export const roles = [
                 code: 'IMPATTO_CONTROLLATO',
             },
             {
-                code:'ESPLORAZIONE'
+                code: 'ESPLORAZIONE'
             },
             {
                 code: 'FUOCO_IN_MOVIMENTO',
@@ -188,7 +188,7 @@ export const roles = [
                 code: 'POTERE_ARACANO_GUARIGIONE',
             },
             {
-                code:'POTERE_ARACANO_ONDA_MENTALE'
+                code: 'POTERE_ARACANO_ONDA_MENTALE'
             },
             {
                 code: 'POTERE_ARACANO_PIROCINESI',
@@ -224,7 +224,7 @@ export const roles = [
                 code: 'POTERE_OSCURO_INGANNO_MENTALE',
             },
             {
-                code:'POTERE_OSCURO_ESPLOSIONE_DELL_ANIMA'
+                code: 'POTERE_OSCURO_ESPLOSIONE_DELL_ANIMA'
             },
             {
                 code: 'POTERE_OSCURO_DOLORE',
@@ -281,32 +281,32 @@ export const genetic = [
         code: 'UMANOIDE',
         genes: ['U', 'E', 'N'],
         abilities:
-        [
-            {
-                code: 'FORTUNA'       
-            },
-            {
-                code: 'SUPERARE_LIMITE'
-            },
-            {
-                code: 'IMMUNITA'
-            },
-            {
-                code: 'MANA_SELVAGGIO'
-            },
-            {
-                code: 'SANGUE_GIOVANE'
-            },
-            {
-                code: 'COMBATTENTE_GRANITICO'
-            },
-            {
-                code: 'TEMPRATO'
-            },
-            {
-                code: 'STIMARE'
-            }
-        ]
+            [
+                {
+                    code: 'FORTUNA'
+                },
+                {
+                    code: 'SUPERARE_LIMITE'
+                },
+                {
+                    code: 'IMMUNITA'
+                },
+                {
+                    code: 'MANA_SELVAGGIO'
+                },
+                {
+                    code: 'SANGUE_GIOVANE'
+                },
+                {
+                    code: 'COMBATTENTE_GRANITICO'
+                },
+                {
+                    code: 'TEMPRATO'
+                },
+                {
+                    code: 'STIMARE'
+                }
+            ]
     }
 ] as Genetic[];
 
@@ -372,6 +372,41 @@ export const traits = [
         code: "TIRA_DUE_VOLTE"
     }
 ] as Trait[];
+
+export const armorDetails = {
+    details: [
+        {
+            code: 'BODY',
+            type: '',
+            notes: ''
+        },
+        {
+            code: 'HEAD',
+            type: '',
+            notes: ''
+        },
+        {
+            code: 'ARM_LEFT',
+            type: '',
+            notes: ''
+        },
+        {
+            code: 'ARM_RIGHT',
+            type: '',
+            notes: ''
+        },
+        {
+            code: 'LEG_LEFT',
+            type: '',
+            notes: ''
+        },
+        {
+            code: 'LEG_RIGHT',
+            type: '',
+            notes: ''
+        }
+    ]
+} as ArmorDetails;
 
 export const mapIdGenetic: { [key: string]: number[] } = {
     "BIOS": [1, 2],

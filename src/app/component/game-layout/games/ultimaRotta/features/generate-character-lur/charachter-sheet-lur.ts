@@ -8,21 +8,37 @@ export interface CharacterSheetLUR extends BaseDocument {
     role?: Role;
     attributes: Attribute[];
     mana?: number;
+    manaCurrent?: number;
     life?: number;
+    lifeCurrent?: number;
     armor?: number;
+    armorDetails?: ArmorDetails;
     inventory?: string;
     scrap?: number;
     point_adventure?: number;
     background?: string;
     sessionId?: string;
     traits?: Trait[];
+    ship?: string;
+    redemption?: number;
+}
+
+export interface ArmorDetails {
+    details?: ArmorInfo[];
+}
+
+export interface ArmorInfo {
+    code: string
+    notes?: string
+    type?: string
+    description?: string
 }
 
 export interface Attribute {
     code: string;
     description?: string;
     value?: number;
-    bonus?: number; 
+    bonus?: number;
 }
 
 export interface Ability {

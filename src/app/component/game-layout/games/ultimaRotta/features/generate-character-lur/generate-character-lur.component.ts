@@ -1,8 +1,7 @@
-import { ChangeDetectorRef, Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core';
+import {  Component, Inject, OnInit, } from '@angular/core';
 import { SharedModule } from '../../../../../../shared/shared.module';
-import { Ability, CharacterSheetLUR, Genetic, Role, Trait } from './charachter-sheet-lur';
+import {  CharacterSheetLUR, Genetic } from './charachter-sheet-lur';
 import { TranslationMessageService } from '../../../../../../services/translation-message-service';
-import { NgForm } from '@angular/forms';
 import { FirestoreService } from '../../../../../../services/firestore.service';
 import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
@@ -29,6 +28,8 @@ export class GenerateCharacterLurComponent implements OnInit {
   readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
   readonly traits = UtilitiesCreateCharacterLur.traitsDefaultData;
+  readonly armorDetails = UtilitiesCreateCharacterLur.armorDetails;
+
   translatedTraitMessage$ = this.translationMessageService.translate('ULTIMA_ROTTA.SHEET.SELECT_TRAITS');
 
   sessionLoaded = false;
@@ -133,6 +134,16 @@ export class GenerateCharacterLurComponent implements OnInit {
     }
     for (const trait of UtilitiesCreateCharacterLur.traitsDefaultData) {
       trait.description = await this.translationMessageService.translate('ULTIMA_ROTTA.TRAITS.' + trait.code);
+    }
+
+    if(this.armorDetails){
+      let armor = this.armorDetails;
+
+      if(armor.details){
+        armor.details.forEach(async details => {
+          details.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + details.code);
+        });
+      }
     }
   }
 

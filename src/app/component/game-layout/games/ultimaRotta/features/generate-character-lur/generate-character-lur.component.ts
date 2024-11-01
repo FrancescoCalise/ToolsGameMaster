@@ -12,7 +12,7 @@ import { fieldMapPDFLUR, UtilitiesCreateCharacterLur } from './utilities-create-
 import { RandomNameService } from '../../../../../../services/randomNameService';
 import { MatDialog } from '@angular/material/dialog';
 import { CharacterDialogComponent } from './character-dialog-form/character-dialog.component';
-import { FieldResizeConfig, PdfService } from '../../../../../../services/pdf.service';
+import { PdfService } from '../../../../../../services/pdf.service';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -152,11 +152,10 @@ export class GenerateCharacterLurComponent implements OnInit {
     let newChar = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
 
     this.spinnerService.show("GenerateCharacterLurComponent.generateRandom");
-    for(let i = 0; i < 20; i++){
-      newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService);
-    }
+    await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService, this.translationMessageService);
+    
     if (newChar && save) {
-      //this.addCharacter(newChar);
+      this.addCharacter(newChar);
     }
 
     this.spinnerService.hide("GenerateCharacterLurComponent.generateRandom");
@@ -172,15 +171,8 @@ export class GenerateCharacterLurComponent implements OnInit {
       this.pdfService.updateValues(newCharFromPdf, fieldMapPDFLUR);
       let pdf = await this.pdfService.getPDFUpdated();
       let fileName = `${newChar.name}_${newChar.genetic.description}_${newChar.role?.description}` + '.pdf';
+      this.pdfService.downloadPdf(pdf, fileName);
 
-      const fieldsToResize: FieldResizeConfig[] = [
-        { fieldName: 'ABILITÀ', width: 140, height: 270, x: 63, y: 170, fontSize: 12 },
-        { fieldName: 'EQUIPAGGIAMENTO', width: 330, height: 100, x: 225, y: 150, fontSize: 10 },
-        { fieldName: 'BACKGROUND', width: 480, height: 50, x: 70, y: 70, fontSize: 10 },
-      ];
-      
-      const resizedPdfBytes = await this.pdfService.resizeMultipleTextFields(pdf, fieldsToResize);
-      this.pdfService.downloadPdf(resizedPdfBytes, fileName);
       this.spinnerService.hide("GenerateCharacterLurComponent.printRandom");
     }
   }

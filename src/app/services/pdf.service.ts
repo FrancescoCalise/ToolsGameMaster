@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PDFDocument, rgb, PDFFont, PDFTextField, StandardFonts, PDFForm, PDFCheckBox } from 'pdf-lib';
+import { PDFDocument, PDFFont, PDFTextField, PDFForm, PDFCheckBox } from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 
 
@@ -10,22 +10,25 @@ export class PdfService {
 
     private pdfDoc: PDFDocument = {} as PDFDocument;
     private form: PDFForm = {} as PDFForm;
+    private pdfBytes: ArrayBuffer = new ArrayBuffer(0);
 
     // Carica il PDF e ottieni il modulo
     async loadPdf(pdfPath: string): Promise<void> {
         try {
-            const pdfBytes = await fetch(pdfPath).then(res => {
-                if (!res.ok) {
-                    throw new Error(`Errore nel caricamento del PDF: ${res.status} ${res.statusText}`);
-                }
-                return res.arrayBuffer();
-            });
-
+            const pdfBytes = await fetch(pdfPath).then(res => res.arrayBuffer());
             this.pdfDoc = await PDFDocument.load(pdfBytes);
             this.form = this.pdfDoc.getForm();
-        } catch (error) {
-            throw new Error('Caricamento del PDF fallito: ' + error);
+            this.pdfBytes = pdfBytes;
+        }catch (error) {
+            console.error('Error loading PDF:', error);
         }
+    }
+
+    getCurrentPDF(): PDFDocument {
+        return this.pdfDoc;
+    }   
+    getCurrentPDFBytes(): ArrayBuffer {
+        return this.pdfBytes;
     }
 
     // Ottiene tutti i campi di modulo presenti nel PDF
@@ -56,7 +59,6 @@ export class PdfService {
     // Mappa i campi del PDF con i campi dell'oggetto usando un dizionario
     updateValues(fieldValues: { [pdfFieldName: string]: any }, fieldMap: { [pdfFieldName: string]: string }): void {
         if (!this.form) return;
-
         Object.keys(fieldMap).forEach(pdfFieldName => {
             const objectFieldValue = this.getObjectFieldValue(fieldValues, fieldMap[pdfFieldName]);
             if (typeof objectFieldValue === 'string') {
@@ -110,7 +112,6 @@ export class PdfService {
 
         return undefined;
     }
-
 
     // Salva il PDF e ritorna i byte aggiornati
     async getPDFUpdated(): Promise<Uint8Array> {

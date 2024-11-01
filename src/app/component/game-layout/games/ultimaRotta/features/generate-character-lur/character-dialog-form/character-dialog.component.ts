@@ -8,7 +8,7 @@ import { SharedFieldsInputModule } from '../../../../../../../shared/shared-fiel
 
 @Component({
     selector: 'app-character-dialog',
-    templateUrl: './character-dialog.component.Backup.html',
+    templateUrl: './character-dialog.component.html',
     styleUrls: ['./character-dialog.component.css'],
     standalone: true,
     imports: [
@@ -26,11 +26,6 @@ export class CharacterDialogComponent implements OnInit {
 
     armorInfoTable: ArmorInfo[] = [];
     displayedColumns: string[] = ['description', 'type', 'notes'];
-
-    onImageChanged(newImage: string | ArrayBuffer | null): void {
-        console.log('Immagine caricata:', newImage);
-    }
-
     abilitiesSelectedArea: string = "";
     inventarioSelectedArea: string = "";
     selectedAbilities: Ability[] = [];

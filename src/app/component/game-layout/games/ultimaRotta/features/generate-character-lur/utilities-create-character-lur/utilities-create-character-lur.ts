@@ -2,6 +2,8 @@ import { firstValueFrom } from 'rxjs';
 import { RandomNameService } from '../../../../../../../services/randomNameService';
 import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURHandlerPDF, Genetic, Role, Trait, } from '../charachter-sheet-lur';
 import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails } from '../data-sheet-lur';
+import { FieldResizeConfig } from '../../../../../../../services/pdf.service';
+import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 
 export class UtilitiesCreateCharacterLur {
 
@@ -37,7 +39,7 @@ export class UtilitiesCreateCharacterLur {
     }
 
 
-    private static updateAttributes(attributes: any[], code: StatsType, incrementBonus: number, incremetValue: number = 0): void {
+    private static updateAttributes(attributes: any[], code: StatsType, incrementBonus: number, incremetValue: number = 1): void {
         const attribute = attributes.find((attr) => attr.code === code);
         if (attribute) {
             attribute.bonus = (attribute.bonus ?? 0) + incrementBonus;
@@ -100,7 +102,9 @@ export class UtilitiesCreateCharacterLur {
 
     private static getTwoDistinctRandomNumbers(max: number): number[] {
         const first = this.generateRandomNumber(max);
-        const second = (first + this.generateRandomNumber(max - 1) + 1) % max;
+        const possibleSeconds = Array.from({ length: max }, (_, i) => i + 1).filter(n => n !== first);
+        const second = possibleSeconds[this.generateRandomNumber(possibleSeconds.length) - 1];
+    
         return [first, second];
     }
 
@@ -164,20 +168,23 @@ export class UtilitiesCreateCharacterLur {
         this.updateAttributes(newChar.attributes, randomStat, 1);
         if (level === 1) {
             this.addLifeMana(newChar, 2, 1);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'MANA_SELVAGGIO') as Ability
-            );
+            let ability = abilities.find((a) => a.code === 'MANA_SELVAGGIO') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         } else if (level === 2) {
             this.addLifeMana(newChar, 2, 1);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'IMMUNITA') as Ability
-            );
+            let ability = abilities.find((a) => a.code === 'IMMUNITA') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         } else if (level === 3) {
             this.updateAttributes(newChar.attributes, StatsType.STRENGTH, -1);
             this.addLifeMana(newChar, 2, 1);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'SANGUE_GIOVANE') as Ability
-            );
+            let ability = abilities.find((a) => a.code === 'SANGUE_GIOVANE') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         }
     }
 
@@ -185,21 +192,24 @@ export class UtilitiesCreateCharacterLur {
         this.updateAttributes(newChar.attributes, randomStat, 1);
         if (level === 1) {
             this.addLifeMana(newChar, 4, 0);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'TEMPRATO') as Ability
-            );
+            let ability = abilities.find((a) => a.code === 'TEMPRATO') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         } else if (level === 2) {
             this.updateAttributes(newChar.attributes, StatsType.MAGIC, -1);
             this.addLifeMana(newChar, 4, 0);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'STIMARE') as Ability
-            );
+            let ability = abilities.find((a) => a.code === 'STIMARE') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         } else if (level === 3) {
             this.updateAttributes(newChar.attributes, StatsType.AGILITY, -1);
             this.addLifeMana(newChar, 4, 0);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'COMBATTENTE_GRANITICO') as Ability
-            );
+            let ability = abilities.find((a) => a.code === 'COMBATTENTE_GRANITICO') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         }
     }
 
@@ -208,16 +218,20 @@ export class UtilitiesCreateCharacterLur {
             this.addLifeMana(newChar, 4, 1);
         } else if (level === 2) {
             this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 1);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'SUPERARE_LIMITE') as Ability
-            );
             this.addLifeMana(newChar, 2, 0);
+
+            let ability = abilities.find((a) => a.code === 'SUPERARE_LIMITE') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         } else if (level === 3) {
             this.updateAttributes(newChar.attributes, randomStat, 1);
-            newChar.genetic.abilities.push(
-                abilities.find((a) => a.code === 'FORTUNA') as Ability
-            );
             this.addLifeMana(newChar, 2, 0);
+
+            let ability = abilities.find((a) => a.code === 'FORTUNA') as Ability
+            if(ability){
+                newChar.genetic.abilities.push(ability);     
+            }
         }
     }
 
@@ -233,17 +247,18 @@ export class UtilitiesCreateCharacterLur {
     public static initCharacter(
         sessionId: string | undefined
     ): CharacterSheetLUR {
-        return {
+        return structuredClone({
             name: '',
             genetic: {} as Genetic,
             excellence: '',
             role: {} as Role,
-            attributes: this.attributeKeys.map((attr) => ({
+            attributes: structuredClone(this.attributeKeys.map((attr) => ({
                 description: attr.description,
                 code: attr.code,
                 value: 1,
                 bonus: undefined,
-            })),
+            }))
+            ),
             mana: undefined,
             life: undefined,
             armor: undefined,
@@ -254,11 +269,11 @@ export class UtilitiesCreateCharacterLur {
             background: '',
             sessionId: sessionId,
             traits: [] as Trait[]
-        };
+        });
     }
 
-    public static async generateRandomCharacter(newChar: CharacterSheetLUR, randomNameService: RandomNameService): Promise<CharacterSheetLUR> {
-        newChar.name = "test" //await this.getRandomName(randomNameService);
+    public static async generateRandomCharacter(newChar: CharacterSheetLUR, randomNameService: RandomNameService, translate: TranslationMessageService): Promise<CharacterSheetLUR> {
+        newChar.name = await this.getRandomName(randomNameService);
         const idGenetic = this.getKeyByValue(mapIdGenetic, this.generateRandomNumber(6));
         newChar.genetic = structuredClone(this.geneticDefaultData.find((g) => g.code === idGenetic) || ({} as Genetic));
         newChar.genetic.abilities = [];
@@ -271,13 +286,19 @@ export class UtilitiesCreateCharacterLur {
             let attribute = newChar.attributes.find((attr) => attr.code === randomStr);
             newChar.excellence = attribute?.description || '';
 
-            // Fill background
-            let traits = this.applyTraits(newChar);
-            newChar.traits = traits;
+            // Fill Traits
+            this.applyTraits(newChar);
+
+            let labelTraits = await translate.translate('ULTIMA_ROTTA.SHEET.TRAITS');
+            let tratisDescription = labelTraits + ' : ' + newChar.traits?.map((t) => t.description).join(' - ');
+            
+            newChar.background = newChar.background ?  
+                                        newChar.background + ' - ' + tratisDescription :  
+                                        tratisDescription;
 
             // Fill role
             let randomRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
-            let roleDefaultData = this.rolesDefaultData.find((r) => r.code === randomRole);
+            const roleDefaultData = this.rolesDefaultData.find((r) => r.code === randomRole);
             let roleToSet = structuredClone(roleDefaultData) as Role;
 
             let haveTraitsLeaderOrSoldato = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
@@ -327,8 +348,8 @@ export class UtilitiesCreateCharacterLur {
                     );
                     const newRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(availableRoles.length));
 
-                    let roleDefaultData = this.rolesDefaultData.find((r) => r.code === newRole) as Role;
-                    roleToSet = structuredClone(roleDefaultData) as Role;
+                    const  newRoleDefaultData = structuredClone(this.rolesDefaultData.find((r) => r.code === newRole)) as Role;
+                    roleToSet = newRoleDefaultData as Role;
                 }
             }
 
@@ -340,12 +361,12 @@ export class UtilitiesCreateCharacterLur {
             let skillAlreadLearned = newChar.role.abilities ? newChar.role.abilities.map((a) => a.code) : [];
 
 
-            const availableAbilities = (roleDefaultData?.abilities as Ability[]).filter((a) => !skillAlreadLearned.includes(a.code));
+            const availableAbilities = [...(roleDefaultData?.abilities as Ability[]).filter((a) => !skillAlreadLearned.includes(a.code))];
 
             // Se ci sono abilità disponibili, scegli una a caso
             if (availableAbilities.length > 0) {
                 const randomIndex = this.generateRandomNumber(availableAbilities.length);
-                let ability = availableAbilities[randomIndex];
+                let ability = availableAbilities[randomIndex - 1];
                 newChar.role.abilities.push(ability);
 
             }
@@ -377,7 +398,7 @@ export class UtilitiesCreateCharacterLur {
                     if (availableAbilities) {
                         if (availableAbilities && availableAbilities.length > 0) {
                             const randomIndex = this.generateRandomNumber(availableAbilities.length);
-                            let ability = availableAbilities[randomIndex];
+                            let ability = availableAbilities[randomIndex - 1];
                             newChar.role.abilities.push(ability);
                         }
                     }
@@ -386,8 +407,7 @@ export class UtilitiesCreateCharacterLur {
             }
             return newChar;
         } catch (error) {
-            debugger;
-            throw new Error('Errore durante la generazione del personaggio: ' + error);
+            throw new Error(error as any);
         }
     }
 
@@ -458,21 +478,15 @@ export class UtilitiesCreateCharacterLur {
         return trait as Trait;
     }
 
-    private static applyTraits(newChar: CharacterSheetLUR): Trait[] {
+    private static applyTraits(newChar: CharacterSheetLUR) {
         let trait = this.generateTraits(20);
-        let traitGenerated: Trait[] = [];
-        traitGenerated.push(trait);
+        this.switchTraits(newChar, trait);
 
-        this.switchTraits(newChar, trait, traitGenerated);
-
-        return traitGenerated;
     }
 
-    private static switchTraits(newChar: CharacterSheetLUR, trait: Trait, traitGenerated: Trait[]): void {
-        newChar.background = trait.description;
+    private static switchTraits(newChar: CharacterSheetLUR, trait: Trait): void {
+        newChar.traits?.push(trait);
         try {
-
-
             switch (trait.code) {
                 case TraitsType.CICATRICE: {
                     // Logic for CICATRICE
@@ -480,22 +494,36 @@ export class UtilitiesCreateCharacterLur {
                     break;
                 }
                 case TraitsType.MALATO_DIFETTOSO: {
-                    let randomIndex = this.generateRandomNumber(newChar.genetic.abilities.length);
-                    let isBios = newChar.genetic.code === GeneticType.Bios;
+                    try{
+                        // Logic for MALATO_DIFETTOSO
 
-                    // Se isBios è vero, filtra le abilità diverse da 'MALATO_DIFETTOSO', altrimenti usa tutte le abilità
-                    const availableAbilities = isBios ? newChar.genetic.abilities.filter((ability) => ability.code !== 'MALATO_DIFETTOSO') : newChar.genetic.abilities;
+                        let isBios = newChar.genetic.code === GeneticType.Bios;
+                        // Se isBios è vero, filtra le abilità diverse da 'MALATO_DIFETTOSO', altrimenti usa tutte le abilità
+                        const availableAbilities = isBios ? newChar.genetic.abilities.filter((ability) => ability.code !== 'ARTIFICIALE') : newChar.genetic.abilities;
 
-                    // Se ci sono abilità disponibili, scegli una a caso
-                    if (availableAbilities.length > 0) {
-                        randomIndex = this.generateRandomNumber(availableAbilities.length);
-                        const selectedAbility = availableAbilities[randomIndex];
-                        let codeToDelete = selectedAbility.code;
-                        newChar.genetic.abilities = newChar.genetic.abilities.filter((a) => a.code != codeToDelete);
+                        // Se ci sono abilità disponibili, scegli una a caso
+                        if (availableAbilities.length > 0) {
+                            const randomIndex = this.generateRandomNumber(availableAbilities.length) - 1;
+                            const selectedAbility = availableAbilities[randomIndex];
+                            const codeToDelete = selectedAbility.code;
+                            
+                            newChar.genetic.abilities = newChar.genetic.abilities.filter((a) => a.code !== codeToDelete);
+                            
 
-                        let currentExcellence = newChar.excellence?.split('-') as string[];
-                        let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], currentExcellence);
-                        newChar.excellence = currentExcellence.join('-') + '-' + newChar.attributes.find((attr) => attr.code === randomStr)?.description;
+                            let currentExcellence = newChar.excellence?.split('-') as string[];
+                            let currentExCode: string[] = [];
+                            currentExcellence.forEach((ex) => {
+                            let code = attributeKeys.find((attr) => attr.description === ex)?.code;
+                                if(code){
+                                    currentExCode.push(code);
+                                }
+                            });
+                            let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], currentExCode);
+                            newChar.excellence = currentExcellence.join('-') + ' - ' + newChar.attributes.find((attr) => attr.code === randomStr)?.description;
+                        }
+                    }
+                    catch(error){
+                        throw new Error('ERROR ON' + trait.code);
                     }
                     break;
                 }
@@ -508,18 +536,12 @@ export class UtilitiesCreateCharacterLur {
                     break;
                 }
                 case TraitsType.FRONT_MAN: {
-                    const attribute = newChar.attributes.find((attr) => attr.code === StatsType.SOCIALITY);
-                    if (attribute) {
-                        attribute.bonus = (attribute.bonus ?? 0) + 1;
-                    }
+                    this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 1);
                     break;
                 }
                 case TraitsType.ROTTMATORE: {
                     // Logic for ROTTAMATORE
-                    const attribute = newChar.attributes.find((attr) => attr.code === StatsType.MANUALITY);
-                    if (attribute) {
-                        attribute.bonus = (attribute.bonus ?? 0) + 1;
-                    }
+                    this.updateAttributes(newChar.attributes, StatsType.MANUALITY, 1);
                     newChar.inventory?.push("Kit da meccanico");
                     let scrap = this.getMaxRandomValue(20, 3, 0) + 10;
                     newChar.scrap = newChar.scrap ? newChar.scrap + scrap : scrap;
@@ -537,7 +559,6 @@ export class UtilitiesCreateCharacterLur {
                 }
                 case TraitsType.TALENTO_NATURALE: {
                     // Logic for TALENTO_NATURALE
-                    debugger
                     let roleCode = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(4));
                     let roleRandom = this.rolesDefaultData.find((r) => r.code === roleCode) as Role;
 
@@ -551,34 +572,36 @@ export class UtilitiesCreateCharacterLur {
                 }
                 case TraitsType.GENETICA_MISTA: {
                     // Logic for GENETICA_MISTA
-                    const attribute = newChar.attributes.find((attr) => attr.code === StatsType.SOCIALITY);
-                    if (attribute) {
-                        attribute.bonus = (attribute.bonus ?? 0) - 1;
-                    }
+                    this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, -1);
 
-                    let humanAbility = this.rolesDefaultData.find((r) => r.code === GeneticType.Umanoide)?.abilities as Ability[];
+                    let humanAbility = this.geneticDefaultData.find((r) => r.code === GeneticType.Umanoide)?.abilities as Ability[];
                     // Filtra le abilità che non sono già incluse in `newChar.role?.abilities`
                     const availableAbilities = humanAbility.filter((ability) => !newChar.genetic?.abilities.includes(ability));
 
                     // Se ci sono abilità disponibili, scegli una a caso
                     if (availableAbilities.length > 0) {
-                        const abilityRandom = this.generateRandomNumber(availableAbilities.length);
-                        const selectedAbility = availableAbilities[abilityRandom];
-                        newChar.role?.abilities.push(selectedAbility);
+                        const abilityRandomIndex = this.generateRandomNumber(availableAbilities.length);
+                        const selectedAbility = availableAbilities[abilityRandomIndex -1];
+                        newChar.genetic?.abilities.push(selectedAbility);
                     }
                     break;
                 }
                 case TraitsType.TIRA_DUE_VOLTE: {
+                    try{
+                        let traitGenerated = newChar.traits as Trait[];
 
-                    for (let i = 0; i < 2; i++) {
-                        const availableTraits = this.traitsDefaultData.filter((trait) => !traitGenerated.includes(trait));
+                        for (let i = 0; i < 2; i++) {
+                            const availableTraits = structuredClone(this.traitsDefaultData.filter((trait) => !traitGenerated.some((generatedTrait) => generatedTrait.code === trait.code)));
 
-                        if (availableTraits.length > 0) {
-                            const randomIndex = this.generateRandomNumber(availableTraits.length);
-                            const newTrait = availableTraits[randomIndex - 1];
-                            traitGenerated.push(newTrait);
-                            this.switchTraits(newChar, newTrait, traitGenerated);
+                            if (availableTraits.length > 0) {
+                                const randomIndex = this.generateRandomNumber(availableTraits.length);
+                                const newTrait = availableTraits[randomIndex - 1];                                
+                                this.switchTraits(newChar, newTrait);
+                            }
                         }
+                    }
+                    catch(error){
+                        throw new Error(error as any);
                     }
                     break;
                 }
@@ -596,7 +619,7 @@ export class UtilitiesCreateCharacterLur {
 
             }
         } catch (error) {
-            throw new Error(trait.code + ' ERRORE');
+            throw new Error("Error su " + trait.code + " - " + error);
         }
     }
 
@@ -784,3 +807,8 @@ export const fieldMapPDFLUR = {
     "SOC P": "attributes[0].proficiency"
     */
 };
+export const fieldsToResize: FieldResizeConfig[] = [
+    { fieldName: 'ABILITÀ', width: 140, height: 270, x: 63, y: 170, fontSize: 12 },
+    { fieldName: 'EQUIPAGGIAMENTO', width: 330, height: 100, x: 225, y: 150, fontSize: 10 },
+    { fieldName: 'BACKGROUND', width: 480, height: 50, x: 70, y: 70, fontSize: 10 },
+  ];

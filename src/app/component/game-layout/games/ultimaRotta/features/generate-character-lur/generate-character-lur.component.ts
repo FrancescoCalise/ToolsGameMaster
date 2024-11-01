@@ -8,10 +8,11 @@ import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { SessionManager } from '../../../../../../interface/Document/SessionManager';
 import { SpinnerService } from '../../../../../../services/spinner.service';
 import { SessionManagerWidgetComponent } from '../../../../../session-manager-widget/session-manager-widget.component';
-import { UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
+import { fieldMapPDFLUR, UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
 import { RandomNameService } from '../../../../../../services/randomNameService';
 import { MatDialog } from '@angular/material/dialog';
 import { CharacterDialogComponent } from './character-dialog-form/character-dialog.component';
+import { FieldResizeConfig, PdfService } from '../../../../../../services/pdf.service';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -29,19 +30,20 @@ export class GenerateCharacterLurComponent implements OnInit {
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
   readonly traits = UtilitiesCreateCharacterLur.traitsDefaultData;
   readonly armorDetails = UtilitiesCreateCharacterLur.armorDetails;
+  readonly pathTemplateFIle = UtilitiesCreateCharacterLur.pathTemplateFIle.replace('{0}', this.translationMessageService.getLang());
 
   translatedTraitMessage$ = this.translationMessageService.translate('ULTIMA_ROTTA.SHEET.SELECT_TRAITS');
 
   sessionLoaded = false;
   defaultSession: SessionManager = {};
   characters: CharacterSheetLUR[] = [];
-  character: CharacterSheetLUR = { genetic: {} as Genetic, attributes: [] };
 
   constructor(private translationMessageService: TranslationMessageService,
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLUR>,
-    private spineerService: SpinnerService,
+    private spinnerService: SpinnerService,
     private randomNameService: RandomNameService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private pdfService: PdfService,
   ) {
     firestoreLurSheetService.setCollectionName('character-sheet-lur');
   }
@@ -92,13 +94,12 @@ export class GenerateCharacterLurComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.spineerService.showSpinner();
+    this.spinnerService.show("GenerateCharacterLurComponent.ngOnInit");
 
     await this.setDescriptionsLanguages();
     await this.loadCharacters();
 
-    this.character = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id); //Sempre dopo le traduzioni
-    this.spineerService.hideSpinner();
+    this.spinnerService.hide("GenerateCharacterLurComponent.ngOnInit");
   }
 
   async loadCharacters(): Promise<void> {
@@ -147,20 +148,40 @@ export class GenerateCharacterLurComponent implements OnInit {
     }
   }
 
-  async generateRandom() {
+  async generateRandom(save:boolean): Promise<CharacterSheetLUR> {
     let newChar = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
 
-    this.spineerService.showSpinner();
-    newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService);
-    if (newChar) {
-      this.character = newChar;
-      this.characters
-      this.addCharacter(newChar);
+    this.spinnerService.show("GenerateCharacterLurComponent.generateRandom");
+    for(let i = 0; i < 20; i++){
+      newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService);
+    }
+    if (newChar && save) {
+      //this.addCharacter(newChar);
     }
 
+    this.spinnerService.hide("GenerateCharacterLurComponent.generateRandom");
+    return newChar;
   }
 
-  printRandom() {
+  async printRandom() {
+    this.spinnerService.show("GenerateCharacterLurComponent.printRandom");
+    let newChar = await this.generateRandom(false);
+    if (newChar) {
+      await this.pdfService.loadPdf(this.pathTemplateFIle);
+      let newCharFromPdf = UtilitiesCreateCharacterLur.mapCharacterToPdf(newChar);
+      this.pdfService.updateValues(newCharFromPdf, fieldMapPDFLUR);
+      let pdf = await this.pdfService.getPDFUpdated();
+      let fileName = `${newChar.name}_${newChar.genetic.description}_${newChar.role?.description}` + '.pdf';
 
+      const fieldsToResize: FieldResizeConfig[] = [
+        { fieldName: 'ABILITÀ', width: 140, height: 270, x: 63, y: 170, fontSize: 12 },
+        { fieldName: 'EQUIPAGGIAMENTO', width: 330, height: 100, x: 225, y: 150, fontSize: 10 },
+        { fieldName: 'BACKGROUND', width: 480, height: 50, x: 70, y: 70, fontSize: 10 },
+      ];
+      
+      const resizedPdfBytes = await this.pdfService.resizeMultipleTextFields(pdf, fieldsToResize);
+      this.pdfService.downloadPdf(resizedPdfBytes, fileName);
+      this.spinnerService.hide("GenerateCharacterLurComponent.printRandom");
+    }
   }
 }

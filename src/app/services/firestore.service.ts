@@ -41,16 +41,16 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
   }
 
   async getItems(): Promise<T[]> {
-    this.spinner.showSpinner();
+    this.spinner.show("FirestoreService.getItems");
     const colRef = collection(this.firestore, this.collectionName);
     const q = query(colRef, where('ownerId', '==', this.user?.uid));
     const querySnapshot = await getDocs(q);
-    this.spinner.hideSpinner();
+    this.spinner.hide("FirestoreService.getItems");
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];
   }
 
   async getItem(id: string): Promise<T | null> {
-    this.spinner.showSpinner();
+    this.spinner.show("FirestoreService.getItem");
     const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
     try {
       const docSnap = await getDoc(docRef);
@@ -59,21 +59,21 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
       throw e;
     }
     finally {
-      this.spinner.hideSpinner();
+      this.spinner.hide("FirestoreService.getItem");
     }
   }
 
   async getItemsWhere(where: QueryFieldFilterConstraint[]): Promise<T[]> {
-    this.spinner.showSpinner();
+    this.spinner.show("FirestoreService.getItemsWhere");
     const colRef = collection(this.firestore, this.collectionName);
     const q = query(colRef, ...where);
     const querySnapshot = await getDocs(q);
-    this.spinner.hideSpinner();
+    this.spinner.hide("FirestoreService.getItemsWhere");
     return querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })) as T[];
   }
 
   async addItem(item: T, forceId?: string): Promise<string> {
-    this.spinner.showSpinner();
+    this.spinner.show("FirestoreService.addItem");
     try {
       const colRef = collection(this.firestore, this.collectionName);
       item.ownerId = this.user ? this.user.uid : null;
@@ -100,7 +100,7 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
     } catch (e) {
       throw e;
     } finally {
-      this.spinner.hideSpinner();
+      this.spinner.hide("FirestoreService.addItem");
     }
   }
 
@@ -119,7 +119,7 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
 
 
   async updateItem(item: T): Promise<boolean> {
-    this.spinner.showSpinner();
+    this.spinner.show("FirestoreService.updateItem");
     item.lastUpdateDate = serverTimestamp();
     const docRef = doc(this.firestore, `${this.collectionName}/${item.id}`);
     try {
@@ -129,12 +129,12 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
       throw e;
     }
     finally {
-      this.spinner.hideSpinner();
+      this.spinner.hide("FirestoreService.updateItem");
     }
   }
 
   async deleteItem(id: string): Promise<boolean> {
-    this.spinner.showSpinner();
+    this.spinner.show("FirestoreService.deleteItem");
     const docRef = doc(this.firestore, `${this.collectionName}/${id}`);
     try {
       await deleteDoc(docRef);
@@ -143,7 +143,7 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
       throw e;
     }
     finally {
-      this.spinner.hideSpinner();
+      this.spinner.hide("FirestoreService.deleteItem");
     }
   }
 }

@@ -1,8 +1,7 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { FeatureAreaComponent } from './feature-sitemap/feature-area.component';
 import {  RouterOutlet } from '@angular/router';
-import { SpinnerService } from '../../services/spinner.service';
 
 
 @Component({
@@ -18,21 +17,6 @@ import { SpinnerService } from '../../services/spinner.service';
 
 })
 
-export class GameLayoutComponent implements OnInit, OnDestroy {
-
-    constructor(
-        private spinner: SpinnerService
-    ) {
-
-    }
-
-    ngOnDestroy(): void {
-        this.spinner.hideSpinner();
-    }
-
-    async ngOnInit(): Promise<void> {
-        this.spinner.showSpinner();
-    }
-
+export class GameLayoutComponent  {
 
 }

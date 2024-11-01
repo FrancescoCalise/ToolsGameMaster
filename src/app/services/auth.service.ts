@@ -43,7 +43,7 @@ export class AuthService {
   async loginWithGoogle(): Promise<UserCredential> {
     try {
       let user = await signInWithPopup(this.auth, new GoogleAuthProvider());
-      this.spinner.showSpinner();
+      this.spinner.show("AuthService.loginWithGoogle");
       let partialUser = this.mapFirebaseUser(user.user);
       this.userSubject.next(partialUser);
       this.isInLogin = true;
@@ -64,20 +64,20 @@ export class AuthService {
     this.isLoginCompleted = true;
     this.cacheService.setItem(this.cacheService.userInfoKey, this.user);
     this.userSubject.next(this.user);
-    this.spinner.hideSpinner();
+    this.spinner.hide("AuthService.loginWithGoogle");
   }
 
   // Logout
   async logout(): Promise<void> {
 
-    this.spinner.showSpinner();
+    this.spinner.show("AuthService.logout");
     await signOut(this.auth);
     this.isInLogin = false;
     this.isLoginCompleted = false;
     this.userSubject.next(null);
     this.cacheService.removeItem(this.cacheService.userInfoKey);
+    this.spinner.hide("AuthService.logout");
     this.router.navigateByUrl('/login');
-
   }
 
   public isAuthLoginCompleted(): boolean {

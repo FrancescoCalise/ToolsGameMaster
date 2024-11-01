@@ -46,11 +46,11 @@ export class AppComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     console.log('Environment: ', environment);
-    spinnerService.showSpinner();
+    spinnerService.show("AppComponent.constructor");
     let selectedLanguage = this.languageService.getLanguage();
     this.translate.setDefaultLang(selectedLanguage);
     this.translate.use(selectedLanguage);
-
+    spinnerService.hide("AppComponent.constructor");
   }
 
   async ngOnInit(): Promise<void> {
@@ -72,7 +72,8 @@ export class AppComponent implements OnInit {
         }
         
         if (event.type === 'VERSION_READY' && this.swVersion !== event.currentVersion.hash) {
-          this.spinnerService.showSpinner();
+          this.spinnerService.show("AppComponent.checkVersionUpdates");
+
           this.swVersion = event.currentVersion.hash;
           this.cacheService.setItem('sw-version', event.currentVersion.hash);
 
@@ -85,6 +86,8 @@ export class AppComponent implements OnInit {
 
           setTimeout(async () => {
             await this.swUpdate.activateUpdate();
+            this.spinnerService.hide("AppComponent.checkVersionUpdates");
+
             window.location.reload();
           }, 3000);
         }

@@ -6,6 +6,7 @@ export interface CharacterSheetLUR extends BaseDocument {
     genetic: Genetic;
     excellence?: string;
     role?: Role;
+    role_in_the_crew?: string;
     attributes: Attribute[];
     mana?: number;
     manaCurrent?: number;
@@ -13,7 +14,7 @@ export interface CharacterSheetLUR extends BaseDocument {
     lifeCurrent?: number;
     armor?: number;
     armorDetails?: ArmorDetails;
-    inventory?: string;
+    inventory?: string[];
     scrap?: number;
     point_adventure?: number;
     background?: string;
@@ -21,6 +22,12 @@ export interface CharacterSheetLUR extends BaseDocument {
     traits?: Trait[];
     ship?: string;
     redemption?: number;
+}
+
+export interface CharacterSheetLURHandlerPDF extends CharacterSheetLUR {
+    genetic_and_role?: string;
+    allAbilities?: string;
+    allEquipment?: string;
 }
 
 export interface ArmorDetails {

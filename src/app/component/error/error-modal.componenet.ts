@@ -5,6 +5,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ErrorLog } from '../../interface/Document/ErrorLog';
 import { TranslationMessageService } from '../../services/translation-message-service';
+import { SpinnerService } from '../../services/spinner.service';
 
 @Component({
   selector: 'app-error-modal',
@@ -19,18 +20,21 @@ import { TranslationMessageService } from '../../services/translation-message-se
 
 export class ErrorModalComponent implements OnInit {
   public title: string = '';
-  
+  public originalComponenetThatOpenSpinner: string = '';
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ErrorLog,
     private dialogRef: MatDialogRef<ErrorModalComponent>,
-    private translationMessageService: TranslationMessageService
+    private translationMessageService: TranslationMessageService,
+    private spinnerService: SpinnerService
   ) {
 
   }
 
   async ngOnInit(): Promise<void> {
+    this.originalComponenetThatOpenSpinner = this.spinnerService.openBy;
     this.title = await this.translationMessageService.translate("ERROR.TITLE");
-
+    this.spinnerService.hide(this.originalComponenetThatOpenSpinner);
   }
 
   close(): void {

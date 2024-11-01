@@ -32,7 +32,7 @@ export class CharacterDialogComponent implements OnInit {
     }
 
     abilitiesSelectedArea: string = "";
-
+    inventarioSelectedArea: string = "";
     selectedAbilities: Ability[] = [];
     selectedGenes: string[] = [];
     selectedArmorDetails:ArmorDetails = {};
@@ -73,6 +73,7 @@ export class CharacterDialogComponent implements OnInit {
             this.abilitiesSelectedArea = currentAbility.join('\n');
         }
         this.armorInfoTable = this.character.armorDetails?.details || [];
+        this.inventarioSelectedArea = this.character.inventory?.join('\n') || '';
     }
 
     save(form: NgForm) {

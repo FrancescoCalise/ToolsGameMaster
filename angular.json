@@ -49,6 +49,11 @@
                 "glob": "ngsw-config.json",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "**/*.ttf",
+                "input": "src/assets/fonts",
+                "output": "/assets/fonts"
               }
             ],
             "styles": [
@@ -143,6 +148,11 @@
                 "glob": "manifest.webmanifest",
                 "input": "src",
                 "output": "/"
+              },
+              {
+                "glob": "**/*.ttf",
+                "input": "src/assets/fonts",
+                "output": "/assets/fonts"
               }
             ],
             "styles": [

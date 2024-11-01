@@ -9,11 +9,6 @@ import { SpinnerService } from '../../services/spinner.service';
   templateUrl: './not-found.component.html',
   styleUrl: './not-found.component.css'
 })
-export class NotFoundComponent implements AfterViewInit {
+export class NotFoundComponent {
   constructor(private spinner: SpinnerService) {}
-
-  ngAfterViewInit(): void {
-    this.spinner.hideSpinner();
-  }
-
 }

@@ -1,13 +1,20 @@
+import { firstValueFrom } from 'rxjs';
 import { RandomNameService } from '../../../../../../../services/randomNameService';
-import { Ability, Attribute, CharacterSheetLUR, Genetic, Role, Trait, } from '../charachter-sheet-lur';
+import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURHandlerPDF, Genetic, Role, Trait, } from '../charachter-sheet-lur';
 import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails } from '../data-sheet-lur';
 
 export class UtilitiesCreateCharacterLur {
+
+
     static readonly rolesDefaultData = roles;
     static readonly geneticDefaultData = genetic;
     static readonly attributeKeys = attributeKeys;
     static readonly traitsDefaultData = traits;
     static readonly armorDetails = armorDetails;
+    static readonly pathTemplateFIle = 'assets/pdfFiles/{0}/ultima-rotta-template.pdf';
+    static pdfFieldMap: { [pdfFieldName: string]: string; } = {
+
+    }
     constructor() { }
 
     private static generateRandomNumber(max: number): number {
@@ -18,11 +25,17 @@ export class UtilitiesCreateCharacterLur {
         return elements[Math.floor(Math.random() * elements.length)];
     }
 
-    private static async getRandomName(
-        randomNameService: RandomNameService
-    ): Promise<string> {
-        return (await randomNameService.getRandomName()) || '';
+    private static async getRandomName(randomNameService: RandomNameService): Promise<string> {
+        try {
+            let name = await firstValueFrom(randomNameService.getRandomName());
+            console.log('Nome generato:', name);
+            return name;
+        } catch (error) {
+            console.error('Errore durante la chiamata a getRandomName:', error);
+            return ''; // Ritorna una stringa vuota in caso di errore o timeout
+        }
     }
+
 
     private static updateAttributes(attributes: any[], code: StatsType, incrementBonus: number, incremetValue: number = 0): void {
         const attribute = attributes.find((attr) => attr.code === code);
@@ -70,7 +83,7 @@ export class UtilitiesCreateCharacterLur {
         let abilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Bios)?.abilities as Ability[];
         newChar.genetic.abilities = structuredClone(abilities);
 
-        newChar.inventory = newChar.inventory + "Arma 1 - Equpaggiamento 1 \n";
+        newChar.inventory?.push("Arma 1", "Equpaggiamento 1");
     }
 
     private static applyNomadeGenetics(newChar: CharacterSheetLUR): void {
@@ -82,16 +95,12 @@ export class UtilitiesCreateCharacterLur {
 
         let nomadeAbilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Nomade)?.abilities as Ability[];
         newChar.genetic.abilities = structuredClone(nomadeAbilities);
-
-        newChar.inventory = newChar.inventory + "Abiti - Arma 1";
+        newChar.inventory?.push("Abiti", "Arma 1");
     }
 
     private static getTwoDistinctRandomNumbers(max: number): number[] {
         const first = this.generateRandomNumber(max);
-        let second;
-        do {
-            second = this.generateRandomNumber(max);
-        } while (second === first);
+        const second = (first + this.generateRandomNumber(max - 1) + 1) % max;
         return [first, second];
     }
 
@@ -109,8 +118,7 @@ export class UtilitiesCreateCharacterLur {
             this.processGeneLevel(newChar, gene, geneUpdates, statUpdates, abilities)
         );
         newChar.genetic.genes = genes;
-
-        newChar.inventory = newChar.inventory + "Abiti - Sostentamento \n";
+        newChar.inventory?.push("Abiti", "Sostentamento");
     }
 
     private static generateGenes(): string[] {
@@ -120,14 +128,10 @@ export class UtilitiesCreateCharacterLur {
     }
 
     private static distinctRandomStat(statsList: string[], statUpdates: string[]): StatsType {
-        let randomStat = this.getRandomElement(statsList);
-
-        while (statUpdates.includes(randomStat)) {
-            this.getRandomElement(statsList);
-        }
-
+        // Filtra `statsList` per escludere gli elementi già presenti in `statUpdates`
+        const availableStats = statsList.filter((stat) => !statUpdates.includes(stat));
+        const randomStat = this.getRandomElement(availableStats);
         statUpdates.push(randomStat);
-
         return StatsType[randomStat as keyof typeof StatsType];
     }
 
@@ -244,7 +248,7 @@ export class UtilitiesCreateCharacterLur {
             life: undefined,
             armor: undefined,
             armorDetails: structuredClone(this.armorDetails),
-            inventory: '',
+            inventory: [] as string[],
             scrap: undefined,
             point_adventure: undefined,
             background: '',
@@ -253,132 +257,138 @@ export class UtilitiesCreateCharacterLur {
         };
     }
 
-    public static async generateRandomCharacter(
-        newChar: CharacterSheetLUR,
-        randomNameService: RandomNameService
-    ): Promise<CharacterSheetLUR> {
-        newChar.name = await this.getRandomName(randomNameService);
+    public static async generateRandomCharacter(newChar: CharacterSheetLUR, randomNameService: RandomNameService): Promise<CharacterSheetLUR> {
+        newChar.name = "test" //await this.getRandomName(randomNameService);
         const idGenetic = this.getKeyByValue(mapIdGenetic, this.generateRandomNumber(6));
         newChar.genetic = structuredClone(this.geneticDefaultData.find((g) => g.code === idGenetic) || ({} as Genetic));
         newChar.genetic.abilities = [];
 
-        // Fill genetic values
-        this.fillGeneticValues(newChar, newChar.genetic);
-        //Fill eccellence
-        let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], []);
-        let attribute = newChar.attributes.find((attr) => attr.code === randomStr);
-        newChar.excellence = attribute?.description || '';
+        try {
+            // Fill genetic values
+            this.fillGeneticValues(newChar, newChar.genetic);
+            //Fill eccellence
+            let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], []);
+            let attribute = newChar.attributes.find((attr) => attr.code === randomStr);
+            newChar.excellence = attribute?.description || '';
 
-        // Fill background
-        let traits = this.applyTraits(newChar);
-        newChar.traits = traits;
+            // Fill background
+            let traits = this.applyTraits(newChar);
+            newChar.traits = traits;
 
-        // Fill role
-        let randomRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
-        let roleDefaultData = this.rolesDefaultData.find((r) => r.code === randomRole);
-        let roleToSet = structuredClone(roleDefaultData) as Role;
+            // Fill role
+            let randomRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
+            let roleDefaultData = this.rolesDefaultData.find((r) => r.code === randomRole);
+            let roleToSet = structuredClone(roleDefaultData) as Role;
 
-        let haveTraitsLeaderOrSoldato = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
-        let haveTraitsArcanistaOrDiscepoloOscuro = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO) ? true : false;
-        let haveTraitsCanagliaOrRicognitore = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE) ? true : false;
-        let admissionTestPassed = false;
+            let haveTraitsLeaderOrSoldato = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
+            let haveTraitsArcanistaOrDiscepoloOscuro = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO) ? true : false;
+            let haveTraitsCanagliaOrRicognitore = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE) ? true : false;
+            let admissionTestPassed = false;
 
-        if ((roleToSet.code === RoleType.LEADER || roleToSet.code === RoleType.SOLDATO) && haveTraitsLeaderOrSoldato) {
-            admissionTestPassed = true;
-        }
-        if ((roleToSet.code === RoleType.ARCANISTA || roleToSet.code === RoleType.DISCEPOLO_OSCURO) && haveTraitsArcanistaOrDiscepoloOscuro) {
-            admissionTestPassed = true;
-        }
-        if ((roleToSet.code === RoleType.CANAGLIA || roleToSet.code === RoleType.RICOGNITORE) && haveTraitsCanagliaOrRicognitore) {
-            admissionTestPassed = true;
-        }
-
-        if (!admissionTestPassed) {
-            this.applyBonusRole(newChar, roleToSet);
-            let attribtes = newChar.attributes;
-            let attributeToTest = attribtes.find((attr) =>
-                roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
-                roleToSet.code === RoleType.SOLDATO && attr.code === StatsType.STRENGTH ||
-                roleToSet.code === RoleType.ARCANISTA && attr.code === StatsType.SOCIALITY ||
-                roleToSet.code === RoleType.DISCEPOLO_OSCURO && attr.code === StatsType.MAGIC ||
-                roleToSet.code === RoleType.CANAGLIA && attr.code === StatsType.MANUALITY ||
-                roleToSet.code === RoleType.RICOGNITORE && attr.code === StatsType.PERCEPTION
-            ) as unknown as Attribute;
-            let valueToTest = attributeToTest.value ?? 0;
-            let bonusToTest = attributeToTest.bonus ?? 0;
-
-            let randomTest = this.getMaxRandomValue(10, valueToTest, bonusToTest);
-
-            if (randomTest > 5) {
+            if ((roleToSet.code === RoleType.LEADER || roleToSet.code === RoleType.SOLDATO) && haveTraitsLeaderOrSoldato) {
                 admissionTestPassed = true;
-            } else {
-                newChar.background = `${newChar.background} - Non ha superato il test di ammissione per ${roleToSet.description} \n`;
-                let inventory = newChar.inventory ? newChar.inventory.split('-') : [];
-                let indexToRemove = this.generateRandomNumber(inventory.length) - 1;
-                inventory = inventory.filter((i, index) => index !== indexToRemove);
-                newChar.inventory = inventory.join('-');
+            }
+            if ((roleToSet.code === RoleType.ARCANISTA || roleToSet.code === RoleType.DISCEPOLO_OSCURO) && haveTraitsArcanistaOrDiscepoloOscuro) {
+                admissionTestPassed = true;
+            }
+            if ((roleToSet.code === RoleType.CANAGLIA || roleToSet.code === RoleType.RICOGNITORE) && haveTraitsCanagliaOrRicognitore) {
+                admissionTestPassed = true;
+            }
 
-                let newRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
-                while (newRole === randomRole) {
-                    newRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
+            if (!admissionTestPassed) {
+                this.applyBonusRole(newChar, roleToSet);
+                let attribtes = newChar.attributes;
+                let attributeToTest = attribtes.find((attr) =>
+                    roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
+                    roleToSet.code === RoleType.SOLDATO && attr.code === StatsType.STRENGTH ||
+                    roleToSet.code === RoleType.ARCANISTA && attr.code === StatsType.SOCIALITY ||
+                    roleToSet.code === RoleType.DISCEPOLO_OSCURO && attr.code === StatsType.MAGIC ||
+                    roleToSet.code === RoleType.CANAGLIA && attr.code === StatsType.MANUALITY ||
+                    roleToSet.code === RoleType.RICOGNITORE && attr.code === StatsType.PERCEPTION
+                ) as unknown as Attribute;
+                let valueToTest = attributeToTest.value ?? 0;
+                let bonusToTest = attributeToTest.bonus ?? 0;
+
+                let randomTest = this.getMaxRandomValue(10, valueToTest, bonusToTest);
+
+                if (randomTest > 5) {
+                    admissionTestPassed = true;
+                } else {
+                    newChar.background = `${newChar.background} - Non ha superato il test di ammissione per ${roleToSet.description} \n`;
+
+                    let maxIndex = newChar.inventory?.length ?? 0;
+
+                    let indexToRemove = this.generateRandomNumber(maxIndex) - 1;
+
+                    newChar.inventory = newChar.inventory?.filter((i, index) => index !== indexToRemove);
+
+                    const availableRoles = Object.keys(roleTraceMapping).filter(
+                        (role) => role !== randomRole
+                    );
+                    const newRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(availableRoles.length));
+
+                    let roleDefaultData = this.rolesDefaultData.find((r) => r.code === newRole) as Role;
+                    roleToSet = structuredClone(roleDefaultData) as Role;
                 }
-                let roleDefaultData = this.rolesDefaultData.find((r) => r.code === newRole) as Role;
-                roleToSet = structuredClone(roleDefaultData) as Role;
-            }
-        }
-
-
-        let persistedRoleAbility = newChar.role?.abilities ? structuredClone(newChar.role?.abilities as Ability[]) : [];
-        newChar.role = roleToSet;
-        newChar.role.abilities = persistedRoleAbility;
-
-
-
-        let skillAlreadLearned = newChar.role.abilities ? newChar.role.abilities.map((a) => a.code) : [];
-        let randomIdAbility = this.generateRandomNumber(10) - 1;
-        let ability = roleDefaultData?.abilities[randomIdAbility] as Ability;
-        if (ability) {
-            while (skillAlreadLearned.includes(ability.code)) {
-                randomIdAbility = this.generateRandomNumber(10);
-                ability = this.rolesDefaultData.find((r) => r.code === roleToSet.code)?.abilities[randomIdAbility] as Ability;
-            }
-            newChar.role.abilities.push(ability);
-        }
-
-        if (admissionTestPassed) {
-            let testOnRoadPassed = false;
-
-            let attributeToTest = newChar.attributes.find((attr) =>
-                roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
-                roleToSet.code === RoleType.SOLDATO && attr.code === StatsType.STRENGTH ||
-                roleToSet.code === RoleType.ARCANISTA && attr.code === StatsType.SOCIALITY ||
-                roleToSet.code === RoleType.DISCEPOLO_OSCURO && attr.code === StatsType.MAGIC ||
-                roleToSet.code === RoleType.CANAGLIA && attr.code === StatsType.MANUALITY ||
-                roleToSet.code === RoleType.RICOGNITORE && attr.code === StatsType.PERCEPTION
-            ) as unknown as Attribute;
-
-            let valueToTest = attributeToTest.value ?? 0;
-            let bonusToTest = attributeToTest.bonus ?? 0;
-
-            let randomTest = this.getMaxRandomValue(10, valueToTest, bonusToTest);
-            if (randomTest > 7) {
-                testOnRoadPassed = true;
             }
 
-            if (testOnRoadPassed) {
-                let randomAbility = this.generateRandomNumber(10);
-                let ability = this.rolesDefaultData.find((r) => r.code === roleToSet.code)?.abilities[randomAbility] as Ability;
-                if (ability) {
-                    while (skillAlreadLearned.includes(ability.code)) {
-                        randomAbility = this.generateRandomNumber(10);
-                        ability = this.rolesDefaultData.find((r) => r.code === roleToSet.code)?.abilities[randomAbility] as Ability;
+
+            let persistedRoleAbility = newChar.role?.abilities ? structuredClone(newChar.role?.abilities as Ability[]) : [];
+            newChar.role = roleToSet;
+            newChar.role.abilities = persistedRoleAbility;
+
+            let skillAlreadLearned = newChar.role.abilities ? newChar.role.abilities.map((a) => a.code) : [];
+
+
+            const availableAbilities = (roleDefaultData?.abilities as Ability[]).filter((a) => !skillAlreadLearned.includes(a.code));
+
+            // Se ci sono abilità disponibili, scegli una a caso
+            if (availableAbilities.length > 0) {
+                const randomIndex = this.generateRandomNumber(availableAbilities.length);
+                let ability = availableAbilities[randomIndex];
+                newChar.role.abilities.push(ability);
+
+            }
+
+
+
+            if (admissionTestPassed) {
+                let testOnRoadPassed = false;
+
+                let attributeToTest = newChar.attributes.find((attr) =>
+                    roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
+                    roleToSet.code === RoleType.SOLDATO && attr.code === StatsType.STRENGTH ||
+                    roleToSet.code === RoleType.ARCANISTA && attr.code === StatsType.SOCIALITY ||
+                    roleToSet.code === RoleType.DISCEPOLO_OSCURO && attr.code === StatsType.MAGIC ||
+                    roleToSet.code === RoleType.CANAGLIA && attr.code === StatsType.MANUALITY ||
+                    roleToSet.code === RoleType.RICOGNITORE && attr.code === StatsType.PERCEPTION
+                ) as unknown as Attribute;
+
+                let valueToTest = attributeToTest.value ?? 0;
+                let bonusToTest = attributeToTest.bonus ?? 0;
+
+                let randomTest = this.getMaxRandomValue(10, valueToTest, bonusToTest);
+                if (randomTest > 7) {
+                    testOnRoadPassed = true;
+                }
+
+                if (testOnRoadPassed) {
+                    let availableAbilities = roleDefaultData?.abilities.filter((a) => !skillAlreadLearned.includes(a.code)) as Ability[];
+                    if (availableAbilities) {
+                        if (availableAbilities && availableAbilities.length > 0) {
+                            const randomIndex = this.generateRandomNumber(availableAbilities.length);
+                            let ability = availableAbilities[randomIndex];
+                            newChar.role.abilities.push(ability);
+                        }
                     }
-                    newChar.role.abilities.push(ability);
+                    newChar.background = `${newChar.background} - Hai superato la prova sul campo \n`;
                 }
-                newChar.background = `${newChar.background} - Hai superato la prova sul campo \n`;
             }
+            return newChar;
+        } catch (error) {
+            debugger;
+            throw new Error('Errore durante la generazione del personaggio: ' + error);
         }
-        return newChar;
     }
 
     static applyBonusRole(newChar: CharacterSheetLUR, roleToSet: Role) {
@@ -389,7 +399,8 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.INTELLIGENCE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 0, 2);
-                newChar.inventory = newChar.inventory + "Arma 2 - Equpaggiamento 1 - Equipaggiamento 2 \n";
+                newChar.inventory?.push("Arma 2", "Equpaggiamento 1", "Equpaggiamento 2");
+
                 break;
             }
             case RoleType.SOLDATO: {
@@ -397,7 +408,8 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newChar.attributes, StatsType.AGILITY, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.STRENGTH, 0, 2);
-                newChar.inventory = newChar.inventory + "Arma 1 - Arma 2 - Sostentamento \n";
+                newChar.inventory?.push("Arma 1", "Arma 2", "Sostentamento");
+
                 break;
             }
             case RoleType.ARCANISTA: {
@@ -405,7 +417,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.INTELLIGENCE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.MAGIC, 0, 2);
-                newChar.inventory = newChar.inventory + "Equpaggiamento 2 - Rottami - Sostentamento \n";
+                newChar.inventory?.push("Equpaggiamento 2", "Rottami", "Sostentamento");
                 break;
             }
             case RoleType.DISCEPOLO_OSCURO: {
@@ -413,7 +425,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newChar.attributes, StatsType.INTELLIGENCE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.MAGIC, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 0, 2);
-                newChar.inventory = newChar.inventory + "Arma 1 - Equipaggiamento 2 - Sostentamento \n";
+                newChar.inventory?.push("Arma 1", "Equpaggiamento 1", "Sostentamento");
                 break;
             }
             case RoleType.CANAGLIA: {
@@ -421,7 +433,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newChar.attributes, StatsType.AGILITY, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.MANUALITY, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.PERCEPTION, 0, 2);
-                newChar.inventory = newChar.inventory + "Arma 1 - Equpaggiamento 1 - Rottami \n";
+                newChar.inventory?.push("Arma 1", "Equpaggiamento 1", "Rottami");
                 break;
             }
             case RoleType.RICOGNITORE: {
@@ -429,19 +441,20 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newChar.attributes, StatsType.AGILITY, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newChar.attributes, StatsType.PERCEPTION, 0, 2);
-                newChar.inventory = newChar.inventory + "Arma 2 - Equpaggiamento 1 - Equpaggiamento 2 \n";
+                newChar.inventory?.push("Arma 2", "Equpaggiamento 1", "Equpaggiamento 2");
                 break;
             }
 
         }
     }
 
-
-
     private static generateTraits(maxInt: number): Trait {
         let randomInt = this.generateRandomNumber(maxInt);
         let getCodeFromMapping = this.getKeyByValue(traitTraceMapping, randomInt);
         let trait = this.traitsDefaultData.find((t) => t.code === getCodeFromMapping);
+        if (!trait) {
+            throw new Error(getCodeFromMapping + ' non trovato');
+        }
         return trait as Trait;
     }
 
@@ -457,112 +470,133 @@ export class UtilitiesCreateCharacterLur {
 
     private static switchTraits(newChar: CharacterSheetLUR, trait: Trait, traitGenerated: Trait[]): void {
         newChar.background = trait.description;
-        switch (trait.code) {
-            case TraitsType.CICATRICE: {
-                // Logic for CICATRICE
-                this.addLifeMana(newChar, -1, 0);
-                break;
-            }
-            case TraitsType.MALATO_DIFETTOSO: {
-                let randomIndex = this.generateRandomNumber(newChar.genetic.abilities.length);
-                let isBios = newChar.genetic.code === GeneticType.Bios;
+        try {
 
-                while (isBios && newChar.genetic.abilities[randomIndex].code === 'MALATO_DIFETTOSO') {
-                    randomIndex = this.generateRandomNumber(newChar.genetic.abilities.length);
-                }
-                let codeToDelete = newChar.genetic.abilities[randomIndex].code;
-                newChar.genetic.abilities = newChar.genetic.abilities.filter((a) => a.code != codeToDelete);
 
-                let currentExcellence = newChar.excellence?.split('-') as string[];
-                let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], currentExcellence);
-                newChar.excellence = currentExcellence.join('-') + '-' + newChar.attributes.find((attr) => attr.code === randomStr)?.description;
-                break;
-            }
-            case TraitsType.AGIATO: {
-                newChar.scrap = newChar.scrap ? newChar.scrap + 50 : 50;
-                break;
-            }
-            case TraitsType.SPIETATO: {
-                this.addLifeMana(newChar, 0, -1);
-                break;
-            }
-            case TraitsType.FRONT_MAN: {
-                const attribute = newChar.attributes.find((attr) => attr.code === StatsType.SOCIALITY);
-                if (attribute) {
-                    attribute.bonus = (attribute.bonus ?? 0) + 1;
+            switch (trait.code) {
+                case TraitsType.CICATRICE: {
+                    // Logic for CICATRICE
+                    this.addLifeMana(newChar, -1, 0);
+                    break;
                 }
-                break;
-            }
-            case TraitsType.ROTTMATORE: {
-                // Logic for ROTTAMATORE
-                const attribute = newChar.attributes.find((attr) => attr.code === StatsType.MANUALITY);
-                if (attribute) {
-                    attribute.bonus = (attribute.bonus ?? 0) + 1;
-                }
-                newChar.inventory = newChar.inventory + "Kit da meccanico \n";
-                let scrap = this.getMaxRandomValue(20, 3, 0) + 10;
-                newChar.scrap = newChar.scrap ? newChar.scrap + scrap : scrap;
-                break;
-            }
-            case TraitsType.SEI_PROPRIO_GROSSO: {
-                // Logic for SEI_PROPRIO_GROSSO
-                this.addLifeMana(newChar, 2, 0);
-                break;
-            }
-            case TraitsType.HAI_UNA_SCINTILLA: {
-                // Logic for HAI_UNA_SCINTILLA
-                this.addLifeMana(newChar, 0, 1);
-                break;
-            }
-            case TraitsType.TALENTO_NATURALE: {
-                // Logic for TALENTO_NATURALE
-                let roleCode = this.getKeyByValue(geneticTraceMapping, this.generateRandomNumber(4));
-                let roleRandom = this.rolesDefaultData.find((r) => r.code === roleCode) as Role;
+                case TraitsType.MALATO_DIFETTOSO: {
+                    let randomIndex = this.generateRandomNumber(newChar.genetic.abilities.length);
+                    let isBios = newChar.genetic.code === GeneticType.Bios;
 
-                let abilityRole = roleRandom.abilities as Ability[];
-                let abilityRandom = this.generateRandomNumber(9);
-                let ability = abilityRole[abilityRandom];
-                newChar.role?.abilities.push(ability);
+                    // Se isBios è vero, filtra le abilità diverse da 'MALATO_DIFETTOSO', altrimenti usa tutte le abilità
+                    const availableAbilities = isBios ? newChar.genetic.abilities.filter((ability) => ability.code !== 'MALATO_DIFETTOSO') : newChar.genetic.abilities;
 
-                break;
-            }
-            case TraitsType.GENETICA_MISTA: {
-                // Logic for GENETICA_MISTA
-                const attribute = newChar.attributes.find((attr) => attr.code === StatsType.SOCIALITY);
-                if (attribute) {
-                    attribute.bonus = (attribute.bonus ?? 0) - 1;
-                }
-                let humanAbility = this.rolesDefaultData.find((r) => r.code === GeneticType.Umanoide)?.abilities as Ability[];
-                let abilityRandom = this.generateRandomNumber(humanAbility.length);
-                while (newChar.role?.abilities.includes(humanAbility[abilityRandom])) {
-                    abilityRandom = this.generateRandomNumber(humanAbility.length);
-                }
-                newChar.role?.abilities.push(humanAbility[abilityRandom]);
-                break;
-            }
-            case TraitsType.TIRA_DUE_VOLTE: {
-                for (let i = 0; i < 2; i++) {
-                    let newTrait = this.generateTraits(19);
-                    while (traitGenerated.includes(trait)) {
-                        newTrait = this.generateTraits(19);
+                    // Se ci sono abilità disponibili, scegli una a caso
+                    if (availableAbilities.length > 0) {
+                        randomIndex = this.generateRandomNumber(availableAbilities.length);
+                        const selectedAbility = availableAbilities[randomIndex];
+                        let codeToDelete = selectedAbility.code;
+                        newChar.genetic.abilities = newChar.genetic.abilities.filter((a) => a.code != codeToDelete);
+
+                        let currentExcellence = newChar.excellence?.split('-') as string[];
+                        let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], currentExcellence);
+                        newChar.excellence = currentExcellence.join('-') + '-' + newChar.attributes.find((attr) => attr.code === randomStr)?.description;
                     }
-                    traitGenerated.push(newTrait);
-                    this.switchTraits(newChar, newTrait, traitGenerated);
+                    break;
                 }
-                break;
-            }
-            case TraitsType.DUE_VITE:
-            case TraitsType.ARMA_EXTRA_1:
-            case TraitsType.ARMA_EXTRA_2:
-            case TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO:
-            case TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE:
-            case TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO:
-            case TraitsType.VENDICATIVO:
-            case TraitsType.SANGUINARIO:
-            case TraitsType.INCUBI: {
-                break;
-            }
+                case TraitsType.AGIATO: {
+                    newChar.scrap = newChar.scrap ? newChar.scrap + 50 : 50;
+                    break;
+                }
+                case TraitsType.SPIETATO: {
+                    this.addLifeMana(newChar, 0, -1);
+                    break;
+                }
+                case TraitsType.FRONT_MAN: {
+                    const attribute = newChar.attributes.find((attr) => attr.code === StatsType.SOCIALITY);
+                    if (attribute) {
+                        attribute.bonus = (attribute.bonus ?? 0) + 1;
+                    }
+                    break;
+                }
+                case TraitsType.ROTTMATORE: {
+                    // Logic for ROTTAMATORE
+                    const attribute = newChar.attributes.find((attr) => attr.code === StatsType.MANUALITY);
+                    if (attribute) {
+                        attribute.bonus = (attribute.bonus ?? 0) + 1;
+                    }
+                    newChar.inventory?.push("Kit da meccanico");
+                    let scrap = this.getMaxRandomValue(20, 3, 0) + 10;
+                    newChar.scrap = newChar.scrap ? newChar.scrap + scrap : scrap;
+                    break;
+                }
+                case TraitsType.SEI_PROPRIO_GROSSO: {
+                    // Logic for SEI_PROPRIO_GROSSO
+                    this.addLifeMana(newChar, 2, 0);
+                    break;
+                }
+                case TraitsType.HAI_UNA_SCINTILLA: {
+                    // Logic for HAI_UNA_SCINTILLA
+                    this.addLifeMana(newChar, 0, 1);
+                    break;
+                }
+                case TraitsType.TALENTO_NATURALE: {
+                    // Logic for TALENTO_NATURALE
+                    debugger
+                    let roleCode = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(4));
+                    let roleRandom = this.rolesDefaultData.find((r) => r.code === roleCode) as Role;
 
+                    let abilityRole = roleRandom.abilities as Ability[];
+                    let abilityRandom = this.generateRandomNumber(10);
+                    let ability = abilityRole[abilityRandom - 1];
+
+                    newChar.role?.abilities ? newChar.role?.abilities.push(ability) : [ability];
+
+                    break;
+                }
+                case TraitsType.GENETICA_MISTA: {
+                    // Logic for GENETICA_MISTA
+                    const attribute = newChar.attributes.find((attr) => attr.code === StatsType.SOCIALITY);
+                    if (attribute) {
+                        attribute.bonus = (attribute.bonus ?? 0) - 1;
+                    }
+
+                    let humanAbility = this.rolesDefaultData.find((r) => r.code === GeneticType.Umanoide)?.abilities as Ability[];
+                    // Filtra le abilità che non sono già incluse in `newChar.role?.abilities`
+                    const availableAbilities = humanAbility.filter((ability) => !newChar.genetic?.abilities.includes(ability));
+
+                    // Se ci sono abilità disponibili, scegli una a caso
+                    if (availableAbilities.length > 0) {
+                        const abilityRandom = this.generateRandomNumber(availableAbilities.length);
+                        const selectedAbility = availableAbilities[abilityRandom];
+                        newChar.role?.abilities.push(selectedAbility);
+                    }
+                    break;
+                }
+                case TraitsType.TIRA_DUE_VOLTE: {
+
+                    for (let i = 0; i < 2; i++) {
+                        const availableTraits = this.traitsDefaultData.filter((trait) => !traitGenerated.includes(trait));
+
+                        if (availableTraits.length > 0) {
+                            const randomIndex = this.generateRandomNumber(availableTraits.length);
+                            const newTrait = availableTraits[randomIndex - 1];
+                            traitGenerated.push(newTrait);
+                            this.switchTraits(newChar, newTrait, traitGenerated);
+                        }
+                    }
+                    break;
+                }
+                case TraitsType.DUE_VITE:
+                case TraitsType.ARMA_EXTRA_1:
+                case TraitsType.ARMA_EXTRA_2:
+                case TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO:
+                case TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE:
+                case TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO:
+                case TraitsType.VENDICATIVO:
+                case TraitsType.SANGUINARIO:
+                case TraitsType.INCUBI: {
+                    break;
+                }
+
+            }
+        } catch (error) {
+            throw new Error(trait.code + ' ERRORE');
         }
     }
 
@@ -589,6 +623,41 @@ export class UtilitiesCreateCharacterLur {
 
         return d;
     };
+
+    static mapCharacterToPdf(newChar: CharacterSheetLUR): CharacterSheetLURHandlerPDF {
+        try {
+            const concatenatedGenes = newChar.genetic.genes ? newChar.genetic.genes.join('-') : null;
+
+            let genetic_and_role = concatenatedGenes ? `${newChar.genetic.description} (${concatenatedGenes}) - ${newChar.role?.description}` : `${newChar.genetic.description} - ${newChar.role?.description}`;
+            let abilities: string[] = [];
+            if (newChar.genetic.abilities) {
+                newChar.genetic.abilities.forEach(skill => {
+                    abilities.push(skill.description as string);
+                });
+            }
+            if (newChar.role?.abilities) {
+                newChar.role.abilities.forEach(skill => {
+                    abilities.push(skill.description as string);
+                });
+            }
+            let all_abilities = abilities.join('\n');
+
+            let allEquip = newChar.inventory ? newChar.inventory.join('\n') : '';
+
+            let newCharPdf: CharacterSheetLURHandlerPDF = {
+                ...newChar,
+                genetic_and_role: genetic_and_role,
+                allAbilities: all_abilities,
+                allEquipment: allEquip
+            }
+
+            return newCharPdf;
+        } catch (error) {
+            console.log(newChar)
+            throw new Error('Errore durante la mappatura del personaggio: ' + error);
+
+        }
+    }
 }
 
 export enum GeneticType {
@@ -645,3 +714,73 @@ export enum RoleType {
     CANAGLIA = 'CANAGLIA',
     RICOGNITORE = 'RICOGNITORE'
 }
+
+export const fieldMapPDFLUR = {
+    "SONO": "name",
+    "GENETICA E RUOLO": "genetic_and_role",
+    "ECCELLENZA": "excellence",
+    "RUOLO NELLA CIURMA": "role_in_the_crew",
+    "IMMAGINE": "", //TODO
+
+    "AGILITÀ D": "attributes[0].value",
+    "AGILITÀ BONUS": "attributes[0].bonus",
+    "CORAGGIO D": "attributes[1].value",
+    "CORAGGIO BONUS": "attributes[1].bonus",
+    "FORZA D": "attributes[2].value",
+    "FORZA BONUS": "attributes[2].bonus",
+    "INTELLIGENZA D": "attributes[3].value",
+    "INTELLIGENZA BONUS": "attributes[3].bonus",
+    "MAGIA D": "attributes[4].value",
+    "MAGIA BONUS": "attributes[4].bonus",
+    "MANUALITÀ D": "attributes[5].value",
+    "MANUALITÀ BONUS": "attributes[5].bonus",
+    "PERCEZIONE D": "attributes[6].value",
+    "PERCEZIONE BONUS": "attributes[6].bonus",
+    "SOCIALITÀ D": "attributes[7].value",
+    "SOCIALITÀ BONUS": "attributes[7].bonus",
+
+    "SALUTE": "life",
+    "SALUTE ATTUALE": "lifeCurrent",
+    "MANA": "mana",
+    "MANA ATTUALE": "manaCurrent",
+    "ARMATURA": "armor",
+    "NAVE": "ship",
+
+    "ABILITÀ": "allAbilities",
+
+    "CORPO": "armorDetails.body",
+    "TESTA": "armorDetails.head",
+    "BRACCIO DX": "armorDetails.rightArm",
+    "BRACCIO SX": "armorDetails.leftArm",
+    "GAMBA DX": "armorDetails.rightLeg",
+    "GAMBA SX": "armorDetails.leftLeg",
+
+    "EQUIPAGGIAMENTO": "allEquipment",
+    "BACKGROUND": "background",
+
+    "ROTTAMI": "scrap",
+    "PUNTI AVVENTURA": "point_adventure",
+    /*     RISCATTO
+    "1": "traits[0].isSelected",
+    "2": "traits[1].isSelected",
+    "3": "traits[2].isSelected",
+    "4": "traits[3].isSelected",
+    "5": "traits[4].isSelected",
+    "6": "traits[5].isSelected",
+    "7": "traits[6].isSelected",
+    "8": "traits[7].isSelected",
+    "9": "traits[8].isSelected",
+    "10": "traits[9].isSelected", 
+    */
+
+    /* Pregio
+    "COR P": "attributes[2].proficiency",
+    "FOR P": "attributes[3].proficiency",
+    "INT P": "attributes[4].proficiency",
+    "MAG P": "attributes[5].proficiency",
+    "MAN P": "attributes[6].proficiency",
+    "PER P": "attributes[7].proficiency",
+    "AGI P": "attributes[1].proficiency",
+    "SOC P": "attributes[0].proficiency"
+    */
+};

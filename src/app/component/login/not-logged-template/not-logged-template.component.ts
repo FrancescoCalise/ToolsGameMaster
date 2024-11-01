@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, InjectionToken, OnInit } from '@angular/core';
+import {  Component, Inject} from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
 import { SharedModule } from '../../../shared/shared.module';
@@ -21,7 +21,7 @@ import { USER_FIRESTORE_SERVICE } from '../../../firebase-provider';
     ReactiveFormsModule
   ]
 })
-export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
+export class NotLoggedTemplateComponent   {
   isAuthLoginCompleted: boolean = false;
   selectedLanguage = 'IT';
   languages = ['EN', 'IT',];
@@ -35,14 +35,6 @@ export class NotLoggedTemplateComponent implements OnInit, AfterViewInit {
     @Inject(USER_FIRESTORE_SERVICE) private firestoreUserService: FirestoreService<UserInformationSaved>
   ) {
     this.firestoreUserService.setCollectionName('users');
-
-  }
-
-  ngAfterViewInit(): void {
-    this.spinner.hideSpinner();
-  }
-
-  ngOnInit(): void {
 
   }
 

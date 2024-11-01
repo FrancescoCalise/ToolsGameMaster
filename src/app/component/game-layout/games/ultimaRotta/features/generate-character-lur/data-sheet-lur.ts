@@ -233,7 +233,7 @@ export const roles = [
                 code: 'POTERE_OSCURO_MORTE',
             },
             {
-                code: 'POTERE_OSCURO_SERVO_DEL_POTORE',
+                code: 'POTERE_OSCURO_SERVO_DEL_POTERE',
             },
             {
                 code: 'POTERE_OSCURO_TERRPRE',

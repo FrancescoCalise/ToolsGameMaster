@@ -20,7 +20,7 @@ import { CacheStorageService } from '../../services/cache-storage.service';
   ]
 })
 
-export class SessionManagerComponenet implements OnInit, AfterViewInit {
+export class SessionManagerComponenet implements OnInit {
 
   public gameName = '';
   private user?: PersonalUser;
@@ -43,12 +43,10 @@ export class SessionManagerComponenet implements OnInit, AfterViewInit {
     this.firestoreSessionManagerService.setCollectionName('session-manager');
   }
 
-  ngAfterViewInit(): void {
-    this.spinnerService.hideSpinner();
-  }
+
 
   async ngOnInit(): Promise<void> {
-    this.spinnerService.showSpinner();
+    this.spinnerService.show("SessionManagerComponenet.ngOnInit");
 
     this.route.parent?.data.subscribe(data => {
       this.gameName = data['gameName'];
@@ -61,7 +59,7 @@ export class SessionManagerComponenet implements OnInit, AfterViewInit {
 
     this.firestoreSessionManagerService.setCollectionName('session-manager');
     await this.loadAllSessionManagers();
-    this.spinnerService.hideSpinner();
+    this.spinnerService.hide("SessionManagerComponenet.ngOnInit");
   }
 
   async loadAllSessionManagers() {

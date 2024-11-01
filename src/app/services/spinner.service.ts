@@ -6,21 +6,30 @@ import { NgxSpinnerService } from 'ngx-spinner';
 })
 export class SpinnerService {
   private isSpinnerVisible = false;
+  public openBy = "";
 
   constructor(private ngxSpinner: NgxSpinnerService) {
 
   }
 
   // Mostra lo spinner
-  showSpinner() {
+  show(nameMethod: string) {
+    if(this.isSpinnerVisible){
+      return;
+    }
+
     this.isSpinnerVisible = true;
+    this.openBy = nameMethod;
+    console.log("Aperto da: " + nameMethod);
     this.ngxSpinner.show();
   }
 
   // Nasconde lo spinner
-  hideSpinner() {
-    if (this.isSpinnerVisible) {
+  hide(nameMethod: string) {
+    if (this.isSpinnerVisible && this.openBy === nameMethod) {
       this.isSpinnerVisible = false;
+      console.log("Chiuso da: " + nameMethod);
+      this.openBy = "";
       this.ngxSpinner.hide();
     }
   }

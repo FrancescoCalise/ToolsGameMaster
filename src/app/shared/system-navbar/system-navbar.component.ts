@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
+import { CacheStorageService } from '../../services/cache-storage.service';
 
 @Component({
   selector: 'app-system-navbar',
@@ -35,7 +36,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private router: Router,
-    private swUpdate: SwUpdate
+    private swUpdate: SwUpdate,
+    private cacheStorageService: CacheStorageService
   ) {
     this.selectedLanguage = this.languageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
@@ -104,4 +106,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     console.log('Go to home');
     this.router.navigate(['/']); // Naviga verso la route della homepage
   }
+  
+  public cleanCache() {
+      this.cacheStorageService.clear();
+  } 
 }

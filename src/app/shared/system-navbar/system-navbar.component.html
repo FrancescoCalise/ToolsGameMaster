@@ -52,7 +52,11 @@
           </a>
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
             <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
+            <li><hr class="dropdown-divider"></li>
             <li><span class="dropdown-item" (click)="forceRefresh()">Version: {{ version }}</span></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><span class="dropdown-item" (click)="cleanCache()">{{ 'SYSTEM_NAVBAR.CLEAN_CACHE' | translate }}</span></li>
+            <li><hr class="dropdown-divider"></li>
           </ul>
         </li>
       </ul>

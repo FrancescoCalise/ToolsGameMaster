@@ -1,6 +1,6 @@
 import { firstValueFrom } from 'rxjs';
 import { RandomNameService } from '../../../../../../../services/randomNameService';
-import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURHandlerPDF, Genetic, Role, Trait, } from '../charachter-sheet-lur';
+import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURFree, Genetic, Role, Trait, } from '../charachter-sheet-lur';
 import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails } from '../data-sheet-lur';
 import { FieldResizeConfig } from '../../../../../../../services/pdf.service';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
@@ -244,35 +244,68 @@ export class UtilitiesCreateCharacterLur {
         newChar.mana = (newChar.mana ?? 0) + mana;
     }
 
-    public static initCharacter(
-        sessionId: string | undefined
-    ): CharacterSheetLUR {
-        return structuredClone({
+    public static async initCharacter(translationMessageService: TranslationMessageService): Promise<CharacterSheetLUR> {
+        let attributesWithDescription = this.attributeKeys;
+        attributesWithDescription.forEach(async att => {
+            if(att.code && !att.description){
+                att.description = await translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + att.code);
+            }
+            att.value = 1;
+        });
+
+        let armorDetail = this.armorDetails;
+        armorDetail.forEach(async info => {
+            if(info.code && !info.description){
+                info.description = await translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + info.code);
+            }
+        });
+        console.log(armorDetail);
+        return {
             name: '',
             genetic: {} as Genetic,
             excellence: '',
             role: {} as Role,
-            attributes: structuredClone(this.attributeKeys.map((attr) => ({
-                description: attr.description,
-                code: attr.code,
-                value: 1,
-                bonus: undefined,
-            }))
-            ),
+            attributes: attributesWithDescription,
             mana: undefined,
             life: undefined,
             armor: undefined,
-            armorDetails: structuredClone(this.armorDetails),
+            armorDetails: structuredClone(armorDetail),
             inventory: [] as string[],
             scrap: undefined,
             point_adventure: undefined,
             background: '',
-            sessionId: sessionId,
             traits: [] as Trait[]
-        });
+        };
     }
 
-    public static async generateRandomCharacter(newChar: CharacterSheetLUR, randomNameService: RandomNameService, translate: TranslationMessageService): Promise<CharacterSheetLUR> {
+    public static initCharacterForTemplate(sessionId: string | undefined, translationMessageService:TranslationMessageService): CharacterSheetLURFree {
+        let attributesWithDescription = this.attributeKeys;
+        attributesWithDescription.forEach(async att => {
+            if(att.code && !att.description){
+                att.description = await translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + att.code);
+            }
+        });
+
+        let armorDetail = this.armorDetails;
+        armorDetail.forEach(async info => {
+            if(info.code && !info.description){
+                info.description = await translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + info.code);
+            }
+        });
+        return {
+            attributes: this.attributeKeys.map((attr) => ({
+                description: attr.description,
+                code: attr.code,
+                value: 1,
+                bonus: undefined,
+            })),
+            sessionId: sessionId,
+            armorDetails: structuredClone(this.armorDetails),
+        };
+    }
+
+    public static async generateRandomCharacter(randomNameService: RandomNameService, translate: TranslationMessageService): Promise<CharacterSheetLUR> {
+        let newChar = await this.initCharacter(translate);
         newChar.name = await this.getRandomName(randomNameService);
         const idGenetic = this.getKeyByValue(mapIdGenetic, this.generateRandomNumber(6));
         newChar.genetic = structuredClone(this.geneticDefaultData.find((g) => g.code === idGenetic) || ({} as Genetic));
@@ -290,6 +323,8 @@ export class UtilitiesCreateCharacterLur {
             this.applyTraits(newChar);
 
             let labelTraits = await translate.translate('ULTIMA_ROTTA.SHEET.TRAITS');
+            newChar.traits = await this.getTraitDescription(newChar.traits, translate);
+
             let tratisDescription = labelTraits + ' : ' + newChar.traits?.map((t) => t.description).join(' - ');
             
             newChar.background = newChar.background ?  
@@ -300,10 +335,12 @@ export class UtilitiesCreateCharacterLur {
             let randomRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
             const roleDefaultData = this.rolesDefaultData.find((r) => r.code === randomRole);
             let roleToSet = structuredClone(roleDefaultData) as Role;
+            console.log("RUOLO CASUALE", roleToSet.code);
+            roleToSet.description = await translate.translate('ULTIMA_ROTTA.ROLE.' + roleToSet.code);
 
-            let haveTraitsLeaderOrSoldato = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
-            let haveTraitsArcanistaOrDiscepoloOscuro = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO) ? true : false;
-            let haveTraitsCanagliaOrRicognitore = traits.find(t => t.code == TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE) ? true : false;
+            let haveTraitsLeaderOrSoldato = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
+            let haveTraitsArcanistaOrDiscepoloOscuro = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO) ? true : false;
+            let haveTraitsCanagliaOrRicognitore = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE) ? true : false;
             let admissionTestPassed = false;
 
             if ((roleToSet.code === RoleType.LEADER || roleToSet.code === RoleType.SOLDATO) && haveTraitsLeaderOrSoldato) {
@@ -317,7 +354,6 @@ export class UtilitiesCreateCharacterLur {
             }
 
             if (!admissionTestPassed) {
-                this.applyBonusRole(newChar, roleToSet);
                 let attribtes = newChar.attributes;
                 let attributeToTest = attribtes.find((attr) =>
                     roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
@@ -334,8 +370,24 @@ export class UtilitiesCreateCharacterLur {
 
                 if (randomTest > 5) {
                     admissionTestPassed = true;
+                    let r = roleToSet.description;
+                    
+                    let testPassed = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_PASSED');
+                    let testAdmissionLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ADMISSION',{
+                        role:  r,
+                        result: testPassed
+                    });
+                    newChar.background = newChar.background ? `${newChar.background} - ${testAdmissionLabel} \n` : testAdmissionLabel;
+
                 } else {
-                    newChar.background = `${newChar.background} - Non ha superato il test di ammissione per ${roleToSet.description} \n`;
+                    ;
+                    let testFailedLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_FAILED');
+                    let testAdmissionLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ADMISSION', {
+                        role: roleToSet.description,
+                        result: testFailedLabel
+                    });
+
+                    newChar.background = newChar.background ? `${newChar.background} - ${testAdmissionLabel} \n` : testAdmissionLabel;
 
                     let maxIndex = newChar.inventory?.length ?? 0;
 
@@ -350,10 +402,11 @@ export class UtilitiesCreateCharacterLur {
 
                     const  newRoleDefaultData = structuredClone(this.rolesDefaultData.find((r) => r.code === newRole)) as Role;
                     roleToSet = newRoleDefaultData as Role;
+                    roleToSet.description = await translate.translate('ULTIMA_ROTTA.ROLE.' + roleToSet.code);
                 }
             }
 
-
+            this.applyBonusRole(newChar, roleToSet);
             let persistedRoleAbility = newChar.role?.abilities ? structuredClone(newChar.role?.abilities as Ability[]) : [];
             newChar.role = roleToSet;
             newChar.role.abilities = persistedRoleAbility;
@@ -370,8 +423,6 @@ export class UtilitiesCreateCharacterLur {
                 newChar.role.abilities.push(ability);
 
             }
-
-
 
             if (admissionTestPassed) {
                 let testOnRoadPassed = false;
@@ -402,13 +453,30 @@ export class UtilitiesCreateCharacterLur {
                             newChar.role.abilities.push(ability);
                         }
                     }
-                    newChar.background = `${newChar.background} - Hai superato la prova sul campo \n`;
+                    let labelTeastOnRoad = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ON_ROAD');
+                    newChar.background = newChar.background ? `${newChar.background} - ${labelTeastOnRoad} \n` : labelTeastOnRoad;
                 }
             }
+
+            console.log('Personaggio generato:', newChar);
             return newChar;
         } catch (error) {
             throw new Error(error as any);
         }
+    }
+
+    static async getTraitDescription(traits: Trait[] | undefined, translate: TranslationMessageService): Promise<Trait[]> {
+        if (!traits) return [];
+    
+        const traitsWithDescription = await Promise.all(
+            traits.map(async (t) => {
+                t.code = t.code as string;
+                t.description = await translate.translate('ULTIMA_ROTTA.TRAITS.' + t.code);
+                return t;
+            })
+        );
+    
+        return traitsWithDescription;
     }
 
     static applyBonusRole(newChar: CharacterSheetLUR, roleToSet: Role) {
@@ -647,41 +715,70 @@ export class UtilitiesCreateCharacterLur {
         return d;
     };
 
-    static mapCharacterToPdf(newChar: CharacterSheetLUR): CharacterSheetLURHandlerPDF {
-        try {
-            const concatenatedGenes = newChar.genetic.genes ? newChar.genetic.genes.join('-') : null;
-
-            let genetic_and_role = concatenatedGenes ? `${newChar.genetic.description} (${concatenatedGenes}) - ${newChar.role?.description}` : `${newChar.genetic.description} - ${newChar.role?.description}`;
-            let abilities: string[] = [];
-            if (newChar.genetic.abilities) {
-                newChar.genetic.abilities.forEach(skill => {
-                    abilities.push(skill.description as string);
-                });
-            }
-            if (newChar.role?.abilities) {
-                newChar.role.abilities.forEach(skill => {
-                    abilities.push(skill.description as string);
-                });
-            }
-            let all_abilities = abilities.join('\n');
-
-            let allEquip = newChar.inventory ? newChar.inventory.join('\n') : '';
-
-            let newCharPdf: CharacterSheetLURHandlerPDF = {
-                ...newChar,
-                genetic_and_role: genetic_and_role,
-                allAbilities: all_abilities,
-                allEquipment: allEquip
-            }
-
-            return newCharPdf;
-        } catch (error) {
-            console.log(newChar)
-            throw new Error('Errore durante la mappatura del personaggio: ' + error);
-
+    private static async getDescriptionFromCode(code: string, description: string | undefined, translationMessageService: TranslationMessageService): Promise<string> {
+        if(description){
+            return description;
         }
+        if(!code){
+            throw new Error('Code is not defined');
+        }
+        return await translationMessageService.translate(code);
+
     }
-}
+
+    static async CovertToCharacterToFree(newChar: CharacterSheetLUR, translationMessageService:TranslationMessageService): Promise<CharacterSheetLURFree> {
+        let newCharFree = {} as CharacterSheetLURFree;
+        newCharFree.name = newChar.name;
+        newCharFree.excellence = newChar.excellence;
+
+        let geneticDescription = await this.getDescriptionFromCode('ULTIMA_ROTTA.GENETIC.' + newChar.genetic.code, newChar.genetic.description, translationMessageService);
+        let roleDescription = await this.getDescriptionFromCode('ULTIMA_ROTTA.ROLE.' + newChar.role?.code, newChar.role?.description, translationMessageService);
+        newCharFree.genetic_and_role = geneticDescription + ' - ' + roleDescription;
+    
+        newCharFree.attributes = structuredClone(newChar.attributes);
+        newCharFree.mana = newChar.mana;
+        newCharFree.manaCurrent = newChar.manaCurrent;
+        newCharFree.life = newChar.life;
+        newCharFree.lifeCurrent = newChar.lifeCurrent;
+        newCharFree.armor = newChar.armor;
+        newCharFree.armorDetails = newChar.armorDetails;
+        newCharFree.allEquipment = newChar.inventory?.join('\n');
+        newCharFree.scrap = newChar.scrap;
+        newCharFree.point_adventure = newChar.point_adventure;
+        newCharFree.background = newChar.background;
+        newCharFree.ship = newChar.ship;
+        newCharFree.redemption = newChar.redemption;
+        const allAbilities: string[] = await this.mapAbilities(newChar.genetic.abilities, newChar.role?.abilities, translationMessageService);
+        newCharFree.allAbilities = allAbilities.join('\n');
+
+        return newCharFree;
+    }
+
+    static async mapAbilities(geneticAbility: Ability[], roleAbility: Ability[] | undefined, translationMessageService: TranslationMessageService): Promise<string[]> {
+        let allAbilities: string[] = [];
+        if (geneticAbility) {
+            const geneticAbilities = await Promise.all(
+                geneticAbility.map(async (skill) => {
+                    const idml = 'ULTIMA_ROTTA.ABILITY.' + skill.code;
+                    const description = await this.getDescriptionFromCode(idml, skill.description, translationMessageService);
+                    return description as string;
+                })
+            );
+            allAbilities.push(...geneticAbilities);
+        }
+        if (roleAbility) {
+            const roleAbilities = await Promise.all(
+                roleAbility.map(async (skill) => {
+                    const description = await this.getDescriptionFromCode('ULTIMA_ROTTA.ABILITY.' + skill.code, skill.description, translationMessageService);
+                    return description as string;
+                })
+            );
+            allAbilities.push(...roleAbilities);
+        }
+
+        return allAbilities;
+    }
+}   
 
 export enum GeneticType {
     Bios = 'BIOS',
@@ -807,8 +904,9 @@ export const fieldMapPDFLUR = {
     "SOC P": "attributes[0].proficiency"
     */
 };
+
 export const fieldsToResize: FieldResizeConfig[] = [
     { fieldName: 'ABILITÀ', width: 140, height: 270, x: 63, y: 170, fontSize: 12 },
     { fieldName: 'EQUIPAGGIAMENTO', width: 330, height: 100, x: 225, y: 150, fontSize: 10 },
     { fieldName: 'BACKGROUND', width: 480, height: 50, x: 70, y: 70, fontSize: 10 },
-  ];
+];

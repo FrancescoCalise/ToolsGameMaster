@@ -1,50 +1,67 @@
-
 <div class="w-100 h-100 p-3">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <div class="d-flex align-items-center">
-            <app-session-manager-widget (sessionLoaded)="onSessionLoaded($event)"></app-session-manager-widget>
-            <h2 class="page-title ms-3">{{ 'ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_CHARACTER' | translate }}</h2>
-        </div>
+    <div class="d-flex mb-3 w-100">
+        <div class="d-flex flex-column w-100">
+            <div class="col-12">
+                <h1 class="d-flex col-12 justify-content-start align-items-center">
+                    <strong>{{'ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_CHARACTER' | translate }}</strong>
+                </h1>
+            </div>
+            <div class="col-12 d-flex flex-row">
+                <div class="col-4 justify-content-start align-items-center">
+                    <app-session-manager-widget class="me-2"
+                        (sessionLoaded)="onSessionLoaded($event)"></app-session-manager-widget>
+                </div>
+                <div class="d-flex col-8 justify-content-end">
+                    <button class="btn btn-secondary btn-sm me-2" (click)="generateRandom(true)">
+                        {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.GENERATE_RANDOM' | translate }}
+                    </button>
+                    <button class="btn btn-success btn-sm me-2" (click)="printPDF()">
+                        <div class="row d-flex flex-row justify-content-start align-items-center">
 
-        <div class="d-flex">
-            <button class="btn btn-secondary btn-sm me-2" (click)="generateRandom(true)">
-                {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.GENERATE_RANDOM' | translate }}
-            </button>
-            <button class="btn btn-primary btn-sm me-2" (click)="printRandom()">
-                {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.PRINT_RANDOM' | translate }}
-            </button>
-            <button class="btn btn-primary btn-sm" (click)="openCharacterDialog()">
-              {{'ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_NEW_CHARACTER' | translate}}
-            </button>
+                            <div class="col-9 d-flex m-0 justify-content-start">
+                                {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.PRINT_RANDOM' | translate }}
+                            </div>
+                            <div class="col-3 d-flex m-0 justify-content-start">
+                                <mat-icon>print</mat-icon>
+                            </div>
+                        </div>
+                    </button>
+                    <button class="btn btn-primary btn-sm" (click)="openCharacterDialog()">
+                        {{'ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_NEW_CHARACTER' | translate}}
+                    </button>
+                </div>
+            </div>
+
         </div>
     </div>
 
     <div *ngIf="characters.length > 0; else noCharacters" class="row g-2">
-        <div *ngFor="let character of characters" class="col-12 col-md-6 col-lg-4">
+        <div *ngFor="let character of characters" class="col-6 col-md-4 col-lg-3">
             <mat-card class="h-100">
                 <mat-card-header>
-                    <mat-card-title>{{ character.name }}</mat-card-title>
+                    <mat-card-title>
+                        <h4>{{ character.name }}</h4>
+                    </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
                     <div class="d-flex flex-row">
-                        <div class="col-4">
-                            <p>
-                                <strong>{{ 'ULTIMA_ROTTA.SHEET.ROLE' | translate }}</strong>: {{ character.role?.description }}
-                            </p>
-                        </div>
-                        <div class="col-4">
-                            <p>
-                                <strong>{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}</strong>: {{ character.genetic.description }}
-                            </p>
+                        <div class="col-12">
+                            <h5>
+                                {{ character?.genetic_and_role }}
+                            </h5>
                         </div>
                     </div>
                 </mat-card-content>
                 <mat-card-actions>
                     <button mat-button color="primary" (click)="openCharacterDialog(character)">
-                        {{ 'ULTIMA_ROTTA.SHEET.EDIT' | translate }}
+                        {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.EDIT_CHARACTER' | translate }}
                     </button>
                     <button mat-button color="warn" (click)="deleteCharacter(character)">
-                        {{ 'ULTIMA_ROTTA.SHEET.DELETE' | translate }}
+                        {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.DELETE_CHARACTER' | translate }}
+                    </button>
+                    <button mat-button color="accent" (click)="printPDF(character)">
+                        <mat-icon>print</mat-icon>
+                        {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.PRINT' | translate }}
                     </button>
                 </mat-card-actions>
             </mat-card>

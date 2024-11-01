@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnInit, } from '@angular/core';
+import { Component, Inject, OnInit, } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { ToastService } from '../../services/toast.service';
 import { ActivatedRoute } from '@angular/router';
@@ -39,7 +39,7 @@ export class SessionManagerComponenet implements OnInit {
     private cacheService: CacheStorageService,
     @Inject(SESSION_MANAGER_SERVICE) private firestoreSessionManagerService: FirestoreService<SessionManager>
 
-  ) { 
+  ) {
     this.firestoreSessionManagerService.setCollectionName('session-manager');
   }
 
@@ -93,12 +93,15 @@ export class SessionManagerComponenet implements OnInit {
 
       if (index !== -1) {
         this.sessions[index] = { ...this.newSession };
+
         await this.firestoreSessionManagerService.updateItem(this.newSession);
+        if (this.newSession.default) {
+          this.cacheService.setItem(this.cacheService.defaultSession, this.newSession)
+        };
       }
     } else {
       if (this.newSession.sessionName) {
         this.newSession.gameName = this.gameName;
-        
         var id = await this.firestoreSessionManagerService.addItem(this.newSession);
         this.newSession.id = id;
         this.sessions.push({ ...this.newSession });
@@ -114,23 +117,29 @@ export class SessionManagerComponenet implements OnInit {
   }
 
   async deleteSession(session: SessionManager): Promise<void> {
+    if (this.defaultSession.default) {
+      this.cacheService.removeItem(this.cacheService.defaultSession);
+    }
+
     this.sessions = this.sessions.filter(s => s.id !== session.id);
 
     await this.firestoreSessionManagerService.deleteItem(session.id as string);
   }
 
   async setAsDefault(session: SessionManager): Promise<void> {
+    this.spinnerService.show("SessionManagerComponenet.setAsDefault");
     this.defaultSession = session;
-    this.cacheService.setItem('defaultSession', session);
+    this.cacheService.setItem(this.cacheService.defaultSession, session);
     session.default = true;
     await this.firestoreSessionManagerService.updateItem(session);
 
-    this.sessions.forEach(s => {
+    this.sessions.forEach(async s => {
       if (s.id !== session.id) {
         s.default = false;
-        this.firestoreSessionManagerService.updateItem(s);
+        await this.firestoreSessionManagerService.updateItem(s);
       }
-    });
+    })
+    this.spinnerService.hide("SessionManagerComponenet.setAsDefault");
   }
 
 }

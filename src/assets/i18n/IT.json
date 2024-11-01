@@ -18,7 +18,8 @@
         "DESCRIPTION": "Questa è la home page"
     },
     "SYSTEM_NAVBAR": {
-        "TITLE": "STRUMENTI DEL GAME MASTER"
+        "TITLE": "STRUMENTI DEL GAME MASTER",
+        "CLEAN_CACHE": "Pulisci Cache"
     },
     "LOGIN": {
         "TITLE": "Bentornato",
@@ -164,9 +165,9 @@
             "MALATO_DIFETTOSO": "Malato Difettoso",
             "SANGUINARIO": "Sanguinario",
             "VENDICATIVO": "Vendicativo",
-            "RUOLO_FACILITATO_LEADER_O_SOLDATO": "Ruolo Facilitato",
-            "RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE": "Ruolo Facilitato",
-            "RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO": "Ruolo Facilitato",
+            "RUOLO_FACILITATO_LEADER_O_SOLDATO": "Ruolo Facilitato Leader/Soldato",
+            "RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE": "Ruolo Facilitato Canaglia/Ricognitore",
+            "RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO": "Ruolo Facilitato Arcanista/Discepolo Oscuro",
             "AGIATO": "Agiato",
             "SPIETATO": "Spietato",
             "FRONT_MAN": "Front Man",
@@ -182,21 +183,25 @@
         },
         "CREATE_CHARACTER": {
             "PRINT_RANDOM": "Stampa personaggio casuale",
+            "PRINT": "Stampa personaggio",
             "GENERATE_RANDOM": "Genera Casuale",
             "CREATE_CHARACTER": "Creazione del Personaggio",
-            "EDIT_CHARACTER": "Modifica del Personaggio",
+            "EDIT_CHARACTER": "Modifica",
+            "DELETE_CHARACTER": "Elimina",
             "CREATE_NEW_CHARACTER": "Crea Nuovo Personaggio",
             "NO_CHARACTERS": "Nessun personaggio disponibile. Clicca su \"Crea Nuovo Personaggio\" per aggiungerne uno.",
             "CLOSE_FORM": "Chiudi la crezione del personaggio"
         },
         "SHEET": {
-            "NAME": "Nome",
-            "GENETIC": "Genetica",
-            "ROLE": "Ruolo",
+            "SONO": "Sono",
+            "UN_UNA":"Un/una",
+            "ROLE_IN_THE_CREW": "Ruolo nella ciruma",
             "EXCELLENCE": "Eccellenza",
+
             "ATTRIBUTES": "Attributi",
             "VALUE": "Valore",
             "BONUS": "Bonus",
+            
             "STATS": "Statistiche",
             "MANA": "Mana",
             "MANA_CURRENT": "Mana Attuale",
@@ -204,23 +209,26 @@
             "LIFE_CURRENT": "Salute Attuale",
             "ARMOR": "Armatura",
             "ADVENTURE_POINTS": "Punti Avventura",
-            "SCRAP": "Rottame",
+            "SCRAPS": "Rottami",
+
             "ABILITY": "Abilità",
             "EQUIP": "Equipaggiamento",
             "BACKGROUND": "BACKGROUND",
-            "SAVE_CHARACTER": "Salva Personaggio",
-            "CANCEL": "Annulla",
-            "EDIT": "Modifica",
-            "DELETE": "Elimina",
-            "SELECT_GENES": "Seleziona Genetica",
-            "ADDITIONAL_INFO": "Informazioni Aggiuntive",
-            "SELECT_ROLE_FIRST": "Seleziona prima il ruolo",
-            "TRAITS": "Tratti",
-            "SELECT_TRAITS": "Seleziona Tratti",
+            "TEST_ON_ROAD": "Hai superato la prova sul campo",
+            "TEST_ADMISSION": "Test d'ammissione per {{role}} {{result}}",
+            "TEST_FAILED": "Fallito",
+            "TEST_PASSED": "Superato",
             "SHIP": "Nave",
             "PORTRAIT": "Ritratto",
             "ABILITIES": "Abilità",
-            "REDEMPTION": "Riscatto"
+            "REDEMPTION": "Riscatto",
+            "SAVE_CHARACTER": "Salva Personaggio",
+            "ADDITIONAL_INFO": "Informazioni Aggiuntive",
+
+            "CANCEL": "Annulla",
+            "EDIT": "Modifica",
+            "DELETE": "Elimina"
+
         },
         "ATTRIBUTES": {
             "AGILITY": "Agilità",

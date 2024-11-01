@@ -1,7 +1,28 @@
 import { BaseDocument } from '../../../../../../interface/Document/BaseModel';
 
+export interface CharacterSheetLURFree extends BaseDocument {
+    name?: string;
+    excellence?: string;
+    genetic_and_role?: string;
+    role_in_the_crew?: string;
+    attributes?: Attribute[];
+    mana?: number;
+    manaCurrent?: number;
+    life?: number;
+    lifeCurrent?: number;
+    armor?: number;
+    armorDetails?: ArmorInfo[];
+    allEquipment?: string;
+    scrap?: number;
+    point_adventure?: number;
+    background?: string;
+    sessionId?: string;
+    ship?: string;
+    redemption?: number;
+    allAbilities?:string 
+}
 
-export interface CharacterSheetLUR extends BaseDocument {
+export interface CharacterSheetLUR{
     name?: string;
     genetic: Genetic;
     excellence?: string;
@@ -13,25 +34,14 @@ export interface CharacterSheetLUR extends BaseDocument {
     life?: number;
     lifeCurrent?: number;
     armor?: number;
-    armorDetails?: ArmorDetails;
+    armorDetails?: ArmorInfo[];
     inventory?: string[];
     scrap?: number;
     point_adventure?: number;
     background?: string;
-    sessionId?: string;
     traits?: Trait[];
     ship?: string;
     redemption?: number;
-}
-
-export interface CharacterSheetLURHandlerPDF extends CharacterSheetLUR {
-    genetic_and_role?: string;
-    allAbilities?: string;
-    allEquipment?: string;
-}
-
-export interface ArmorDetails {
-    details?: ArmorInfo[];
 }
 
 export interface ArmorInfo {
@@ -42,7 +52,7 @@ export interface ArmorInfo {
 }
 
 export interface Attribute {
-    code: string;
+    code?: string;
     description?: string;
     value?: number;
     bonus?: number;

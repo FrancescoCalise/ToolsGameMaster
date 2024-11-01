@@ -3,8 +3,7 @@
     <div *ngIf="!isSmallDevice()" class="row h-100 m-0">
 
         <div [ngClass]="showSiteMap ? 'site-map-open' : 'site-map-closed'">
-            <app-feature-area [gameConfig]="gameConfig" class="w-100"
-                (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
+            <app-feature-area [gameConfig]="gameConfig" class="w-100 h-100"    (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
         </div>
 
         <div class="p-2" [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">

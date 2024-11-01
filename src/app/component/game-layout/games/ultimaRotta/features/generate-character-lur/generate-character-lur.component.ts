@@ -1,6 +1,6 @@
-import {  Component, Inject, OnInit, } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, } from '@angular/core';
 import { SharedModule } from '../../../../../../shared/shared.module';
-import {  CharacterSheetLUR, Genetic } from './charachter-sheet-lur';
+import { CharacterSheetLURFree } from './charachter-sheet-lur';
 import { TranslationMessageService } from '../../../../../../services/translation-message-service';
 import { FirestoreService } from '../../../../../../services/firestore.service';
 import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
@@ -24,7 +24,7 @@ import { PdfService } from '../../../../../../services/pdf.service';
     SessionManagerWidgetComponent,
   ],
 })
-export class GenerateCharacterLurComponent implements OnInit {
+export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
   readonly rolesDefaultData = UtilitiesCreateCharacterLur.rolesDefaultData;
   readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
@@ -35,11 +35,11 @@ export class GenerateCharacterLurComponent implements OnInit {
   translatedTraitMessage$ = this.translationMessageService.translate('ULTIMA_ROTTA.SHEET.SELECT_TRAITS');
 
   sessionLoaded = false;
-  defaultSession: SessionManager = {};
-  characters: CharacterSheetLUR[] = [];
+  defaultSession: SessionManager | undefined = undefined;
+  characters: CharacterSheetLURFree[] = [];
 
   constructor(private translationMessageService: TranslationMessageService,
-    @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLUR>,
+    @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLURFree>,
     private spinnerService: SpinnerService,
     private randomNameService: RandomNameService,
     private dialog: MatDialog,
@@ -48,41 +48,51 @@ export class GenerateCharacterLurComponent implements OnInit {
     firestoreLurSheetService.setCollectionName('character-sheet-lur');
   }
 
-  openCharacterDialog(character?: CharacterSheetLUR) {
+  ngOnDestroy(): void {
+    this.defaultSession = undefined;
+  }
+
+  async ngOnInit() {
+    this.spinnerService.show("GenerateCharacterLurComponent.ngOnInit");
+    await this.loadCharacters();
+    this.spinnerService.hide("GenerateCharacterLurComponent.ngOnInit");
+  }
+
+  openCharacterDialog(character?: CharacterSheetLURFree) {
     const isMobile = window.innerWidth < 768;
     const dialogRef = this.dialog.open(CharacterDialogComponent, {
       width: isMobile ? '100%' : '80%',
       height: isMobile ? '100%' : '50%',
       minHeight: '80%',
       data: {
-        character: character ? { ...character } : UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id),
-        geneticDefaultData: UtilitiesCreateCharacterLur.geneticDefaultData,
-        rolesDefaultData: UtilitiesCreateCharacterLur.rolesDefaultData,
+        character: character ? { ...character } : undefined,
+        sessionId: this.defaultSession?.id,
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: CharacterSheetLUR | undefined) => {
+    dialogRef.afterClosed().subscribe((result: CharacterSheetLURFree | undefined) => {
       if (result) {
         character ? this.updateCharacter(result) : this.addCharacter(result);
       }
     });
   }
 
-  addCharacter(newCharacter: CharacterSheetLUR) {
+  addCharacter(newCharacter: CharacterSheetLURFree) {
+    newCharacter.sessionId = this.defaultSession?.id;
     this.firestoreLurSheetService.addItem(newCharacter).then((id) => {
       newCharacter.id = id;
       this.characters.push(newCharacter);
     });
   }
 
-  deleteCharacter(character: CharacterSheetLUR) {
+  deleteCharacter(character: CharacterSheetLURFree) {
     this.firestoreLurSheetService.deleteItem(character.id as string).then(() => {
       const index = this.characters.findIndex((char) => char.id === character.id);
       if (index !== -1) this.characters.splice(index, 1);
     });
   }
 
-  updateCharacter(updatedCharacter: CharacterSheetLUR) {
+  updateCharacter(updatedCharacter: CharacterSheetLURFree) {
     const index = this.characters.findIndex((char) => char.id === updatedCharacter.id);
     if (index !== -1) this.characters[index] = updatedCharacter;
   }
@@ -93,87 +103,40 @@ export class GenerateCharacterLurComponent implements OnInit {
     this.ngOnInit();
   }
 
-  async ngOnInit() {
-    this.spinnerService.show("GenerateCharacterLurComponent.ngOnInit");
-
-    await this.setDescriptionsLanguages();
-    await this.loadCharacters();
-
-    this.spinnerService.hide("GenerateCharacterLurComponent.ngOnInit");
-  }
-
   async loadCharacters(): Promise<void> {
     if (!this.defaultSession) return;
     let sessionId = this.defaultSession?.id;
     let whereConditions: QueryFieldFilterConstraint[] = [];
     whereConditions.push(where('sessionId', '==', sessionId));
     this.characters = await this.firestoreLurSheetService.getItemsWhere(whereConditions);
-
   }
 
-  async setDescriptionsLanguages(): Promise<void> {
-    for (const role of UtilitiesCreateCharacterLur.rolesDefaultData) {
-      role.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ROLE.' + role.code);
-      if (role.abilities) {
-        for (const ability of role.abilities) {
-          ability.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ABILITY.' + ability.code);
-        }
-      }
-    }
 
-    for (const g of UtilitiesCreateCharacterLur.geneticDefaultData) {
-      g.description = await this.translationMessageService.translate('ULTIMA_ROTTA.GENETIC.' + g.code);
-      if (g.abilities) {
-        for (const ability of g.abilities) {
-          ability.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ABILITY.' + ability.code);
-        }
-      }
-    }
-
-    for (const attribute of UtilitiesCreateCharacterLur.attributeKeys) {
-      attribute.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code);
-    }
-    for (const trait of UtilitiesCreateCharacterLur.traitsDefaultData) {
-      trait.description = await this.translationMessageService.translate('ULTIMA_ROTTA.TRAITS.' + trait.code);
-    }
-
-    if(this.armorDetails){
-      let armor = this.armorDetails;
-
-      if(armor.details){
-        armor.details.forEach(async details => {
-          details.description = await this.translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + details.code);
-        });
-      }
-    }
-  }
-
-  async generateRandom(save:boolean): Promise<CharacterSheetLUR> {
-    let newChar = UtilitiesCreateCharacterLur.initCharacter(this.defaultSession?.id);
+  async generateRandom(save: boolean): Promise<CharacterSheetLURFree> {
 
     this.spinnerService.show("GenerateCharacterLurComponent.generateRandom");
-    await UtilitiesCreateCharacterLur.generateRandomCharacter(newChar, this.randomNameService, this.translationMessageService);
-    
-    if (newChar && save) {
-      this.addCharacter(newChar);
+    const newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(this.randomNameService, this.translationMessageService);
+    let newCharFree = await UtilitiesCreateCharacterLur.CovertToCharacterToFree(newChar, this.translationMessageService);
+    console.log(newCharFree);
+    if (newCharFree && save) {
+      this.addCharacter(newCharFree);
     }
-
     this.spinnerService.hide("GenerateCharacterLurComponent.generateRandom");
-    return newChar;
+    return newCharFree;
   }
 
-  async printRandom() {
+  async printPDF(character?: CharacterSheetLURFree) {
     this.spinnerService.show("GenerateCharacterLurComponent.printRandom");
-    let newChar = await this.generateRandom(false);
+    let newChar = character ? character : await this.generateRandom(false);
     if (newChar) {
       await this.pdfService.loadPdf(this.pathTemplateFIle);
-      let newCharFromPdf = UtilitiesCreateCharacterLur.mapCharacterToPdf(newChar);
-      this.pdfService.updateValues(newCharFromPdf, fieldMapPDFLUR);
+      this.pdfService.updateValues(newChar, fieldMapPDFLUR);
       let pdf = await this.pdfService.getPDFUpdated();
-      let fileName = `${newChar.name}_${newChar.genetic.description}_${newChar.role?.description}` + '.pdf';
+      let fileName = `${newChar.name}_${newChar.genetic_and_role}.pdf`;
       this.pdfService.downloadPdf(pdf, fileName);
 
       this.spinnerService.hide("GenerateCharacterLurComponent.printRandom");
     }
   }
+
 }

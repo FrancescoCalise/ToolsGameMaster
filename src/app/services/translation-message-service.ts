@@ -25,12 +25,15 @@ export class TranslationMessageService {
    * @returns Promise<string> La stringa tradotta.
    */
   async translate(key: string, params?: Object): Promise<string> {
-    if (this.cache[key]) {
+    if (this.cache[key] && !params) {
       return this.cache[key];
     }
     const translatedText = await firstValueFrom(this.translateService.get(key, params));
     this.cache[key] = translatedText;
-
+    
+    if(translatedText === key){
+      console.warn(`Translation not found for key: ${key}`);
+    }
     this.cacheStorageService.setItem(this.cacheStorageService.translationCache, JSON.stringify(this.cache));
 
     return translatedText;

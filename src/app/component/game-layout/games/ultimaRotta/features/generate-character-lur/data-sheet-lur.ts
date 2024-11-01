@@ -1,4 +1,4 @@
-import { ArmorDetails, Attribute, Genetic, Role, Trait } from "./charachter-sheet-lur";
+import { ArmorInfo, Attribute, Genetic, Role, Trait } from "./charachter-sheet-lur";
 
 export const attributeKeys = [
     {
@@ -373,40 +373,38 @@ export const traits = [
     }
 ] as Trait[];
 
-export const armorDetails = {
-    details: [
-        {
-            code: 'BODY',
-            type: '',
-            notes: ''
-        },
-        {
-            code: 'HEAD',
-            type: '',
-            notes: ''
-        },
-        {
-            code: 'ARM_LEFT',
-            type: '',
-            notes: ''
-        },
-        {
-            code: 'ARM_RIGHT',
-            type: '',
-            notes: ''
-        },
-        {
-            code: 'LEG_LEFT',
-            type: '',
-            notes: ''
-        },
-        {
-            code: 'LEG_RIGHT',
-            type: '',
-            notes: ''
-        }
-    ]
-} as ArmorDetails;
+export const armorDetails = [
+    {
+        code: 'BODY',
+        type: '',
+        notes: ''
+    },
+    {
+        code: 'HEAD',
+        type: '',
+        notes: ''
+    },
+    {
+        code: 'ARM_LEFT',
+        type: '',
+        notes: ''
+    },
+    {
+        code: 'ARM_RIGHT',
+        type: '',
+        notes: ''
+    },
+    {
+        code: 'LEG_LEFT',
+        type: '',
+        notes: ''
+    },
+    {
+        code: 'LEG_RIGHT',
+        type: '',
+        notes: ''
+    }
+] as ArmorInfo[];
 
 export const mapIdGenetic: { [key: string]: number[] } = {
     "BIOS": [1, 2],

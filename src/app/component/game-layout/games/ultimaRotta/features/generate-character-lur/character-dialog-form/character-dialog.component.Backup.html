@@ -29,11 +29,11 @@
                     <div class="p-2 col-12">
                         <div class="d-flex flex-row">
                             <div class="col-2">
-                                <label for="genetic">{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}</label>
+                                <label for="genetic">{{ 'ULTIMA_ROTTA.SHEET.GENETIC_AND_ROLE' | translate }}</label>
                             </div>
                             <div class="col-10">
                                 <mat-form-field appearance="fill" class="w-100">
-                                    <mat-select [(ngModel)]="character.genetic" name="genetic" required placeholder="{{ 'ULTIMA_ROTTA.SHEET.GENETIC' | translate }}" [compareWith]="compareCode">
+                                    <mat-select [(ngModel)]="character.genetic" name="genetic" required placeholder="{{ 'ULTIMA_ROTTA.SHEET.GENETIC_AND_ROLE' | translate }}" [compareWith]="compareCode">
                                         <mat-option *ngFor="let option of geneticDefaultData" [value]="option">
                                             {{ option.description }}
                                         </mat-option>

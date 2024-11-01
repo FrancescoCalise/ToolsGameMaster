@@ -52,32 +52,41 @@ select {
 
 }
 
-.compact-table .col-width-2 {
-    width: 20%;
-    max-width: 20%;
+.compact-table {
+    font-size: 0.8rem; /* Riduce la dimensione del font dell'intera tabella */
 }
 
-.compact-table .col-width-5 {
-    width: 40%;
-    max-width: 40%;
+.compact-table .mat-row,
+.compact-table .mat-header-row {
+    height: 24px; /* Imposta un'altezza ridotta per ogni riga */
+}
+
+.compact-table .mat-cell,
+.compact-table .mat-header-cell {
+    padding: 2px 4px; /* Riduce il padding delle celle */
+    line-height: 1; /* Riduce l'altezza della linea per una maggiore compattezza */
 }
 
 .compact-form-field .mat-form-field-wrapper {
-    width: 100%!important;
-    max-width: 100%!important;
-    padding-bottom: 0!important;
+    padding: 0; /* Rimuove padding interno del form field */
+    min-height: 24px; /* Riduce l'altezza del campo di input */
 }
 
-.compact-form-field  {
-    width: 100%!important;
-    max-width: 100%!important;
-    padding-bottom: 0!important;
+.compact-form-field .mat-form-field-infix {
+    padding: 0 4px; /* Riduce il padding laterale dell'input */
+    min-height: 24px;
 }
-.compact-form-field input {
-    font-size: 0.85rem;
-    height: 1.5rem;
-    padding: 2px 4px;
-    box-sizing: border-box;
-    width: 100%!important;
-    max-width: 100%!important;
+
+.compact-form-field input.mat-input-element {
+    height: 24px; /* Imposta una altezza fissa per l'input */
+    line-height: 1; /* Riduce l'altezza della linea */
+    padding: 0; /* Rimuove il padding dell'input */
 }
+
+/* Altezza ridotta per desktop */
+.row-table-fix {
+    height: 38px !important;
+    max-height: 38px !important;
+    min-height: 38px !important;
+}
+

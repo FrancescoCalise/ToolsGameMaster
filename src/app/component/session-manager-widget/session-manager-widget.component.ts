@@ -1,4 +1,4 @@
-import { Component,EventEmitter,Inject,OnInit, Output } from '@angular/core';
+import { Component,EventEmitter,Inject,OnDestroy,OnInit, Output } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { SessionManager } from '../../interface/Document/SessionManager';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +17,7 @@ import { SESSION_MANAGER_SERVICE } from '../../firebase-provider';
   ]
 })
 
-export class SessionManagerWidgetComponent implements OnInit {
+export class SessionManagerWidgetComponent implements OnInit, OnDestroy {
   defaultSession: SessionManager = {};
   gameName = '';
   @Output() sessionLoaded = new EventEmitter<SessionManager>()
@@ -27,6 +27,10 @@ export class SessionManagerWidgetComponent implements OnInit {
     private cacheService: CacheStorageService,
     @Inject(SESSION_MANAGER_SERVICE) private firestoreSessionManagerService: FirestoreService<SessionManager>
   ) { 
+    
+  }
+
+  ngOnDestroy(): void {
     
   }
 
@@ -41,7 +45,10 @@ export class SessionManagerWidgetComponent implements OnInit {
   }
 
   async setDefaultSession(): Promise<void> {
+    
+    console.log()
     let defaultSession = this.cacheService.getItem(this.cacheService.defaultSession) as SessionManager;
+    console.log(defaultSession)
     if (!defaultSession) {
       let whereConditions: QueryFieldFilterConstraint[] = [];
       whereConditions.push(where('gameName', '==', this.gameName));

@@ -214,7 +214,8 @@
             "REDEMPTION": "Riscatto",
             "SAVE_CHARACTER": "Salva Personaggio",
             "ADDITIONAL_INFO": "Informazioni Aggiuntive",
-            "CANCEL": "Annulla"
+            "CANCEL": "Annulla",
+            "BASIC_INFORMATION": "Informazioni di Base"
         },
         "ATTRIBUTES": {
             "AGILITY": "Agilità",

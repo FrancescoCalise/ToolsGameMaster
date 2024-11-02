@@ -64,8 +64,8 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     const isMobile = window.innerWidth < 768;
     const dialogRef = this.dialog.open(CharacterDialogComponent, {
       width: isMobile ? '100%' : '80%',
-      height: isMobile ? '100%' : '50%',
-      minHeight: '80%',
+      height: isMobile ? '100%' : '90%',
+      minHeight: '90%',
       data: {
         character: character ? { ...character } : undefined,
         sessionId: this.defaultSession?.id,

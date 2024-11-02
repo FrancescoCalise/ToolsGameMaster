@@ -1,6 +1,5 @@
 {
-    "FIELDS_LABEL":
-    {
+    "FIELDS_LABEL": {
         "LOAD_PHOTO": "Carica Foto"
     },
     "GENERIC_LABEL": {
@@ -182,26 +181,18 @@
             "TIRA_DUE_VOLTE": "Tira Due Volte"
         },
         "CREATE_CHARACTER": {
-            "PRINT_RANDOM": "Stampa personaggio casuale",
-            "PRINT": "Stampa personaggio",
-            "GENERATE_RANDOM": "Genera Casuale",
             "CREATE_CHARACTER": "Creazione del Personaggio",
             "EDIT_CHARACTER": "Modifica",
-            "DELETE_CHARACTER": "Elimina",
-            "CREATE_NEW_CHARACTER": "Crea Nuovo Personaggio",
-            "NO_CHARACTERS": "Nessun personaggio disponibile. Clicca su \"Crea Nuovo Personaggio\" per aggiungerne uno.",
-            "CLOSE_FORM": "Chiudi la crezione del personaggio"
+            "NO_CHARACTERS": "Nessun personaggio disponibile. Crea il tuo personaggio!."
         },
         "SHEET": {
             "SONO": "Sono",
-            "UN_UNA":"Un/una",
+            "UN_UNA": "Un/una",
             "ROLE_IN_THE_CREW": "Ruolo nella ciruma",
             "EXCELLENCE": "Eccellenza",
-
             "ATTRIBUTES": "Attributi",
             "VALUE": "Valore",
             "BONUS": "Bonus",
-            
             "STATS": "Statistiche",
             "MANA": "Mana",
             "MANA_CURRENT": "Mana Attuale",
@@ -210,7 +201,6 @@
             "ARMOR": "Armatura",
             "ADVENTURE_POINTS": "Punti Avventura",
             "SCRAPS": "Rottami",
-
             "ABILITY": "Abilità",
             "EQUIP": "Equipaggiamento",
             "BACKGROUND": "BACKGROUND",
@@ -224,11 +214,7 @@
             "REDEMPTION": "Riscatto",
             "SAVE_CHARACTER": "Salva Personaggio",
             "ADDITIONAL_INFO": "Informazioni Aggiuntive",
-
-            "CANCEL": "Annulla",
-            "EDIT": "Modifica",
-            "DELETE": "Elimina"
-
+            "CANCEL": "Annulla"
         },
         "ATTRIBUTES": {
             "AGILITY": "Agilità",
@@ -240,19 +226,6 @@
             "PERCEPTION": "Percezione",
             "SOCIALITY": "Socialità"
         },
-        "SESSION_MANAGER": {
-            "TITLE": "Gestione Sessioni",
-            "CREATE_NEW_SESSION": "Crea Nuova Sessione",
-            "SESSION_NAME_LABEL": "Nome della Sessione",
-            "SAVE_SESSION": "Salva Sessione",
-            "CANCEL": "Annulla",
-            "GAME_LABEL": "Gioco",
-            "EDIT": "Modifica",
-            "DELETE": "Elimina",
-            "SET_ACTIVE": "Imposta come Attiva",
-            "NO_SESSIONS_AVAILABLE": "Nessuna sessione disponibile. Clicca 'Crea Nuova Sessione' per aggiungerne una.",
-            "ACTIVE_SESSION": "Sessione Attiva"
-        },
         "ARMOR": {
             "HEAD": "Testa",
             "BODY": "Corpo",
@@ -263,10 +236,33 @@
             "AREA": "Area",
             "NOTES": "Innesto / Modifca / Note",
             "PLATE": "Placca"
+        },
+        "ITEMS":{
+            "WEAPON_1": "Arma 1",
+            "WEAPON_2": "Arma 2",
+            "EQUIP_1": "Equipaggiamento 1",
+            "EQUIP_2": "Equipaggiamento 2",
+            "SUSTENANCE": "Sostentamento",
+            "CLHOTES": "Abiti",
+            "MECHANIC_KIT": "Kit da Meccanico",
+            "SCRAPS": "Rottami"
         }
     },
     "DUNGEON_AND_DRAGONS_5E": {
         "TITLE": "Dungeon & Dragons 5E"
+    },
+    "SESSION_MANAGER": {
+        "TITLE": "Gestione Sessioni",
+        "CREATE_NEW_SESSION": "Crea Nuova Sessione",
+        "SESSION_NAME_LABEL": "Nome della Sessione",
+        "SAVE_SESSION": "Salva Sessione",
+        "CANCEL": "Annulla",
+        "GAME_LABEL": "Gioco",
+        "EDIT": "Modifica",
+        "DELETE": "Elimina",
+        "SET_ACTIVE": "Imposta come Attiva",
+        "NO_SESSIONS_AVAILABLE": "Nessuna sessione disponibile. Clicca 'Crea Nuova Sessione' per aggiungerne una.",
+        "ACTIVE_SESSION": "Sessione Attiva"
     },
     "FEATURE": {
         "SESSION_MANAGER": "Gestione sessioni",

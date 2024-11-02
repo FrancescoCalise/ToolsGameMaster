@@ -51,6 +51,12 @@ export interface ArmorInfo {
     description?: string
 }
 
+export interface ItemLUR {
+    code: string
+    description?: string
+    note?: string
+}
+
 export interface Attribute {
     code?: string;
     description?: string;

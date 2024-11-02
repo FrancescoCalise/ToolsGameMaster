@@ -1,8 +1,8 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>{{ 'ULTIMA_ROTTA.SESSION_MANAGER.TITLE' | translate }}</h2>
+    <h2>{{ 'SESSION_MANAGER.TITLE' | translate }}</h2>
     <button class="btn btn-primary" (click)="toggleForm()">
-      {{ 'ULTIMA_ROTTA.SESSION_MANAGER.CREATE_NEW_SESSION' | translate }}
+      {{ 'SESSION_MANAGER.CREATE_NEW_SESSION' | translate }}
     </button>
   </div>
 
@@ -10,15 +10,15 @@
     <form #sessionForm="ngForm" (ngSubmit)="createNewSession()">
       <div class="mb-3">
         <label for="sessionName" class="form-label">
-          {{ 'ULTIMA_ROTTA.SESSION_MANAGER.SESSION_NAME_LABEL' | translate }}
+          {{ 'SESSION_MANAGER.SESSION_NAME_LABEL' | translate }}
         </label>
         <input type="text" id="sessionName" class="form-control" [(ngModel)]="newSession.sessionName" name="sessionName" required>
       </div>
       <button type="submit" class="btn btn-success" [disabled]="!sessionForm.valid">
-        {{ 'ULTIMA_ROTTA.SESSION_MANAGER.SAVE_SESSION' | translate }}
+        {{ 'SESSION_MANAGER.SAVE_SESSION' | translate }}
       </button>
       <button type="button" class="btn btn-secondary ms-2" (click)="toggleForm()">
-        {{ 'ULTIMA_ROTTA.SESSION_MANAGER.CANCEL' | translate }}
+        {{ 'SESSION_MANAGER.CANCEL' | translate }}
       </button>
     </form>
   </div>
@@ -31,18 +31,18 @@
             <div>
               <h5 class="card-title">{{ session.sessionName }}</h5>
               <p class="card-text text-muted">
-                {{ 'ULTIMA_ROTTA.SESSION_MANAGER.GAME_LABEL' | translate }}: {{ session.gameName }}
+                {{ 'SESSION_MANAGER.GAME_LABEL' | translate }}: {{ session.gameName }}
               </p>
             </div>
             <div class="btn-group" role="group">
               <button class="btn btn-sm btn-outline-secondary" (click)="editSession(session)">
-                {{ 'ULTIMA_ROTTA.SESSION_MANAGER.EDIT' | translate }}
+                {{ 'SESSION_MANAGER.EDIT' | translate }}
               </button>
               <button class="btn btn-sm btn-outline-danger" (click)="deleteSession(session)">
-                {{ 'ULTIMA_ROTTA.SESSION_MANAGER.DELETE' | translate }}
+                {{ 'SESSION_MANAGER.DELETE' | translate }}
               </button>
               <button class="btn btn-sm btn-outline-primary" [ngClass]="{'btn-primary': session.default}" (click)="setAsDefault(session)">
-                {{ 'ULTIMA_ROTTA.SESSION_MANAGER.SET_ACTIVE' | translate }}
+                {{ 'SESSION_MANAGER.SET_ACTIVE' | translate }}
               </button>
             </div>
           </div>
@@ -53,7 +53,7 @@
 
   <ng-template #noSessions>
     <div class="alert alert-info text-center">
-      {{ 'ULTIMA_ROTTA.SESSION_MANAGER.NO_SESSIONS_AVAILABLE' | translate }}
+      {{ 'SESSION_MANAGER.NO_SESSIONS_AVAILABLE' | translate }}
     </div>
   </ng-template>
 </div>

@@ -1,7 +1,7 @@
 import { firstValueFrom } from 'rxjs';
 import { RandomNameService } from '../../../../../../../services/randomNameService';
 import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURTemplate, Genetic, Role, Trait, } from '../charachter-sheet-lur';
-import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails } from '../data-sheet-lur';
+import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails, itemsLUR } from '../data-sheet-lur';
 import { FieldResizeConfig } from '../../../../../../../services/pdf.service';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 
@@ -13,8 +13,10 @@ export class UtilitiesCreateCharacterLur {
     static readonly attributeKeys = attributeKeys;
     static readonly traitsDefaultData = traits;
     static readonly armorDetails = armorDetails;
+    static readonly items = itemsLUR;
+
     static readonly pathTemplateFIle = 'assets/pdfFiles/{0}/ultima-rotta-template.pdf';
-    
+
     constructor() { }
 
     private static generateRandomNumber(max: number): number {
@@ -43,7 +45,7 @@ export class UtilitiesCreateCharacterLur {
         }
     }
 
-    private static fillGeneticValues(newChar: CharacterSheetLUR, genetic: Genetic) {
+    private static fillGeneticValues(newPg: CharacterSheetLUR, genetic: Genetic) {
         const defaultGenetics: {
             [key in GeneticType]: {
                 life: number;
@@ -59,52 +61,52 @@ export class UtilitiesCreateCharacterLur {
         const applyGenetics = defaultGenetics[genetic.code as GeneticType];
 
         if (applyGenetics) {
-            newChar.life = applyGenetics.life;
-            newChar.mana = applyGenetics.mana;
-            newChar.armor = applyGenetics.armor;
+            newPg.life = applyGenetics.life;
+            newPg.mana = applyGenetics.mana;
+            newPg.armor = applyGenetics.armor;
         }
 
         switch (genetic.code) {
             case GeneticType.Bios:
-                this.applyBiosGenetics(newChar);
+                this.applyBiosGenetics(newPg);
                 break;
             case GeneticType.Nomade:
-                this.applyNomadeGenetics(newChar);
+                this.applyNomadeGenetics(newPg);
                 break;
             case GeneticType.Umanoide:
-                this.applyUmanoideGenetics(newChar);
+                this.applyUmanoideGenetics(newPg);
                 break;
         }
     }
 
-    static applyBiosGenetics(newChar: CharacterSheetLUR) {
+    static applyBiosGenetics(newPg: CharacterSheetLUR) {
         let abilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Bios)?.abilities as Ability[];
-        newChar.genetic.abilities = structuredClone(abilities);
+        newPg.genetic.abilities = structuredClone(abilities);
 
-        newChar.inventory?.push("Arma 1", "Equpaggiamento 1");
+        this.updateInventory(["WEAPON_1", "EQUIP_1"], newPg);
     }
 
-    private static applyNomadeGenetics(newChar: CharacterSheetLUR): void {
+    private static applyNomadeGenetics(newPg: CharacterSheetLUR): void {
         const randomStats = this.getTwoDistinctRandomNumbers(8);
         randomStats.forEach((statIndex) => {
-            const attribute = newChar.attributes?.[statIndex - 1];
+            const attribute = newPg.attributes?.[statIndex - 1];
             attribute.bonus = (attribute.bonus ?? 0) + 1;
         });
 
         let nomadeAbilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Nomade)?.abilities as Ability[];
-        newChar.genetic.abilities = structuredClone(nomadeAbilities);
-        newChar.inventory?.push("Abiti", "Arma 1");
+        newPg.genetic.abilities = structuredClone(nomadeAbilities);
+        this.updateInventory(["CLOTHES", "WEAPON_1"], newPg);
     }
 
     private static getTwoDistinctRandomNumbers(max: number): number[] {
         const first = this.generateRandomNumber(max);
         const possibleSeconds = Array.from({ length: max }, (_, i) => i + 1).filter(n => n !== first);
         const second = possibleSeconds[this.generateRandomNumber(possibleSeconds.length) - 1];
-    
+
         return [first, second];
     }
 
-    private static applyUmanoideGenetics(newChar: CharacterSheetLUR): void {
+    private static applyUmanoideGenetics(newPg: CharacterSheetLUR): void {
         const genes = this.generateGenes();
         const statUpdates: string[] = [];
         const geneUpdates: string[] = [];
@@ -115,10 +117,10 @@ export class UtilitiesCreateCharacterLur {
         const abilities = humanoidGenetic?.abilities ?? []; // access abilities directly and ensure it's an array
 
         genes.forEach((gene) =>
-            this.processGeneLevel(newChar, gene, geneUpdates, statUpdates, abilities)
+            this.processGeneLevel(newPg, gene, geneUpdates, statUpdates, abilities)
         );
-        newChar.genetic.genes = genes;
-        newChar.inventory?.push("Abiti", "Sostentamento");
+        newPg.genetic.genes = genes;
+        this.updateInventory(["CLOTHES", "SUSTENANCE"], newPg);
     }
 
     private static generateGenes(): string[] {
@@ -135,109 +137,109 @@ export class UtilitiesCreateCharacterLur {
         return StatsType[randomStat as keyof typeof StatsType];
     }
 
-    private static processGeneLevel(newChar: CharacterSheetLUR, gene: string, geneUpdates: string[], statUpdates: string[], abilities: Ability[]): void {
+    private static processGeneLevel(newPg: CharacterSheetLUR, gene: string, geneUpdates: string[], statUpdates: string[], abilities: Ability[]): void {
         geneUpdates.push(gene);
         const level = geneUpdates.filter((g) => g === gene).length;
 
         switch (gene) {
             case HumanGenesType.CROMOSOMA_E: {
                 const randomStat = this.distinctRandomStat([StatsType.AGILITY, StatsType.MAGIC, StatsType.PERCEPTION], statUpdates);
-                this.applyGeneE(newChar, level, randomStat, abilities);
+                this.applyGeneE(newPg, level, randomStat, abilities);
                 break;
             }
             case HumanGenesType.CROMOSOMA_N: {
                 const randomStat = this.distinctRandomStat([StatsType.COURAGE, StatsType.STRENGTH, StatsType.MANUALITY], statUpdates);
-                this.applyGeneN(newChar, level, randomStat, abilities);
+                this.applyGeneN(newPg, level, randomStat, abilities);
                 break;
             }
             case HumanGenesType.CROMOSOMA_U: {
                 const randomStat = this.distinctRandomStat([
                     StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE,
                     StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION], statUpdates);
-                this.applyGeneU(newChar, level, randomStat, abilities);
+                this.applyGeneU(newPg, level, randomStat, abilities);
                 break;
             }
         }
     }
 
-    private static applyGeneE(newChar: CharacterSheetLUR, level: number, randomStat: StatsType, abilities: Ability[]): void {
-        this.updateAttributes(newChar.attributes, randomStat, 1);
+    private static applyGeneE(newPg: CharacterSheetLUR, level: number, randomStat: StatsType, abilities: Ability[]): void {
+        this.updateAttributes(newPg.attributes, randomStat, 1);
         if (level === 1) {
-            this.addLifeMana(newChar, 2, 1);
+            this.addLifeMana(newPg, 2, 1);
             let ability = abilities.find((a) => a.code === 'MANA_SELVAGGIO') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         } else if (level === 2) {
-            this.addLifeMana(newChar, 2, 1);
+            this.addLifeMana(newPg, 2, 1);
             let ability = abilities.find((a) => a.code === 'IMMUNITA') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         } else if (level === 3) {
-            this.updateAttributes(newChar.attributes, StatsType.STRENGTH, -1);
-            this.addLifeMana(newChar, 2, 1);
+            this.updateAttributes(newPg.attributes, StatsType.STRENGTH, -1);
+            this.addLifeMana(newPg, 2, 1);
             let ability = abilities.find((a) => a.code === 'SANGUE_GIOVANE') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         }
     }
 
-    private static applyGeneN(newChar: CharacterSheetLUR, level: number, randomStat: StatsType, abilities: Ability[]): void {
-        this.updateAttributes(newChar.attributes, randomStat, 1);
+    private static applyGeneN(newPg: CharacterSheetLUR, level: number, randomStat: StatsType, abilities: Ability[]): void {
+        this.updateAttributes(newPg.attributes, randomStat, 1);
         if (level === 1) {
-            this.addLifeMana(newChar, 4, 0);
+            this.addLifeMana(newPg, 4, 0);
             let ability = abilities.find((a) => a.code === 'TEMPRATO') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         } else if (level === 2) {
-            this.updateAttributes(newChar.attributes, StatsType.MAGIC, -1);
-            this.addLifeMana(newChar, 4, 0);
+            this.updateAttributes(newPg.attributes, StatsType.MAGIC, -1);
+            this.addLifeMana(newPg, 4, 0);
             let ability = abilities.find((a) => a.code === 'STIMARE') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         } else if (level === 3) {
-            this.updateAttributes(newChar.attributes, StatsType.AGILITY, -1);
-            this.addLifeMana(newChar, 4, 0);
+            this.updateAttributes(newPg.attributes, StatsType.AGILITY, -1);
+            this.addLifeMana(newPg, 4, 0);
             let ability = abilities.find((a) => a.code === 'COMBATTENTE_GRANITICO') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         }
     }
 
-    private static applyGeneU(newChar: CharacterSheetLUR, level: number, randomStat: StatsType, abilities: Ability[]): void {
+    private static applyGeneU(newPg: CharacterSheetLUR, level: number, randomStat: StatsType, abilities: Ability[]): void {
         if (level === 1) {
-            this.addLifeMana(newChar, 4, 1);
+            this.addLifeMana(newPg, 4, 1);
         } else if (level === 2) {
-            this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 1);
-            this.addLifeMana(newChar, 2, 0);
+            this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, 1);
+            this.addLifeMana(newPg, 2, 0);
 
             let ability = abilities.find((a) => a.code === 'SUPERARE_LIMITE') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         } else if (level === 3) {
-            this.updateAttributes(newChar.attributes, randomStat, 1);
-            this.addLifeMana(newChar, 2, 0);
+            this.updateAttributes(newPg.attributes, randomStat, 1);
+            this.addLifeMana(newPg, 2, 0);
 
             let ability = abilities.find((a) => a.code === 'FORTUNA') as Ability
-            if(ability){
-                newChar.genetic.abilities.push(ability);     
+            if (ability) {
+                newPg.genetic.abilities.push(ability);
             }
         }
     }
 
     private static addLifeMana(
-        newChar: CharacterSheetLUR,
+        newPg: CharacterSheetLUR,
         life: number,
         mana: number
     ): void {
-        newChar.life = (newChar.life ?? 0) + life;
-        newChar.mana = (newChar.mana ?? 0) + mana;
+        newPg.life = (newPg.life ?? 0) + life;
+        newPg.mana = (newPg.mana ?? 0) + mana;
     }
 
     public static async initCharacter(translationMessageService: TranslationMessageService): Promise<CharacterSheetLUR> {
@@ -269,7 +271,7 @@ export class UtilitiesCreateCharacterLur {
     private static async initTranslationMessageService(translationMessageService: TranslationMessageService): Promise<void> {
         let attributesWithDescription = this.attributeKeys;
         attributesWithDescription.forEach(async att => {
-            if(att.code && !att.description){
+            if (att.code && !att.description) {
                 att.description = await translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + att.code);
             }
             att.value = 1;
@@ -277,14 +279,21 @@ export class UtilitiesCreateCharacterLur {
 
         let armorDetail = this.armorDetails;
         armorDetail.forEach(async info => {
-            if(info.code && !info.description){
+            if (info.code && !info.description) {
                 info.description = await translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + info.code);
+            }
+        });
+
+        let items = this.items;
+        items.forEach(async item => {
+            if (item.code && !item.description) {
+                item.description = await translationMessageService.translate('ULTIMA_ROTTA.ITEMS.' + item.code);
             }
         });
     }
 
-    public static async initCharacterForTemplate(sessionId: string | undefined, translationMessageService:TranslationMessageService): Promise<CharacterSheetLURTemplate> {
-        
+    public static async initCharacterForTemplate(sessionId: string | undefined, translationMessageService: TranslationMessageService): Promise<CharacterSheetLURTemplate> {
+
         await this.initTranslationMessageService(translationMessageService);
 
         return {
@@ -300,31 +309,32 @@ export class UtilitiesCreateCharacterLur {
     }
 
     public static async generateRandomCharacter(randomNameService: RandomNameService, translate: TranslationMessageService): Promise<CharacterSheetLUR> {
-        let newChar = await this.initCharacter(translate);
-        newChar.name = await this.getRandomName(randomNameService);
+        let newPg = await this.initCharacter(translate);
+        newPg.name = await this.getRandomName(randomNameService);
         const idGenetic = this.getKeyByValue(mapIdGenetic, this.generateRandomNumber(6));
-        newChar.genetic = structuredClone(this.geneticDefaultData.find((g) => g.code === idGenetic) || ({} as Genetic));
-        newChar.genetic.abilities = [];
+        newPg.genetic = structuredClone(this.geneticDefaultData.find((g) => g.code === idGenetic) || ({} as Genetic));
+        newPg.genetic.abilities = [];
 
         try {
             // Fill genetic values
-            this.fillGeneticValues(newChar, newChar.genetic);
+            this.fillGeneticValues(newPg, newPg.genetic);
+
             //Fill eccellence
             let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], []);
-            let attribute = newChar.attributes.find((attr) => attr.code === randomStr);
-            newChar.excellence = attribute?.description || '';
+            let attribute = newPg.attributes.find((attr) => attr.code === randomStr);
+            newPg.excellence = attribute?.description || '';
 
             // Fill Traits
-            this.applyTraits(newChar);
+            this.applyTraits(newPg);
 
             let labelTraits = await translate.translate('ULTIMA_ROTTA.SHEET.TRAITS');
-            newChar.traits = await this.getTraitDescription(newChar.traits, translate);
+            newPg.traits = await this.getTraitDescription(newPg.traits, translate);
 
-            let tratisDescription = labelTraits + ' : ' + newChar.traits?.map((t) => t.description).join(' - ');
-            
-            newChar.background = newChar.background ?  
-                                        newChar.background + ' - ' + tratisDescription :  
-                                        tratisDescription;
+            let tratisDescription = labelTraits + ' : ' + newPg.traits?.map((t) => t.description).join(' - ');
+
+            newPg.background = newPg.background ?
+                newPg.background + ' - ' + tratisDescription :
+                tratisDescription;
 
             // Fill role
             let randomRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
@@ -333,9 +343,9 @@ export class UtilitiesCreateCharacterLur {
 
             roleToSet.description = await translate.translate('ULTIMA_ROTTA.ROLE.' + roleToSet.code);
 
-            let haveTraitsLeaderOrSoldato = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
-            let haveTraitsArcanistaOrDiscepoloOscuro = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO) ? true : false;
-            let haveTraitsCanagliaOrRicognitore = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE) ? true : false;
+            let haveTraitsLeaderOrSoldato = newPg.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
+            let haveTraitsArcanistaOrDiscepoloOscuro = newPg.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO) ? true : false;
+            let haveTraitsCanagliaOrRicognitore = newPg.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE) ? true : false;
             let admissionTestPassed = false;
 
             if ((roleToSet.code === RoleType.LEADER || roleToSet.code === RoleType.SOLDATO) && haveTraitsLeaderOrSoldato) {
@@ -349,7 +359,7 @@ export class UtilitiesCreateCharacterLur {
             }
 
             if (!admissionTestPassed) {
-                let attribtes = newChar.attributes;
+                let attribtes = newPg.attributes;
                 let attributeToTest = attribtes.find((attr) =>
                     roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
                     roleToSet.code === RoleType.SOLDATO && attr.code === StatsType.STRENGTH ||
@@ -366,47 +376,50 @@ export class UtilitiesCreateCharacterLur {
                 if (randomTest > 5) {
                     admissionTestPassed = true;
                     let r = roleToSet.description;
-                    
+
                     let testPassed = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_PASSED');
-                    let testAdmissionLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ADMISSION',{
-                        role:  r,
+                    let testAdmissionLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ADMISSION', {
+                        role: r,
                         result: testPassed
                     });
-                    newChar.background = newChar.background ? `${newChar.background} - ${testAdmissionLabel} \n` : testAdmissionLabel;
+                    newPg.background = newPg.background ? `${newPg.background} - ${testAdmissionLabel} \n` : testAdmissionLabel;
 
                 } else {
-                    ;
                     let testFailedLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_FAILED');
                     let testAdmissionLabel = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ADMISSION', {
                         role: roleToSet.description,
                         result: testFailedLabel
                     });
 
-                    newChar.background = newChar.background ? `${newChar.background} - ${testAdmissionLabel} \n` : testAdmissionLabel;
+                    newPg.background = newPg.background ? `${newPg.background} - ${testAdmissionLabel} \n` : testAdmissionLabel;
 
-                    let maxIndex = newChar.inventory?.length ?? 0;
+                    const descriptionKitMeccanic = await translate.translate('ULTIMA_ROTTA.ITEMS.MECHANIC_KIT');
 
-                    let indexToRemove = this.generateRandomNumber(maxIndex) - 1;
+                    const itemCanBeRemoved = newPg.inventory?.filter(i => i !== descriptionKitMeccanic);
+                    if (itemCanBeRemoved && itemCanBeRemoved.length > 0) {
+                        const randomItem = itemCanBeRemoved[Math.floor(Math.random() * itemCanBeRemoved.length)];
 
-                    newChar.inventory = newChar.inventory?.filter((i, index) => index !== indexToRemove);
+                        newPg.inventory = newPg.inventory?.filter(i => i !== randomItem);
+                    }
+
 
                     const availableRoles = Object.keys(roleTraceMapping).filter(
                         (role) => role !== randomRole
                     );
                     const newRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(availableRoles.length));
 
-                    const  newRoleDefaultData = structuredClone(this.rolesDefaultData.find((r) => r.code === newRole)) as Role;
+                    const newRoleDefaultData = structuredClone(this.rolesDefaultData.find((r) => r.code === newRole)) as Role;
                     roleToSet = newRoleDefaultData as Role;
                     roleToSet.description = await translate.translate('ULTIMA_ROTTA.ROLE.' + roleToSet.code);
                 }
             }
 
-            this.applyBonusRole(newChar, roleToSet);
-            let persistedRoleAbility = newChar.role?.abilities ? structuredClone(newChar.role?.abilities as Ability[]) : [];
-            newChar.role = roleToSet;
-            newChar.role.abilities = persistedRoleAbility;
+            this.applyBonusRole(newPg, roleToSet);
+            let persistedRoleAbility = newPg.role?.abilities ? structuredClone(newPg.role?.abilities as Ability[]) : [];
+            newPg.role = roleToSet;
+            newPg.role.abilities = persistedRoleAbility;
 
-            let skillAlreadLearned = newChar.role.abilities ? newChar.role.abilities.map((a) => a.code) : [];
+            let skillAlreadLearned = newPg.role.abilities ? newPg.role.abilities.map((a) => a.code) : [];
 
 
             const availableAbilities = [...(roleDefaultData?.abilities as Ability[]).filter((a) => !skillAlreadLearned.includes(a.code))];
@@ -415,14 +428,14 @@ export class UtilitiesCreateCharacterLur {
             if (availableAbilities.length > 0) {
                 const randomIndex = this.generateRandomNumber(availableAbilities.length);
                 let ability = availableAbilities[randomIndex - 1];
-                newChar.role.abilities.push(ability);
+                newPg.role.abilities.push(ability);
 
             }
 
             if (admissionTestPassed) {
                 let testOnRoadPassed = false;
 
-                let attributeToTest = newChar.attributes.find((attr) =>
+                let attributeToTest = newPg.attributes.find((attr) =>
                     roleToSet.code === RoleType.LEADER && attr.code === StatsType.INTELLIGENCE ||
                     roleToSet.code === RoleType.SOLDATO && attr.code === StatsType.STRENGTH ||
                     roleToSet.code === RoleType.ARCANISTA && attr.code === StatsType.SOCIALITY ||
@@ -445,14 +458,14 @@ export class UtilitiesCreateCharacterLur {
                         if (availableAbilities && availableAbilities.length > 0) {
                             const randomIndex = this.generateRandomNumber(availableAbilities.length);
                             let ability = availableAbilities[randomIndex - 1];
-                            newChar.role.abilities.push(ability);
+                            newPg.role.abilities.push(ability);
                         }
                     }
                     let labelTeastOnRoad = await translate.translate('ULTIMA_ROTTA.SHEET.TEST_ON_ROAD');
-                    newChar.background = newChar.background ? `${newChar.background} - ${labelTeastOnRoad} \n` : labelTeastOnRoad;
+                    newPg.background = newPg.background ? `${newPg.background} - ${labelTeastOnRoad} \n` : labelTeastOnRoad;
                 }
             }
-            return newChar;
+            return newPg;
         } catch (error) {
             throw new Error(error as any);
         }
@@ -460,7 +473,7 @@ export class UtilitiesCreateCharacterLur {
 
     static async getTraitDescription(traits: Trait[] | undefined, translate: TranslationMessageService): Promise<Trait[]> {
         if (!traits) return [];
-    
+
         const traitsWithDescription = await Promise.all(
             traits.map(async (t) => {
                 t.code = t.code as string;
@@ -468,65 +481,82 @@ export class UtilitiesCreateCharacterLur {
                 return t;
             })
         );
-    
+
         return traitsWithDescription;
     }
 
-    static applyBonusRole(newChar: CharacterSheetLUR, roleToSet: Role) {
+    static applyBonusRole(newPg: CharacterSheetLUR, roleToSet: Role) {
 
         switch (roleToSet.code) {
             case RoleType.LEADER: {
-                this.addLifeMana(newChar, 1, 2);
-                this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.INTELLIGENCE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 0, 2);
-                newChar.inventory?.push("Arma 2", "Equpaggiamento 1", "Equpaggiamento 2");
+                this.addLifeMana(newPg, 1, 2);
+                this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.INTELLIGENCE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, 0, 2);
+
+                this.updateInventory(["WEAPON_2", "EQUIP_1", "EQUIP_2"], newPg);
 
                 break;
             }
             case RoleType.SOLDATO: {
-                this.addLifeMana(newChar, 3, 0);
-                this.updateAttributes(newChar.attributes, StatsType.AGILITY, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.STRENGTH, 0, 2);
-                newChar.inventory?.push("Arma 1", "Arma 2", "Sostentamento");
+                this.addLifeMana(newPg, 3, 0);
+                this.updateAttributes(newPg.attributes, StatsType.AGILITY, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.STRENGTH, 0, 2);
+
+                this.updateInventory(["WEAPON_1", "WEAPON_2", "SUSTENANCE"], newPg);
 
                 break;
             }
             case RoleType.ARCANISTA: {
-                this.addLifeMana(newChar, 2, 1);
-                this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.INTELLIGENCE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.MAGIC, 0, 2);
-                newChar.inventory?.push("Equpaggiamento 2", "Rottami", "Sostentamento");
+                this.addLifeMana(newPg, 2, 1);
+                this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.INTELLIGENCE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.MAGIC, 0, 2);
+                this.updateInventory(["WEAPON_1", "SCRAPS", "SUSTENANCE"], newPg);
                 break;
             }
             case RoleType.DISCEPOLO_OSCURO: {
-                this.addLifeMana(newChar, 0, 3);
-                this.updateAttributes(newChar.attributes, StatsType.INTELLIGENCE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.MAGIC, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 0, 2);
-                newChar.inventory?.push("Arma 1", "Equpaggiamento 1", "Sostentamento");
+                this.addLifeMana(newPg, 0, 3);
+                this.updateAttributes(newPg.attributes, StatsType.INTELLIGENCE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.MAGIC, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, 0, 2);
+                this.updateInventory(["WEAPON_1", "EQUIP_1", "SUSTENANCE"], newPg);
                 break;
             }
             case RoleType.CANAGLIA: {
-                this.addLifeMana(newChar, 1, 2);
-                this.updateAttributes(newChar.attributes, StatsType.AGILITY, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.MANUALITY, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.PERCEPTION, 0, 2);
-                newChar.inventory?.push("Arma 1", "Equpaggiamento 1", "Rottami");
+                this.addLifeMana(newPg, 1, 2);
+                this.updateAttributes(newPg.attributes, StatsType.AGILITY, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.MANUALITY, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.PERCEPTION, 0, 2);
+                this.updateInventory(["WEAPON_1", "EQUIP_1", "SCRAPS"], newPg);
                 break;
             }
             case RoleType.RICOGNITORE: {
-                this.addLifeMana(newChar, 2, 1);
-                this.updateAttributes(newChar.attributes, StatsType.AGILITY, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.COURAGE, 0, 2);
-                this.updateAttributes(newChar.attributes, StatsType.PERCEPTION, 0, 2);
-                newChar.inventory?.push("Arma 2", "Equpaggiamento 1", "Equpaggiamento 2");
+                this.addLifeMana(newPg, 2, 1);
+                this.updateAttributes(newPg.attributes, StatsType.AGILITY, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
+                this.updateAttributes(newPg.attributes, StatsType.PERCEPTION, 0, 2);
+                this.updateInventory(["WEAPON_2", "EQUIP_2", "EQUIP_2"], newPg);
                 break;
             }
 
         }
+    }
+
+    static updateInventory(itemCodes: string[], currentPG: CharacterSheetLUR) {
+        itemCodes.forEach((itemCode) => {
+            if (itemCode === 'SCRAPS') {
+                let diceResult = this.generateRandomNumber(8);
+                let scrap = diceResult * 10;
+                currentPG.scrap = currentPG.scrap ? currentPG.scrap + scrap : scrap;
+            } else {
+                let item = this.items.find((i) => i.code === itemCode);
+                if (item) {
+                    currentPG.inventory?.push(item.description as string);
+                }
+            }
+        });
     }
 
     private static generateTraits(maxInt: number): Trait {
@@ -539,83 +569,83 @@ export class UtilitiesCreateCharacterLur {
         return trait as Trait;
     }
 
-    private static applyTraits(newChar: CharacterSheetLUR) {
+    private static applyTraits(newPg: CharacterSheetLUR) {
         let trait = this.generateTraits(20);
-        this.switchTraits(newChar, trait);
+        this.switchTraits(newPg, trait);
 
     }
 
-    private static switchTraits(newChar: CharacterSheetLUR, trait: Trait): void {
-        newChar.traits?.push(trait);
+    private static switchTraits(newPg: CharacterSheetLUR, trait: Trait): void {
+        newPg.traits?.push(trait);
         try {
             switch (trait.code) {
                 case TraitsType.CICATRICE: {
                     // Logic for CICATRICE
-                    this.addLifeMana(newChar, -1, 0);
+                    this.addLifeMana(newPg, -1, 0);
                     break;
                 }
                 case TraitsType.MALATO_DIFETTOSO: {
-                    try{
+                    try {
                         // Logic for MALATO_DIFETTOSO
 
-                        let isBios = newChar.genetic.code === GeneticType.Bios;
+                        let isBios = newPg.genetic.code === GeneticType.Bios;
                         // Se isBios è vero, filtra le abilità diverse da 'MALATO_DIFETTOSO', altrimenti usa tutte le abilità
-                        const availableAbilities = isBios ? newChar.genetic.abilities.filter((ability) => ability.code !== 'ARTIFICIALE') : newChar.genetic.abilities;
+                        const availableAbilities = isBios ? newPg.genetic.abilities.filter((ability) => ability.code !== 'ARTIFICIALE') : newPg.genetic.abilities;
 
                         // Se ci sono abilità disponibili, scegli una a caso
                         if (availableAbilities.length > 0) {
                             const randomIndex = this.generateRandomNumber(availableAbilities.length) - 1;
                             const selectedAbility = availableAbilities[randomIndex];
                             const codeToDelete = selectedAbility.code;
-                            
-                            newChar.genetic.abilities = newChar.genetic.abilities.filter((a) => a.code !== codeToDelete);
-                            
 
-                            let currentExcellence = newChar.excellence?.split('-') as string[];
+                            newPg.genetic.abilities = newPg.genetic.abilities.filter((a) => a.code !== codeToDelete);
+
+
+                            let currentExcellence = newPg.excellence?.split('-') as string[];
                             let currentExCode: string[] = [];
                             currentExcellence.forEach((ex) => {
-                            let code = attributeKeys.find((attr) => attr.description === ex)?.code;
-                                if(code){
+                                let code = attributeKeys.find((attr) => attr.description === ex)?.code;
+                                if (code) {
                                     currentExCode.push(code);
                                 }
                             });
                             let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], currentExCode);
-                            newChar.excellence = currentExcellence.join('-') + ' - ' + newChar.attributes.find((attr) => attr.code === randomStr)?.description;
+                            newPg.excellence = currentExcellence.join('-') + ' - ' + newPg.attributes.find((attr) => attr.code === randomStr)?.description;
                         }
                     }
-                    catch(error){
+                    catch (error) {
                         throw new Error('ERROR ON' + trait.code);
                     }
                     break;
                 }
                 case TraitsType.AGIATO: {
-                    newChar.scrap = newChar.scrap ? newChar.scrap + 50 : 50;
+                    newPg.scrap = newPg.scrap ? newPg.scrap + 50 : 50;
                     break;
                 }
                 case TraitsType.SPIETATO: {
-                    this.addLifeMana(newChar, 0, -1);
+                    this.addLifeMana(newPg, 0, -1);
                     break;
                 }
                 case TraitsType.FRONT_MAN: {
-                    this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, 1);
+                    this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, 1);
                     break;
                 }
                 case TraitsType.ROTTMATORE: {
                     // Logic for ROTTAMATORE
-                    this.updateAttributes(newChar.attributes, StatsType.MANUALITY, 1);
-                    newChar.inventory?.push("Kit da meccanico");
+                    this.updateAttributes(newPg.attributes, StatsType.MANUALITY, 1);
+                    this.updateInventory(["MECHANIC_KIT"], newPg);
                     let scrap = this.getMaxRandomValue(20, 3, 0) + 10;
-                    newChar.scrap = newChar.scrap ? newChar.scrap + scrap : scrap;
+                    newPg.scrap = newPg.scrap ? newPg.scrap + scrap : scrap;
                     break;
                 }
                 case TraitsType.SEI_PROPRIO_GROSSO: {
                     // Logic for SEI_PROPRIO_GROSSO
-                    this.addLifeMana(newChar, 2, 0);
+                    this.addLifeMana(newPg, 2, 0);
                     break;
                 }
                 case TraitsType.HAI_UNA_SCINTILLA: {
                     // Logic for HAI_UNA_SCINTILLA
-                    this.addLifeMana(newChar, 0, 1);
+                    this.addLifeMana(newPg, 0, 1);
                     break;
                 }
                 case TraitsType.TALENTO_NATURALE: {
@@ -627,41 +657,41 @@ export class UtilitiesCreateCharacterLur {
                     let abilityRandom = this.generateRandomNumber(10);
                     let ability = abilityRole[abilityRandom - 1];
 
-                    newChar.role?.abilities ? newChar.role?.abilities.push(ability) : [ability];
+                    newPg.role?.abilities ? newPg.role?.abilities.push(ability) : [ability];
 
                     break;
                 }
                 case TraitsType.GENETICA_MISTA: {
                     // Logic for GENETICA_MISTA
-                    this.updateAttributes(newChar.attributes, StatsType.SOCIALITY, -1);
+                    this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, -1);
 
                     let humanAbility = this.geneticDefaultData.find((r) => r.code === GeneticType.Umanoide)?.abilities as Ability[];
-                    // Filtra le abilità che non sono già incluse in `newChar.role?.abilities`
-                    const availableAbilities = humanAbility.filter((ability) => !newChar.genetic?.abilities.includes(ability));
+                    // Filtra le abilità che non sono già incluse in `newPg.role?.abilities`
+                    const availableAbilities = humanAbility.filter((ability) => !newPg.genetic?.abilities.includes(ability));
 
                     // Se ci sono abilità disponibili, scegli una a caso
                     if (availableAbilities.length > 0) {
                         const abilityRandomIndex = this.generateRandomNumber(availableAbilities.length);
-                        const selectedAbility = availableAbilities[abilityRandomIndex -1];
-                        newChar.genetic?.abilities.push(selectedAbility);
+                        const selectedAbility = availableAbilities[abilityRandomIndex - 1];
+                        newPg.genetic?.abilities.push(selectedAbility);
                     }
                     break;
                 }
                 case TraitsType.TIRA_DUE_VOLTE: {
-                    try{
-                        let traitGenerated = newChar.traits as Trait[];
+                    try {
+                        let traitGenerated = newPg.traits as Trait[];
 
                         for (let i = 0; i < 2; i++) {
-                            const availableTraits = structuredClone(this.traitsDefaultData.filter((trait) => !traitGenerated.some((generatedTrait) => generatedTrait.code === trait.code)));
+                            const availableTraits = this.traitsDefaultData.filter((trait) => !traitGenerated.some((generatedTrait) => generatedTrait.code === trait.code));
 
                             if (availableTraits.length > 0) {
                                 const randomIndex = this.generateRandomNumber(availableTraits.length);
-                                const newTrait = availableTraits[randomIndex - 1];                                
-                                this.switchTraits(newChar, newTrait);
+                                const newTrait = availableTraits[randomIndex - 1];
+                                this.switchTraits(newPg, newTrait);
                             }
                         }
                     }
-                    catch(error){
+                    catch (error) {
                         throw new Error(error as any);
                     }
                     break;
@@ -709,42 +739,42 @@ export class UtilitiesCreateCharacterLur {
     };
 
     private static async getDescriptionFromCode(code: string, description: string | undefined, translationMessageService: TranslationMessageService): Promise<string> {
-        if(description){
+        if (description) {
             return description;
         }
-        if(!code){
+        if (!code) {
             throw new Error('Code is not defined');
         }
         return await translationMessageService.translate(code);
 
     }
 
-    static async CovertToCharacterToFree(newChar: CharacterSheetLUR, translationMessageService:TranslationMessageService): Promise<CharacterSheetLURTemplate> {
-        let newCharFree = {} as CharacterSheetLURTemplate;
-        newCharFree.name = newChar.name;
-        newCharFree.excellence = newChar.excellence;
+    static async CovertToCharacterToFree(newPg: CharacterSheetLUR, translationMessageService: TranslationMessageService): Promise<CharacterSheetLURTemplate> {
+        let newPgFree = {} as CharacterSheetLURTemplate;
+        newPgFree.name = newPg.name;
+        newPgFree.excellence = newPg.excellence;
 
-        let geneticDescription = await this.getDescriptionFromCode('ULTIMA_ROTTA.GENETIC.' + newChar.genetic.code, newChar.genetic.description, translationMessageService);
-        let roleDescription = await this.getDescriptionFromCode('ULTIMA_ROTTA.ROLE.' + newChar.role?.code, newChar.role?.description, translationMessageService);
-        newCharFree.genetic_and_role = geneticDescription + ' - ' + roleDescription;
-    
-        newCharFree.attributes = structuredClone(newChar.attributes);
-        newCharFree.mana = newChar.mana;
-        newCharFree.manaCurrent = newChar.manaCurrent;
-        newCharFree.life = newChar.life;
-        newCharFree.lifeCurrent = newChar.lifeCurrent;
-        newCharFree.armor = newChar.armor;
-        newCharFree.armorDetails = newChar.armorDetails;
-        newCharFree.allEquipment = newChar.inventory?.join('\n');
-        newCharFree.scrap = newChar.scrap;
-        newCharFree.point_adventure = newChar.point_adventure;
-        newCharFree.background = newChar.background;
-        newCharFree.ship = newChar.ship;
-        newCharFree.redemption = newChar.redemption;
-        const allAbilities: string[] = await this.mapAbilities(newChar.genetic.abilities, newChar.role?.abilities, translationMessageService);
-        newCharFree.allAbilities = allAbilities.join('\n');
+        let geneticDescription = await this.getDescriptionFromCode('ULTIMA_ROTTA.GENETIC.' + newPg.genetic.code, newPg.genetic.description, translationMessageService);
+        let roleDescription = await this.getDescriptionFromCode('ULTIMA_ROTTA.ROLE.' + newPg.role?.code, newPg.role?.description, translationMessageService);
+        newPgFree.genetic_and_role = geneticDescription + ' - ' + roleDescription;
 
-        return newCharFree;
+        newPgFree.attributes = structuredClone(newPg.attributes);
+        newPgFree.mana = newPg.mana;
+        newPgFree.manaCurrent = newPg.manaCurrent;
+        newPgFree.life = newPg.life;
+        newPgFree.lifeCurrent = newPg.lifeCurrent;
+        newPgFree.armor = newPg.armor;
+        newPgFree.armorDetails = newPg.armorDetails;
+        newPgFree.allEquipment = newPg.inventory?.join('\n');
+        newPgFree.scrap = newPg.scrap;
+        newPgFree.point_adventure = newPg.point_adventure;
+        newPgFree.background = newPg.background;
+        newPgFree.ship = newPg.ship;
+        newPgFree.redemption = newPg.redemption;
+        const allAbilities: string[] = await this.mapAbilities(newPg.genetic.abilities, newPg.role?.abilities, translationMessageService);
+        newPgFree.allAbilities = allAbilities.join('\n');
+
+        return newPgFree;
     }
 
     static async mapAbilities(geneticAbility: Ability[], roleAbility: Ability[] | undefined, translationMessageService: TranslationMessageService): Promise<string[]> {
@@ -771,7 +801,7 @@ export class UtilitiesCreateCharacterLur {
 
         return allAbilities;
     }
-}   
+}
 
 export enum GeneticType {
     Bios = 'BIOS',

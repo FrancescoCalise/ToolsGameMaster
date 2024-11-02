@@ -1,4 +1,4 @@
-import { ArmorInfo, Attribute, Genetic, Role, Trait } from "./charachter-sheet-lur";
+import { ArmorInfo, Attribute, Genetic, ItemLUR, Role, Trait } from "./charachter-sheet-lur";
 
 export const attributeKeys = [
     {
@@ -405,6 +405,33 @@ export const armorDetails = [
         notes: ''
     }
 ] as ArmorInfo[];
+
+export const itemsLUR = [
+    {
+        code : 'WEAPON_1',
+    },
+    {
+        code: 'WEAPON_2',
+    },
+    {
+        code: 'EQUIP_1',
+    },
+    {
+        code: 'EQUIP_2',
+    },
+    {
+        code: 'CLOTHES'
+    },
+    {
+        code:'SUSTENANCE'
+    },
+    {
+        code: 'MECHANIC_KIT'
+    },
+    {
+        code: 'SCRAPS'
+    }
+] as ItemLUR[];
 
 export const mapIdGenetic: { [key: string]: number[] } = {
     "BIOS": [1, 2],

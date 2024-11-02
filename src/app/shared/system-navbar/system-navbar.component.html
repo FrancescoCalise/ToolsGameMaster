@@ -53,9 +53,9 @@
           <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="infoDropdown">
             <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
             <li><hr class="dropdown-divider"></li>
-            <li><span class="dropdown-item" (click)="forceRefresh()">Version: {{ version }}</span></li>
+            <li><span class="dropdown-item" (click)="forceRefresh()" style="cursor: pointer;">Version: {{ version }}</span></li>
             <li><hr class="dropdown-divider"></li>
-            <li><span class="dropdown-item" (click)="cleanCache()">{{ 'SYSTEM_NAVBAR.CLEAN_CACHE' | translate }}</span></li>
+            <li><span class="dropdown-item" (click)="cleanCache()" style="cursor: pointer;">{{ 'SYSTEM_NAVBAR.CLEAN_CACHE' | translate }}</span></li>
             <li><hr class="dropdown-divider"></li>
           </ul>
         </li>
@@ -77,8 +77,11 @@
         <h6 class="text-uppercase">{{ 'USER.PROFILE_SECTION' | translate }}</h6>
         <ul class="list-unstyled ms-3">
           <li><a class="dropdown-item" href="/profile">{{ 'USER.PROFILE' | translate }}</a></li>
+          <li><hr class="dropdown-divider"></li>
           <li><a class="dropdown-item" href="/settings">{{ 'USER.SETTINGS' | translate }}</a></li>
+          <li><hr class="dropdown-divider"></li>
           <li><button class="dropdown-item mt-2" (click)="logout()">{{ 'USER.LOGOUT' | translate }}</button></li>
+          <li><hr class="dropdown-divider"></li>
         </ul>
       </li>
       <!-- Language Selection -->
@@ -90,6 +93,7 @@
               <span class="{{ language.flag }}"></span> {{ language.label }}
             </button>
           </li>
+          <li><hr class="dropdown-divider"></li>
         </ul>
       </li>
       <!-- Information Section -->
@@ -97,7 +101,11 @@
         <h6 class="text-uppercase">{{ 'USER.INFORMATION' | translate }}</h6>
         <ul class="list-unstyled ms-3">
           <li><span class="dropdown-item">Environment: {{ environment }}</span></li>
-          <li><span class="dropdown-item" (click)="forceRefresh()">Version: {{ version }}</span></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><span class="dropdown-item" (click)="forceRefresh()" style="cursor: pointer;">Version: {{ version }}</span></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><span class="dropdown-item" (click)="cleanCache()" style="cursor: pointer;">{{ 'SYSTEM_NAVBAR.CLEAN_CACHE' | translate }}</span></li>
+          <li><hr class="dropdown-divider"></li>
         </ul>
       </li>
     </ul>

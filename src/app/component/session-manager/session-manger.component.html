@@ -1,25 +1,27 @@
-<div class="container mt-4">
+<div class="w-100 h-100 p-3">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2>{{ 'SESSION_MANAGER.TITLE' | translate }}</h2>
-    <button class="btn btn-primary" (click)="toggleForm()">
-      {{ 'SESSION_MANAGER.CREATE_NEW_SESSION' | translate }}
-    </button>
+    <strong><h1>{{ 'SESSION_MANAGER.TITLE' | translate }}</h1></strong>
+    <app-field-button 
+      colorClass="btn-primary" 
+      icon="add" 
+      tooltip="{{ 'SESSION_MANAGER.CREATE_NEW_SESSION' | translate }}" 
+      (buttonClick)="toggleForm()">
+    </app-field-button>
   </div>
 
   <div *ngIf="showForm" class="mb-4">
     <form #sessionForm="ngForm" (ngSubmit)="createNewSession()">
-      <div class="mb-3">
-        <label for="sessionName" class="form-label">
-          {{ 'SESSION_MANAGER.SESSION_NAME_LABEL' | translate }}
+      <div class="d-flex align-items-center w-100 mb-3">
+        <label for="sessionName" class="form-label me-3">
+          <strong>{{ 'SESSION_MANAGER.SESSION_NAME_LABEL' | translate }}: </strong>
         </label>
-        <input type="text" id="sessionName" class="form-control" [(ngModel)]="newSession.sessionName" name="sessionName" required>
+        <input type="text" id="sessionName" class="form-control" [(ngModel)]="newSession.sessionName" name="sessionName" required style="flex: 1;">
       </div>
-      <button type="submit" class="btn btn-success" [disabled]="!sessionForm.valid">
-        {{ 'SESSION_MANAGER.SAVE_SESSION' | translate }}
-      </button>
-      <button type="button" class="btn btn-secondary ms-2" (click)="toggleForm()">
-        {{ 'SESSION_MANAGER.CANCEL' | translate }}
-      </button>
+  
+      <div class="mb-3 d-flex flex-row justify-content-center">
+        <app-field-button colorClass="btn-success" icon="save" tooltip="{{ 'SESSION_MANAGER.SAVE_SESSION' | translate }}" [isDisabled]="!sessionForm.valid"   (buttonClick)="sessionForm.ngSubmit.emit()"> </app-field-button>
+        <app-field-button colorClass="btn-secondary ms-2" icon="cancel" tooltip="{{ 'SESSION_MANAGER.CANCEL' | translate }}" (buttonClick)="toggleForm()"> </app-field-button>
+      </div>
     </form>
   </div>
 
@@ -30,20 +32,23 @@
           <div class="d-flex justify-content-between align-items-start">
             <div>
               <h5 class="card-title">{{ session.sessionName }}</h5>
+              <span *ngIf="session.default"><strong>{{ 'SESSION_MANAGER.ACTIVE_SESSION' | translate }} </strong></span>
               <p class="card-text text-muted">
-                {{ 'SESSION_MANAGER.GAME_LABEL' | translate }}: {{ session.gameName }}
+                {{ 'SESSION_MANAGER.GAME_LABEL' | translate }} : {{ session.gameName }}
               </p>
             </div>
             <div class="btn-group" role="group">
-              <button class="btn btn-sm btn-outline-secondary" (click)="editSession(session)">
-                {{ 'SESSION_MANAGER.EDIT' | translate }}
-              </button>
-              <button class="btn btn-sm btn-outline-danger" (click)="deleteSession(session)">
-                {{ 'SESSION_MANAGER.DELETE' | translate }}
-              </button>
-              <button class="btn btn-sm btn-outline-primary" [ngClass]="{'btn-primary': session.default}" (click)="setAsDefault(session)">
-                {{ 'SESSION_MANAGER.SET_ACTIVE' | translate }}
-              </button>
+              <app-field-button colorClass="btn-success" icon="edit"
+                tooltip="{{ 'SESSION_MANAGER.EDIT' | translate }}" (buttonClick)="editSession(session)">
+              </app-field-button>
+              <app-field-button colorClass="btn-info" icon="check"
+                tooltip="{{ 'SESSION_MANAGER.SET_ACTIVE' | translate }}"
+                [ngClass]="{'btn-primary': session.default}" (buttonClick)="setAsDefault(session)"  [isDisabled]="session.default">
+              </app-field-button>
+              <app-field-button colorClass="btn-danger" icon="delete"
+                tooltip="{{ 'SESSION_MANAGER.DELETE' | translate }}" (buttonClick)="deleteSession(session)" [isDisabled]="session.default">
+              </app-field-button>
+
             </div>
           </div>
         </div>

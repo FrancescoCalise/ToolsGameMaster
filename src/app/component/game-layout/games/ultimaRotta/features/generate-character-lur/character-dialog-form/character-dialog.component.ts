@@ -5,6 +5,7 @@ import { Ability, ArmorInfo, CharacterSheetLURTemplate, } from '../charachter-sh
 import { SharedModule } from '../../../../../../../shared/shared.module';
 import { UtilitiesCreateCharacterLur } from '../utilities-create-character-lur/utilities-create-character-lur';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
+import { SharedFields } from '../../../../../../../shared/shared-fields.module';
 
 @Component({
     selector: 'app-character-dialog',
@@ -13,6 +14,7 @@ import { TranslationMessageService } from '../../../../../../../services/transla
     standalone: true,
     imports: [
         SharedModule,
+        SharedFields
     ]
 })
 export class CharacterDialogComponent implements OnInit {

@@ -1,4 +1,4 @@
-<button class="btn custom-button me-2" [ngClass]="colorClass" (click)="onClick()">
-    <mat-icon>{{ icon }}</mat-icon>
-  </button>
-  
+<button class="btn custom-button me-2" [ngClass]="colorClass" (click)="onClick()" [matTooltip]="tooltip" [disabled]="isDisabled">
+  <mat-icon>{{ icon }}</mat-icon>
+  <span>{{ label }}</span>
+</button>

@@ -9,6 +9,7 @@ import { AuthService, PersonalUser } from '../../services/auth.service';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { SpinnerService } from '../../services/spinner.service';
 import { CacheStorageService } from '../../services/cache-storage.service';
+import { SharedFields } from '../../shared/shared-fields.module';
 
 @Component({
   selector: 'app-session-manger',
@@ -17,6 +18,7 @@ import { CacheStorageService } from '../../services/cache-storage.service';
   standalone: true,
   imports: [
     SharedModule,
+    SharedFields
   ]
 })
 
@@ -25,11 +27,19 @@ export class SessionManagerComponenet implements OnInit {
   public gameName = '';
   private user?: PersonalUser;
   public sessions: SessionManager[] = [];
-  newSession: SessionManager = {};
+  newSession: SessionManager = {
+    sessionName: '',
+    gameName: '',
+    default: false
+  };
   showForm: boolean = false;
   editingSession: boolean = false;
 
-  defaultSession: SessionManager = {};
+  defaultSession: SessionManager = {
+    sessionName: '',
+    gameName: '',
+    default: false
+  };
 
   constructor(
     private toastService: ToastService,
@@ -79,7 +89,11 @@ export class SessionManagerComponenet implements OnInit {
   toggleForm(): void {
     this.showForm = !this.showForm;
     if (!this.editingSession) {
-      this.newSession = {}; // Reset form when opening or closing if not editing
+      this.newSession = {
+        sessionName: '',
+        gameName: this.gameName,
+        default: false
+      }; // Reset form when opening or closing if not editing
     }
     this.editingSession = false;
   }
@@ -101,6 +115,11 @@ export class SessionManagerComponenet implements OnInit {
       }
     } else {
       if (this.newSession.sessionName) {
+
+        if (this.sessions.length == 0) {
+          this.newSession.default = true;
+        }
+
         this.newSession.gameName = this.gameName;
         var id = await this.firestoreSessionManagerService.addItem(this.newSession);
         this.newSession.id = id;
@@ -112,8 +131,9 @@ export class SessionManagerComponenet implements OnInit {
 
   editSession(session: SessionManager): void {
     this.newSession = { ...session };
-    this.editingSession = true;
-    this.showForm = true;
+
+    this.editingSession = !this.editingSession;
+    this.showForm = !this.showForm;
   }
 
   async deleteSession(session: SessionManager): Promise<void> {

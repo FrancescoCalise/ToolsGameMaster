@@ -13,9 +13,12 @@ import { SharedModule } from "../../../../shared/shared.module";
 export class FieldButtonComponent {
     @Input() colorClass: string = ''; // Classe di colore in input
     @Input() icon: string = ''; // Nome dell'icona in input
+    @Input() label: string = ''; // Testo del pulsante in input
+    @Input() tooltip: string = ''; // Tooltip in input
+    @Input() isDisabled: boolean = false; // Disabilita il pulsante
     @Output() buttonClick = new EventEmitter<void>(); // Evento di click
 
     onClick() {
         this.buttonClick.emit(); // Emetti l'evento quando viene cliccato
-      }
+    }
 }

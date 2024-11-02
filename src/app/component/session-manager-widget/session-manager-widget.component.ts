@@ -18,7 +18,11 @@ import { SESSION_MANAGER_SERVICE } from '../../firebase-provider';
 })
 
 export class SessionManagerWidgetComponent implements OnInit, OnDestroy {
-  defaultSession: SessionManager = {};
+  defaultSession: SessionManager = {
+    sessionName: '',
+    gameName: '',
+    default: false
+  };
   gameName = '';
   @Output() sessionLoaded = new EventEmitter<SessionManager>()
 
@@ -57,7 +61,11 @@ export class SessionManagerWidgetComponent implements OnInit, OnDestroy {
         defaultSession = sessions[0];
         this.cacheService.setItem(this.cacheService.defaultSession, defaultSession);
       }else{
-        this.defaultSession = {};
+        this.defaultSession = {
+          sessionName: '',
+          gameName: '',
+          default: false
+        };
       }
     }
     this.defaultSession = defaultSession;

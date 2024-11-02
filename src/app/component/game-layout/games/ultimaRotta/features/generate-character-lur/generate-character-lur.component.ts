@@ -74,7 +74,6 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((result: CharacterSheetLURTemplate | undefined) => {
       if (result) {
-        debugger;
         character ? this.updateCharacter(result) : this.addCharacter(result);
       }
     });

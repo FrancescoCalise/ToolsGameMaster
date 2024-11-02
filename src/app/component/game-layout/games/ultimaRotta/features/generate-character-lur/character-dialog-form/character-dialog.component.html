@@ -1,215 +1,119 @@
-<h2 mat-dialog-title>{{ character ? ('ULTIMA_ROTTA.CREATE_CHARACTER.EDIT_CHARACTER' | translate) :    ('ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_CHARACTER' | translate) }}</h2>
+<div mat-dialog-content class="w-100 h-100 d-flex flex-column">
+    <form *ngIf="character" #characterForm="ngForm" (ngSubmit)="save(characterForm)" class="w-100 h-100">
+        <div class="d-flex justify-content-between align-items-center mb-3 sticky-top bg-white">
+            <h2 class="fw-bold">
+                {{ character ? ('ULTIMA_ROTTA.CREATE_CHARACTER.EDIT_CHARACTER' | translate) :
+                ('ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_CHARACTER' | translate) }}
+            </h2>
 
+            <div class="d-flex">
+                <app-field-button 
+                    colorClass="btn-success btn-sm me-2" 
+                    icon="save" 
+                    tooltip="{{ 'ULTIMA_ROTTA.SHEET.SAVE_CHARACTER' | translate }}" 
+                    [isDisabled]="!characterForm.valid" 
+                    (buttonClick)="characterForm.ngSubmit.emit()">
+                </app-field-button>
 
-<div mat-dialog-content class="w-100 h-100">
-    <form *ngIf="character" #characterForm="ngForm" (ngSubmit)="save(characterForm)">
-        <div class="row">
-            <div class="col-6 col-sm-6 col-md-3">
-                <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>{{ 'ULTIMA_ROTTA.SHEET.SONO' | translate }}</mat-label>
-                    <input matInput type="text" [(ngModel)]="character.name" name="name" required>
-                </mat-form-field>
-            </div>
+                <app-field-button 
+                    colorClass="btn-danger btn-sm" 
+                    icon="cancel" 
+                    tooltip="{{ 'ULTIMA_ROTTA.SHEET.CANCEL' | translate }}" 
+                    (buttonClick)="close()">
+                </app-field-button>
 
-            <div class="col-6 col-sm-6 col-md-3">
-                <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>{{ 'ULTIMA_ROTTA.SHEET.UN_UNA' | translate }}</mat-label>
-                    <input matInput type="text" [(ngModel)]="character.genetic_and_role" name="genetic_and_role" required>
-                </mat-form-field>
-            </div>
-
-            <div class="col-6 col-sm-6 col-md-3">
-                <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>{{ 'ULTIMA_ROTTA.SHEET.EXCELLENCE' | translate }}</mat-label>
-                    <input matInput type="text" [(ngModel)]="character.excellence" name="excellence">
-                </mat-form-field>
-            </div>
-            <div class="col-6 col-sm-6 col-md-3">
-                <mat-form-field appearance="fill" class="w-100">
-                    <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ROLE_IN_THE_CREW' | translate }}</mat-label>
-                    <input matInput type="text" [(ngModel)]="character.role_in_the_crew" name="role_in_the_crew">
-                </mat-form-field>
             </div>
         </div>
 
-        <div class="col-12 col-md-12 col-lg-12 d-flex flex-column h-100">
-            <h4 class="section-title text-center">{{ 'ULTIMA_ROTTA.SHEET.ATTRIBUTES' | translate }}</h4>
-            <div class="row g-1 p-3 border">
-                <div *ngFor="let attribute of character.attributes"
-                    class="col-6 col-sm-6 col-md-4 col-lg-3 justify-content-center align-items-center">
-                    <label class="form-label  fw-semibold w-100 text-center">
-                        {{ 'ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code | translate }}
-                    </label>
-                    <div class="d-flex justify-content-center align-items-center">
-                        <mat-form-field appearance="fill" class="m-2">
-                            <input matInput type="number" [(ngModel)]="attribute.value"
-                                [name]="attribute.code + 'Value'" step="1">
+        <div class="overflow-auto">
+
+            <div class="col-12 col-md-12 col-lg-12 d-flex flex-column h-100 mb-3">
+                <h4 class="section-title justify-content-start">Bascic information</h4>
+                <div class="row p-3 m-0 border d-flex justify-content-start align-items-center">
+                    <div class="col-12 col-md-3">
+                        <mat-form-field appearance="fill" class="w-100 m-0">
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.SONO' | translate }}</mat-label>
+                            <input matInput type="text" [(ngModel)]="character.name" name="name" required>
                         </mat-form-field>
-
-                        <label class="form-label text-center mx-1  fw-semibold">D</label>
-
-                        <mat-form-field appearance="fill">
-                            <input matInput type="number" [(ngModel)]="attribute.bonus"
-                                [name]="attribute.code + 'Bonus'" step="1">
-                        </mat-form-field>
-
                     </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-md-12 col-lg-12 d-flex flex-column h-100">
-                <div class="mb-3">
-                    <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.STATS' | translate }}</h4>
-                    <div class="row g-1 p-3 border w-100">
-
-                        <!-- Max Mana -->
-                        <div class="col-4 col-md-3 col-lg-1">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.MANA' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.mana" name="mana">
-                            </mat-form-field>
-                        </div>
-                        <!-- Current Mana -->
-                        <div class="col-4 col-md-3 col-lg-1">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.MANA_CURRENT' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.manaCurrent" name="manaCurrent">
-                            </mat-form-field>
-                        </div>
-                        <!-- Max Life -->
-                        <div class="col-4 col-1 col-md-3 col-lg-1">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.LIFE' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.life" name="life">
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Current Life -->
-                        <div class="col-4 col-md-3 col-lg-1">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.LIFE_CURRENT' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.lifeCurrent" name="lifeCurrent">
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Armor -->
-                        <div class="col-4 col-md-3 col-lg-1">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ARMOR' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.armor" name="armor">
-                            </mat-form-field>
-                        </div>
-
-                        <!-- Scrap -->
-                        <div class="col-4 col-md-3 col-lg-3">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.SCRAPS' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.scrap" name="scraps">
-                            </mat-form-field>
-                        </div>
-                        <!-- Adventure Points -->
-                        <div class="col-4 col-md-3 col-lg-4">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ADVENTURE_POINTS' | translate }}</mat-label>
-                                <input matInput type="number" [(ngModel)]="character.point_adventure"
-                                    name="point_adventure">
-                            </mat-form-field>
-                        </div>
-                    </div>
-
-                </div>
-
-                <div class="h-100 w-100 d-flex flex-column">
-                    <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.ADDITIONAL_INFO' | translate }}</h4>
-
-                    <div class="row g-1 p-3 border h-100 flex-grow-1">
-                        <div class="col-12 col-md-4 col-lg-4 d-flex flex-column h-100">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ABILITIES' | translate }}</mat-label>
-                                <textarea matInput [(ngModel)]="character.allAbilities" name="allAbilities"
-                                    class="flex-grow-1" rows="10"></textarea>
-                            </mat-form-field>
-                        </div>
-                        <div class="col-12 col-md-4 col-lg-4 d-flex flex-column h-100">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.EQUIP' | translate }}</mat-label>
-                                <textarea matInput [(ngModel)]="character.allEquipment" name="allEquipment"
-                                    class="flex-grow-1" rows="10"></textarea>
-                            </mat-form-field>
-                        </div>
-
-                        <div class="col-12 col-md-4 col-lg-4 d-flex flex-column h-100">
-                            <mat-form-field appearance="fill" class="w-100">
-                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.SHIP' | translate }}</mat-label>
-                                <textarea matInput [(ngModel)]="character.ship" name="ship" class="flex-grow-1"
-                                    rows="10"></textarea>
-                            </mat-form-field>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="h-100 w-100 d-flex row">
-                    <!-- Campo di testo per il background -->
-                    <div class="col-12 col-md-12 col-lg-6 d-flex flex-column flex-grow-1 h-100">
+            
+                    <div class="col-12 col-md-3">
                         <mat-form-field appearance="fill" class="w-100">
-                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.BACKGROUND' | translate }}</mat-label>
-                            <textarea matInput [(ngModel)]="character.background" name="background" class="flex-grow-1" rows="10"></textarea>
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.UN_UNA' | translate }}</mat-label>
+                            <input matInput type="text" [(ngModel)]="character.genetic_and_role" name="genetic_and_role" required>
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="col-12 col-md-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.EXCELLENCE' | translate }}</mat-label>
+                            <input matInput type="text" [(ngModel)]="character.excellence" name="excellence">
+                        </mat-form-field>
+                    </div>
+            
+                    <div class="col-12 col-md-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ROLE_IN_THE_CREW' | translate }}</mat-label>
+                            <input matInput type="text" [(ngModel)]="character.role_in_the_crew" name="role_in_the_crew">
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            
+
+            <div class="col-12 col-md-12 col-lg-12 d-flex flex-column h-100 mb-3">
+                <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.ATTRIBUTES' | translate }}</h4>
+                <div class="row p-3 m-0 border d-flex justify-content-start align-items-center">
+                    <div *ngFor="let attribute of character.attributes"
+                        class="col-6 col-sm-6 col-md-4 col-lg-3 justify-content-center align-items-center">
+                        <label class="form-label  fw-semibold w-100 text-center">
+                            {{ 'ULTIMA_ROTTA.ATTRIBUTES.' + attribute.code | translate }}
+                        </label>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <mat-form-field appearance="fill" class="m-2">
+                                <input matInput type="number" [(ngModel)]="attribute.value"
+                                    [name]="attribute.code + 'Value'" step="1">
+                            </mat-form-field>
+
+                            <label class="form-label text-center mx-1  fw-semibold">D</label>
+
+                            <mat-form-field appearance="fill">
+                                <input matInput type="number" [(ngModel)]="attribute.bonus"
+                                    [name]="attribute.code + 'Bonus'" step="1">
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-12 col-lg-12 d-flex flex-column h-100 mb-3">
+                <h4 class="section-title">{{ 'ULTIMA_ROTTA.SHEET.ADDITIONAL_INFO' | translate }}</h4>
+                <div class="row p-3 m-0 border d-flex justify-content-start align-items-center">
+                    <div class="col-12 col-md-4 col-lg-4 d-flex flex-column h-100">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.ABILITIES' | translate }}</mat-label>
+                            <textarea matInput [(ngModel)]="character.allAbilities" name="allAbilities"
+                                class="flex-grow-1" rows="10"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12 col-md-4 col-lg-4 d-flex flex-column h-100">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.EQUIP' | translate }}</mat-label>
+                            <textarea matInput [(ngModel)]="character.allEquipment" name="allEquipment"
+                                class="flex-grow-1" rows="10"></textarea>
                         </mat-form-field>
                     </div>
 
-                    <!-- Campo di testo per il table -->
-                    <div class="col-12 col-md-12 col-lg-6 d-flex flex-column flex-grow-1 h-100">
-                        <mat-table *ngIf="character.armorDetails" [dataSource]="character.armorDetails" class="compact-table">
-                            <!-- Area Column -->
-                            <ng-container matColumnDef="description">
-                                <mat-header-cell *matHeaderCellDef class="col-width-2">
-                                    <strong>{{ 'ULTIMA_ROTTA.ARMOR.AREA' | translate }}</strong>
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let armorInfo" class="col-width-2">
-                                    <strong>{{ armorInfo.description }}</strong>
-                                </mat-cell>
-                            </ng-container>
-                    
-                            <!-- Plate Column -->
-                            <ng-container matColumnDef="type">
-                                <mat-header-cell *matHeaderCellDef class="col-width-5">
-                                    <strong>{{ 'ULTIMA_ROTTA.ARMOR.PLATE' | translate }}</strong>
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let armorInfo" class="col-width-5">
-                                    <mat-form-field appearance="fill" class="compact-form-field">
-                                        <input matInput type="number" [(ngModel)]="armorInfo.type" name="armorType">
-                                    </mat-form-field>
-                                </mat-cell>
-                            </ng-container>
-                    
-                            <!-- Notes Column -->
-                            <ng-container matColumnDef="notes">
-                                <mat-header-cell *matHeaderCellDef class="col-width-5">
-                                    <strong>{{ 'ULTIMA_ROTTA.ARMOR.NOTES' | translate }}</strong>
-                                </mat-header-cell>
-                                <mat-cell *matCellDef="let armorInfo" class="col-width-5">
-                                    <mat-form-field appearance="fill" class="compact-form-field">
-                                        <input matInput type="text" [(ngModel)]="armorInfo.notes" name="armorNotes" class="w-100">
-                                    </mat-form-field>
-                                </mat-cell>
-                            </ng-container>
-                    
-                            <!-- Header and Row Declarations -->
-                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-                            <mat-row *matRowDef="let row; columns: displayedColumns;" class="row-table-fix"></mat-row>
-                        </mat-table>
+                    <div class="col-12 col-md-4 col-lg-4 d-flex flex-column h-100">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ 'ULTIMA_ROTTA.SHEET.SHIP' | translate }}</mat-label>
+                            <textarea matInput [(ngModel)]="character.ship" name="ship" class="flex-grow-1"
+                                rows="10"></textarea>
+                        </mat-form-field>
                     </div>
-                    </div>
-                
+                </div>
             </div>
-        </div>
-
-
-        <div class="d-flex justify-content-center mt-3">
-            <button type="submit" class="btn btn-success btn-sm me-2" [disabled]="!characterForm.valid">{{
-                'ULTIMA_ROTTA.SHEET.SAVE_CHARACTER' | translate }}</button>
-            <button type="button" class="btn btn-secondary btn-sm" (click)="close()">{{ 'ULTIMA_ROTTA.SHEET.CANCEL' |
-                translate }}</button>
         </div>
     </form>
 </div>

@@ -3,9 +3,9 @@ import { SharedModule } from "../../../../shared/shared.module";
 import { TranslationMessageService } from "../../../../services/translation-message-service";
 
 @Component({
-    selector: 'fields-image-uploader',
-    templateUrl: './fields-image-uploader.component.html',
-    styleUrls: ['./fields-image-uploader.component.css'],
+    selector: 'field-image-uploader',
+    templateUrl: './field-image-uploader.component.html',
+    styleUrls: ['./field-image-uploader.component.css'],
     standalone: true,
     imports: [
         SharedModule

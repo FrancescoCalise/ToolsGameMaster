@@ -79,7 +79,6 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     }
 
     toggleMenu() {
-        console.log('toggleMenu');
         this.menuOpen = !this.menuOpen;
         this.toggoleSiteMap.emit(this.menuOpen);
     }

@@ -12,23 +12,11 @@
                         (sessionLoaded)="onSessionLoaded($event)"></app-session-manager-widget>
                 </div>
                 <div class="d-flex col-12 col-sm-12 col-md-8 col-lg-8 justify-content-end">
-                    <button class="btn btn-secondary btn-sm me-2" (click)="generateRandom(true)">
-                        {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.GENERATE_RANDOM' | translate }}
-                    </button>
-                    <button class="btn btn-success btn-sm me-2" (click)="printPDF()">
-                        <div class="row d-flex flex-row justify-content-start align-items-center">
-
-                            <div class="col-9 d-flex m-0 justify-content-start">
-                                {{ 'ULTIMA_ROTTA.CREATE_CHARACTER.PRINT_RANDOM' | translate }}
-                            </div>
-                            <div class="col-3 d-flex m-0 justify-content-start">
-                                <mat-icon>print</mat-icon>
-                            </div>
-                        </div>
-                    </button>
-                    <button class="btn btn-primary btn-sm" (click)="openCharacterDialog()">
-                        {{'ULTIMA_ROTTA.CREATE_CHARACTER.CREATE_NEW_CHARACTER' | translate}}
-                    </button>
+                    <div class="d-flex col-12 col-sm-12 col-md-8 col-lg-8 justify-content-end">
+                        <app-field-button colorClass="btn-success" icon="casino" (buttonClick)="generateRandom(true)"></app-field-button>
+                        <app-field-button colorClass="btn-dark" icon="print" (buttonClick)="printPDF()"></app-field-button>
+                        <app-field-button colorClass="btn-primary" icon="add" (buttonClick)="openCharacterDialog()"></app-field-button>
+                    </div>
                 </div>
             </div>
 
@@ -36,38 +24,33 @@
     </div>
 
     <div *ngIf="characters.length > 0; else noCharacters" class="row g-2">
-        <div *ngFor="let character of characters" class="col-6 col-md-4 col-lg-3">
-            <mat-card class="h-100">
-                <mat-card-header>
+        <div *ngFor="let character of characters" class="d-flex col-6 col-md-4 col-lg-2">
+            <mat-card class="d-flex h-100 w-100">
+                <mat-card-header class="d-flex justify-content-center align-items-center">
                     <mat-card-title>
                         <h4>{{ character.name }}</h4>
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content>
-                    <div class="d-flex flex-row">
-                        <div class="col-12">
+                    <div class="d-flex flex-row w-100">
+                        <div class="d-flex col-12 justify-content-center align-items-center w-100">
                             <h5>
                                 {{ character?.genetic_and_role }}
                             </h5>
                         </div>
                     </div>
                 </mat-card-content>
-                <mat-card-actions>
-                    <div class="d-flex row w-100">
-                        <div class="d-flex col-sm-6 col-md-3 col-lg-3">
-                            <mat-icon class="icon-edit" (click)="openCharacterDialog(character)">edit</mat-icon>
-                        </div>
-                        <div class="d-flex col-6 col-sm-6 col-md-3 col-lg-3">
-                            <mat-icon class="icon-delete" (click)="deleteCharacter(character)">delete</mat-icon>
-                        </div>
-                        <div class="d-flex col-6 col-sm-6 col-md-6 col-lg-6">
-                            <div class="row d-flex">
-                                <div class="d-flex col-12 align-items-center justify-content-end">
-                                    <mat-icon class="icon-print" (click)="printPDF(character)">print</mat-icon>
-                                </div>
-                            </div>
-                        </div>
-                    </div>                    
+                <mat-card-actions class="d-flex justify-content-center align-items-center">
+                    <div class="d-flex col-4 col-sm-4 col-md-4 col-lg-4 justify-content-center align-items-center">
+                        <app-field-button colorClass="btn-primary" icon="edit" (buttonClick)="openCharacterDialog(character)"></app-field-button>
+                    </div>
+                    <div class="d-flex col-4 col-sm-4 col-md-4 col-lg-4 justify-content-center align-items-center">
+                        <app-field-button colorClass="btn-dark" icon="print" (buttonClick)="printPDF(character)"></app-field-button>
+                    </div>  
+                    <div class="d-flex col-4 col-sm-4 col-md-4 col-lg-4 justify-content-center align-items-center">
+                        <app-field-button colorClass="btn-danger" icon="delete" (buttonClick)="deleteCharacter(character)"></app-field-button>
+                    </div>
+                           
                 </mat-card-actions>
             </mat-card>
         </div>

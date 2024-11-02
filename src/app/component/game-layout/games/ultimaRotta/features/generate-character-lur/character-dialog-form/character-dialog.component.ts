@@ -1,10 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
-import { Ability, ArmorInfo, CharacterSheetLURFree, } from '../charachter-sheet-lur';
+import { Ability, ArmorInfo, CharacterSheetLURTemplate, } from '../charachter-sheet-lur';
 import { SharedModule } from '../../../../../../../shared/shared.module';
 import { UtilitiesCreateCharacterLur } from '../utilities-create-character-lur/utilities-create-character-lur';
-import { SharedFieldsInputModule } from '../../../../../../../shared/shared-fields-input.module';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 
 @Component({
@@ -14,7 +13,6 @@ import { TranslationMessageService } from '../../../../../../../services/transla
     standalone: true,
     imports: [
         SharedModule,
-        SharedFieldsInputModule
     ]
 })
 export class CharacterDialogComponent implements OnInit {
@@ -25,7 +23,7 @@ export class CharacterDialogComponent implements OnInit {
     readonly traits = UtilitiesCreateCharacterLur.traitsDefaultData;
     readonly armorDetails = UtilitiesCreateCharacterLur.armorDetails;
 
-    character: CharacterSheetLURFree;;
+    character: CharacterSheetLURTemplate;;
     sessionId: string | undefined;
 
     armorInfoTable: ArmorInfo[] = [];
@@ -39,7 +37,7 @@ export class CharacterDialogComponent implements OnInit {
     constructor(
         public dialogRef: MatDialogRef<CharacterDialogComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { 
-            character: CharacterSheetLURFree
+            character: CharacterSheetLURTemplate
             sessionId: string| undefined
          },
          private translationMessageService: TranslationMessageService,
@@ -50,7 +48,7 @@ export class CharacterDialogComponent implements OnInit {
 
     async ngOnInit(): Promise<void> {
         if(!this.character){
-            await UtilitiesCreateCharacterLur.initCharacterForTemplate(this.sessionId, this.translationMessageService);
+            this.character = await UtilitiesCreateCharacterLur.initCharacterForTemplate(this.sessionId, this.translationMessageService);
         }
     }
 

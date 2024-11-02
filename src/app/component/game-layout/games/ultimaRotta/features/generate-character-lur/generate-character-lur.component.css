@@ -77,15 +77,3 @@ form {
         min-height: 18.8vh;
     }
 }
-
-.icon-edit {
-  color: #4CAF50; /* Verde */
-}
-
-.icon-delete {
-  color: #F44336; /* Rosso */
-}
-
-.icon-print {
-  color: #2196F3; /* Blu */
-}

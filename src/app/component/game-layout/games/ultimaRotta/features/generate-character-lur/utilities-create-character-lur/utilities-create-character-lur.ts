@@ -1,6 +1,6 @@
 import { firstValueFrom } from 'rxjs';
 import { RandomNameService } from '../../../../../../../services/randomNameService';
-import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURFree, Genetic, Role, Trait, } from '../charachter-sheet-lur';
+import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURTemplate, Genetic, Role, Trait, } from '../charachter-sheet-lur';
 import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails } from '../data-sheet-lur';
 import { FieldResizeConfig } from '../../../../../../../services/pdf.service';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
@@ -14,9 +14,7 @@ export class UtilitiesCreateCharacterLur {
     static readonly traitsDefaultData = traits;
     static readonly armorDetails = armorDetails;
     static readonly pathTemplateFIle = 'assets/pdfFiles/{0}/ultima-rotta-template.pdf';
-    static pdfFieldMap: { [pdfFieldName: string]: string; } = {
-
-    }
+    
     constructor() { }
 
     private static generateRandomNumber(max: number): number {
@@ -30,11 +28,9 @@ export class UtilitiesCreateCharacterLur {
     private static async getRandomName(randomNameService: RandomNameService): Promise<string> {
         try {
             let name = await firstValueFrom(randomNameService.getRandomName());
-            console.log('Nome generato:', name);
             return name;
         } catch (error) {
-            console.error('Errore durante la chiamata a getRandomName:', error);
-            return ''; // Ritorna una stringa vuota in caso di errore o timeout
+            return '';
         }
     }
 
@@ -245,6 +241,32 @@ export class UtilitiesCreateCharacterLur {
     }
 
     public static async initCharacter(translationMessageService: TranslationMessageService): Promise<CharacterSheetLUR> {
+        await this.initTranslationMessageService(translationMessageService)
+
+        return {
+            name: '',
+            genetic: {} as Genetic,
+            excellence: '',
+            role: {} as Role,
+            attributes: this.attributeKeys.map((attr) => ({
+                description: attr.description,
+                code: attr.code,
+                value: 1,
+                bonus: undefined,
+            })),
+            mana: undefined,
+            life: undefined,
+            armor: undefined,
+            armorDetails: structuredClone(this.armorDetails),
+            inventory: [] as string[],
+            scrap: undefined,
+            point_adventure: undefined,
+            background: '',
+            traits: [] as Trait[]
+        };
+    }
+
+    private static async initTranslationMessageService(translationMessageService: TranslationMessageService): Promise<void> {
         let attributesWithDescription = this.attributeKeys;
         attributesWithDescription.forEach(async att => {
             if(att.code && !att.description){
@@ -259,39 +281,12 @@ export class UtilitiesCreateCharacterLur {
                 info.description = await translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + info.code);
             }
         });
-        console.log(armorDetail);
-        return {
-            name: '',
-            genetic: {} as Genetic,
-            excellence: '',
-            role: {} as Role,
-            attributes: attributesWithDescription,
-            mana: undefined,
-            life: undefined,
-            armor: undefined,
-            armorDetails: structuredClone(armorDetail),
-            inventory: [] as string[],
-            scrap: undefined,
-            point_adventure: undefined,
-            background: '',
-            traits: [] as Trait[]
-        };
     }
 
-    public static initCharacterForTemplate(sessionId: string | undefined, translationMessageService:TranslationMessageService): CharacterSheetLURFree {
-        let attributesWithDescription = this.attributeKeys;
-        attributesWithDescription.forEach(async att => {
-            if(att.code && !att.description){
-                att.description = await translationMessageService.translate('ULTIMA_ROTTA.ATTRIBUTES.' + att.code);
-            }
-        });
+    public static async initCharacterForTemplate(sessionId: string | undefined, translationMessageService:TranslationMessageService): Promise<CharacterSheetLURTemplate> {
+        
+        await this.initTranslationMessageService(translationMessageService);
 
-        let armorDetail = this.armorDetails;
-        armorDetail.forEach(async info => {
-            if(info.code && !info.description){
-                info.description = await translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + info.code);
-            }
-        });
         return {
             attributes: this.attributeKeys.map((attr) => ({
                 description: attr.description,
@@ -335,7 +330,7 @@ export class UtilitiesCreateCharacterLur {
             let randomRole = this.getKeyByValue(roleTraceMapping, this.generateRandomNumber(6));
             const roleDefaultData = this.rolesDefaultData.find((r) => r.code === randomRole);
             let roleToSet = structuredClone(roleDefaultData) as Role;
-            console.log("RUOLO CASUALE", roleToSet.code);
+
             roleToSet.description = await translate.translate('ULTIMA_ROTTA.ROLE.' + roleToSet.code);
 
             let haveTraitsLeaderOrSoldato = newChar.traits?.find(t => t.code == TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO) ? true : false;
@@ -457,8 +452,6 @@ export class UtilitiesCreateCharacterLur {
                     newChar.background = newChar.background ? `${newChar.background} - ${labelTeastOnRoad} \n` : labelTeastOnRoad;
                 }
             }
-
-            console.log('Personaggio generato:', newChar);
             return newChar;
         } catch (error) {
             throw new Error(error as any);
@@ -726,8 +719,8 @@ export class UtilitiesCreateCharacterLur {
 
     }
 
-    static async CovertToCharacterToFree(newChar: CharacterSheetLUR, translationMessageService:TranslationMessageService): Promise<CharacterSheetLURFree> {
-        let newCharFree = {} as CharacterSheetLURFree;
+    static async CovertToCharacterToFree(newChar: CharacterSheetLUR, translationMessageService:TranslationMessageService): Promise<CharacterSheetLURTemplate> {
+        let newCharFree = {} as CharacterSheetLURTemplate;
         newCharFree.name = newChar.name;
         newCharFree.excellence = newChar.excellence;
 

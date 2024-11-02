@@ -1,6 +1,6 @@
 import { Component, Inject, OnDestroy, OnInit, } from '@angular/core';
 import { SharedModule } from '../../../../../../shared/shared.module';
-import { CharacterSheetLURFree } from './charachter-sheet-lur';
+import { CharacterSheetLURTemplate } from './charachter-sheet-lur';
 import { TranslationMessageService } from '../../../../../../services/translation-message-service';
 import { FirestoreService } from '../../../../../../services/firestore.service';
 import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
@@ -13,6 +13,7 @@ import { RandomNameService } from '../../../../../../services/randomNameService'
 import { MatDialog } from '@angular/material/dialog';
 import { CharacterDialogComponent } from './character-dialog-form/character-dialog.component';
 import { PdfService } from '../../../../../../services/pdf.service';
+import { SharedFields } from '../../../../../../shared/shared-fields.module';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -21,6 +22,7 @@ import { PdfService } from '../../../../../../services/pdf.service';
   standalone: true,
   imports: [
     SharedModule,
+    SharedFields,
     SessionManagerWidgetComponent,
   ],
 })
@@ -36,10 +38,10 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
 
   sessionLoaded = false;
   defaultSession: SessionManager | undefined = undefined;
-  characters: CharacterSheetLURFree[] = [];
+  characters: CharacterSheetLURTemplate[] = [];
 
   constructor(private translationMessageService: TranslationMessageService,
-    @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLURFree>,
+    @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLURTemplate>,
     private spinnerService: SpinnerService,
     private randomNameService: RandomNameService,
     private dialog: MatDialog,
@@ -58,7 +60,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     this.spinnerService.hide("GenerateCharacterLurComponent.ngOnInit");
   }
 
-  openCharacterDialog(character?: CharacterSheetLURFree) {
+  openCharacterDialog(character?: CharacterSheetLURTemplate) {
     const isMobile = window.innerWidth < 768;
     const dialogRef = this.dialog.open(CharacterDialogComponent, {
       width: isMobile ? '100%' : '80%',
@@ -70,14 +72,15 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
       },
     });
 
-    dialogRef.afterClosed().subscribe((result: CharacterSheetLURFree | undefined) => {
+    dialogRef.afterClosed().subscribe((result: CharacterSheetLURTemplate | undefined) => {
       if (result) {
+        debugger;
         character ? this.updateCharacter(result) : this.addCharacter(result);
       }
     });
   }
 
-  addCharacter(newCharacter: CharacterSheetLURFree) {
+  addCharacter(newCharacter: CharacterSheetLURTemplate) {
     newCharacter.sessionId = this.defaultSession?.id;
     this.firestoreLurSheetService.addItem(newCharacter).then((id) => {
       newCharacter.id = id;
@@ -85,14 +88,14 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteCharacter(character: CharacterSheetLURFree) {
+  deleteCharacter(character: CharacterSheetLURTemplate) {
     this.firestoreLurSheetService.deleteItem(character.id as string).then(() => {
       const index = this.characters.findIndex((char) => char.id === character.id);
       if (index !== -1) this.characters.splice(index, 1);
     });
   }
 
-  updateCharacter(updatedCharacter: CharacterSheetLURFree) {
+  updateCharacter(updatedCharacter: CharacterSheetLURTemplate) {
     const index = this.characters.findIndex((char) => char.id === updatedCharacter.id);
     if (index !== -1) this.characters[index] = updatedCharacter;
   }
@@ -112,12 +115,12 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
   }
 
 
-  async generateRandom(save: boolean): Promise<CharacterSheetLURFree> {
+  async generateRandom(save: boolean): Promise<CharacterSheetLURTemplate> {
 
     this.spinnerService.show("GenerateCharacterLurComponent.generateRandom");
     const newChar = await UtilitiesCreateCharacterLur.generateRandomCharacter(this.randomNameService, this.translationMessageService);
     let newCharFree = await UtilitiesCreateCharacterLur.CovertToCharacterToFree(newChar, this.translationMessageService);
-    console.log(newCharFree);
+
     if (newCharFree && save) {
       this.addCharacter(newCharFree);
     }
@@ -125,7 +128,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     return newCharFree;
   }
 
-  async printPDF(character?: CharacterSheetLURFree) {
+  async printPDF(character?: CharacterSheetLURTemplate) {
     this.spinnerService.show("GenerateCharacterLurComponent.printRandom");
     let newChar = character ? character : await this.generateRandom(false);
     if (newChar) {

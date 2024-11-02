@@ -20,7 +20,6 @@ export class SpinnerService {
 
     this.isSpinnerVisible = true;
     this.openBy = nameMethod;
-    console.log("Aperto da: " + nameMethod);
     this.ngxSpinner.show();
   }
 
@@ -28,7 +27,6 @@ export class SpinnerService {
   hide(nameMethod: string) {
     if (this.isSpinnerVisible && this.openBy === nameMethod) {
       this.isSpinnerVisible = false;
-      console.log("Chiuso da: " + nameMethod);
       this.openBy = "";
       this.ngxSpinner.hide();
     }

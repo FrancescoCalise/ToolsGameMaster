@@ -79,7 +79,6 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
 
   // Funzione chiamata quando si cambia la lingua
   changeLanguage(languageCode: string): void {
-    console.log('Cambio lingua:', languageCode);
     this.selectedLanguage = languageCode;
     this.languageService.setLanguage(languageCode); // Salva la lingua nel servizio
     this.updateFlag(languageCode); // Aggiorna la bandiera quando cambia la lingua
@@ -103,7 +102,6 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     this.authService.logout();
   }
   goToHome(): void {
-    console.log('Go to home');
     this.router.navigate(['/']); // Naviga verso la route della homepage
   }
   

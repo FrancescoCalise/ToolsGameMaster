@@ -156,7 +156,6 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
         },
         onComplete: async (details: any) => {
           await this.translationMessageService.translate('SYSTEM_FOOTER.DONATION_SUCCESS');
-          console.log('Donation completed: ', details);
           await this.saveLastDonation();
         },
         onError: async (err: any) => {

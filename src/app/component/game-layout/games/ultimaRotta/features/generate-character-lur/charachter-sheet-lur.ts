@@ -1,6 +1,6 @@
 import { BaseDocument } from '../../../../../../interface/Document/BaseModel';
 
-export interface CharacterSheetLURFree extends BaseDocument {
+export interface CharacterSheetLURTemplate extends BaseDocument {
     name?: string;
     excellence?: string;
     genetic_and_role?: string;

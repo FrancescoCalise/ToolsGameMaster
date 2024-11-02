@@ -23,8 +23,6 @@ export class UserProfileComponent implements OnInit{
     this.preloadUserPhoto();
     let timeStamp = this.user.lastDonation;
     this.lastDonationDate = new Date((timeStamp?.seconds as number) * 1000) || null;
-
-    console.log(this.user);
   }
   preloadUserPhoto(): void {
     const img = new Image();

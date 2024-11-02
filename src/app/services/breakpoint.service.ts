@@ -44,8 +44,6 @@ export class BreakpointService {
         } else {
           this.toastService.showInfo('Breakpoint changed to: ' + breakpoint);
         }
-
-        console.log('Breakpoint changed to: ', breakpoint);
         this.breakpointChangeSubject.next(breakpoint);
       }
     });

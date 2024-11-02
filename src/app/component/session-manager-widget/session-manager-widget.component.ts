@@ -46,9 +46,7 @@ export class SessionManagerWidgetComponent implements OnInit, OnDestroy {
 
   async setDefaultSession(): Promise<void> {
     
-    console.log()
     let defaultSession = this.cacheService.getItem(this.cacheService.defaultSession) as SessionManager;
-    console.log(defaultSession)
     if (!defaultSession) {
       let whereConditions: QueryFieldFilterConstraint[] = [];
       whereConditions.push(where('gameName', '==', this.gameName));

@@ -1,0 +1,57 @@
+<div class="turn-order-container mat-elevation-z8" style="padding: 16px;">
+    <h2>Turn Order</h2>
+  
+    <!-- Input fields to add new characters with initiative -->
+    <div class="add-character-form" style="display: flex; gap: 8px; align-items: center;">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Character Name</mat-label>
+        <input matInput #characterName placeholder="Enter name" />
+      </mat-form-field>
+  
+      <mat-form-field appearance="outline" class="small-width">
+        <mat-label>Initiative</mat-label>
+        <input matInput #characterInitiative type="number" placeholder="Enter initiative" />
+      </mat-form-field>
+  
+      <button mat-raised-button color="primary" (click)="addCharacter(characterName.value, characterInitiative.valueAsNumber);">
+        Add Character
+      </button>
+    </div>
+  
+    <!-- List of characters with initiatives -->
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort style="margin-top: 16px;">
+  
+      <!-- Character Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let character">{{ character.name }}</td>
+      </ng-container>
+  
+      <!-- Initiative Column -->
+      <ng-container matColumnDef="initiative">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Initiative</th>
+        <td mat-cell *matCellDef="let character">{{ character.initiative }}</td>
+      </ng-container>
+  
+      <!-- Actions Column -->
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef>Actions</th>
+        <td mat-cell *matCellDef="let character">
+          <button mat-button color="accent" (click)="rollInitiativeForCharacter(character)">
+            Roll Initiative
+          </button>
+        </td>
+      </ng-container>
+  
+      <!-- Header and Row Declarations -->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  
+    <!-- Roll initiative for all characters -->
+    <div class="actions" style="display: flex; gap: 8px; margin-top: 16px;">
+      <button mat-raised-button color="primary" (click)="rollInitiativeForAll()">Roll Initiative for All</button>
+      <button mat-raised-button color="warn" (click)="close()">Close</button>
+    </div>
+  </div>
+  

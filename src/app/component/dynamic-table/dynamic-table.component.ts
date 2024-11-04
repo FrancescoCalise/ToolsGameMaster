@@ -14,7 +14,7 @@ import { SharedModule } from '../../shared/shared.module';
 })
 export class DynamicTableComponent implements OnInit, OnDestroy {
   @Input() table!: TableConfig; // Tabella originale non tradotta (input)
-  @Input() excludedColumns: string[] = []; // Colonne da escludere dalla traduzione
+  @Input() excludedColumnsToTranslate: string[] = []; // Colonne da escludere dalla traduzione
   private originalTable!: TableConfig; // Copia della tabella originale per ricalcolare le traduzioni
   translatedTable!: TableConfig; // Tabella d'appoggio tradotta
   columnIds: string[] = []; // ID delle colonne originali
@@ -83,8 +83,8 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
       this.translatedTable.data.map(async (row) => {
         const translatedRow: { [key: string]: string } = {};
         for (const key in row) {
-          // Traduci solo se il valore non è vuoto e la colonna non è inclusa in `excludedColumns`
-          translatedRow[key] = (!this.excludedColumns.includes(key) && row[key])
+          // Traduci solo se il valore non è vuoto e la colonna non è inclusa in `excludedColumnsToTranslate`
+          translatedRow[key] = (!this.excludedColumnsToTranslate.includes(key) && row[key])
             ? await this.translationService.translate(row[key])
             : row[key];
         }

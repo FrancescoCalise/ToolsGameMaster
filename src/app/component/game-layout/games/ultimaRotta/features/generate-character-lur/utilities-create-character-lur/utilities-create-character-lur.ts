@@ -553,6 +553,11 @@ export class UtilitiesCreateCharacterLur {
                 let diceResult = this.generateRandomNumber(8);
                 let scrap = diceResult * 10;
                 currentPG.scrap = currentPG.scrap ? currentPG.scrap + scrap : scrap;
+            } else if (itemCode == "MECHANIC_KIT"){
+                let descriptionItem = await translate.translate('ULTIMA_ROTTA.ITEMS.' + itemCode);
+                if (descriptionItem) {
+                    currentPG.inventory?.push(descriptionItem as string);
+                }
             } else {
                 let correctTable: { [key: number]: string } = (this.items as any)[itemCode];
                 let diceResult = this.generateRandomNumber(8);

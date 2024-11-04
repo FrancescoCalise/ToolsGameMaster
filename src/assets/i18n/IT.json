@@ -383,6 +383,32 @@
             "SHOCK_WEAPONS": "Armi Folgoranti attacco su percezione / Danno su Manualità",
             "BOMB_WEAPONS": "Bombe attacco su percezione / Danno invariabile",
             "INERT_EFFECT": "Effetto inerte: cosa fa inerme?"
+        },
+        "TABLE":{
+            "CRITIC":{
+                "RESULT": "Risultato",
+                "CRITIC_AREA": "Area Maciullata",
+                "MODIFIERS": "Modificatori",
+                "BODY": "Corpo",
+                "HEAD": "Testa",
+                "RIGHT_ARM": "Braccio destro",
+                "LEFT_ARM": "Braccio sinistro",
+                "RIGHT_LEG": "Gamba destra",
+                "LEFT_LEG": "Gamba sinistra",
+                "MODIFIERS_MINUS_1_PS_MAX": "-1 PS Massimi",
+                "MODIFIERS_MINUS_1_PERCEPTION": "-1 Percezione",
+                "MODIFIERS_MINUS_1_STRENGTH_MANUALITY": "-1 Forza e -1 Manualità",
+                "MODIFIERS_MINUS_1_AGILITY": "-1 Agilità",
+                "MODIFIERS_MINUS_2_PS_MAX": "-2 PS Massimi",
+                "MODIFIERS_MINUS_1_PERCEPTION_INTELLIGENCE": "-1 Percezione e -1 Intelligenza",
+                "MODIFIERS_MINUS_2_STRENGTH_MANUALITY": "-2 Forza e -2 Manualità",
+                "MODIFIERS_MINUS_2_AGILITY": "-2 Agilità",
+                "MODIFIERS_MINUS_3_PS_MAX": "-3 PS Massimi",
+                "MODIFIERS_MINUS_2_PERCEPTION_INTELLIGENCE": "-2 Percezione e -2 Intelligenza",
+                "NOTES": "Note",
+                "NOTE_NO_EFFECT_1_6": "Da 1 a 6 non succede nulla",
+                "NOTE_EFFECT_7_20_INERT_PLUS_MODIFIERS": "Da 7 a 20 Inerme + modificatori"
+            }
         }
     },
     "DUNGEON_AND_DRAGONS_5E": {

@@ -382,6 +382,32 @@
             "SHOCK_WEAPONS": "Shock Weapons: attack on perception / Damage on Manual Dexterity",
             "BOMB_WEAPONS": "Bomb Weapons: attack on perception / Damage unmodifiable",
             "INERT_EFFECT": "Inert effect: what does inert do?"
+        },
+        "TABLE": {
+            "CRITIC": {
+                "RESULT": "Result",
+                "CRITIC_AREA": "Crushed Area",
+                "MODIFIERS": "Modifiers",
+                "BODY": "Body",
+                "HEAD": "Head",
+                "RIGHT_ARM": "Right Arm",
+                "LEFT_ARM": "Left Arm",
+                "RIGHT_LEG": "Right Leg",
+                "LEFT_LEG": "Left Leg",
+                "MODIFIERS_MINUS_1_PS_MAX": "-1 Max HP",
+                "MODIFIERS_MINUS_1_PERCEPTION": "-1 Perception",
+                "MODIFIERS_MINUS_1_STRENGTH_MANUALITY": "-1 Strength and -1 Dexterity",
+                "MODIFIERS_MINUS_1_AGILITY": "-1 Agility",
+                "MODIFIERS_MINUS_2_PS_MAX": "-2 Max HP",
+                "MODIFIERS_MINUS_1_PERCEPTION_INTELLIGENCE": "-1 Perception and -1 Intelligence",
+                "MODIFIERS_MINUS_2_STRENGTH_MANUALITY": "-2 Strength and -2 Dexterity",
+                "MODIFIERS_MINUS_2_AGILITY": "-2 Agility",
+                "MODIFIERS_MINUS_3_PS_MAX": "-3 Max HP",
+                "MODIFIERS_MINUS_2_PERCEPTION_INTELLIGENCE": "-2 Perception and -2 Intelligence",
+                "NOTES": "Notes",
+                "NOTE_NO_EFFECT_1_6": "From 1 to 6 nothing happens",
+                "NOTE_EFFECT_7_20_INERT_PLUS_MODIFIERS": "From 7 to 20 Stunned + modifiers"
+            }
         }
     },
     "DUNGEON_AND_DRAGONS_5E": {

@@ -52,14 +52,15 @@ export const routes: Routes = [
             component: MultiDynamicTablesComponent,
             data: {
               multiTable: ultimaRottaWeapon,
-              excludedColumns:["ULTIMA_ROTTA.COST", "ULTIMA_ROTTA.DURATION", "ULTIMA_ROTTA.DAMAGE"]
+              excludedColumnsToTranslate:["ULTIMA_ROTTA.COST", "ULTIMA_ROTTA.DURATION", "ULTIMA_ROTTA.DAMAGE"]
             }
           },
           {
             path: 'SHOW_CRITIC_DAMAGE',
             component: MultiDynamicTablesComponent,
             data: {
-              data: ultimaRottaCriticDamage
+              multiTable: ultimaRottaCriticDamage,
+              excludedColumnsToTranslate:[]
             }
           },
           {

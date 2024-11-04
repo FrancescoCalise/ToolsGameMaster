@@ -18,14 +18,14 @@ import { TranslationMessageService } from '../../services/translation-message-se
 export class MultiDynamicTablesComponent implements OnInit {
 
   @Input() multiTable!: TableConfig[];
-  @Input() excludedColumns!: string[];
+  @Input() excludedColumnsToTranslate!: string[];
   constructor(private route: ActivatedRoute, private translationService: TranslationMessageService) {
   }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
       this.multiTable = data['multiTable'];
-      this.excludedColumns = data['excludedColumns']
+      this.excludedColumnsToTranslate = data['excludedColumnsToTranslate']
     });
   }
 

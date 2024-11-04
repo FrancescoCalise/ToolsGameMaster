@@ -406,7 +406,7 @@ export const armorDetails = [
     }
 ] as ArmorInfo[];
 
-export const itemsLUR = [
+export const codeItemTableLUR = [
     {
         code : 'WEAPON_1',
     },
@@ -433,6 +433,81 @@ export const itemsLUR = [
     }
 ] as ItemLUR[];
 
+export const CLOTHES: { [key: number]: string } = {
+    1: "CAMBIO_CON_ABITI_SPORCHI",
+    2: "CAMBIO_CON_ABITI_PULITI",
+    3: "CAMBIO_CON_ABITI_ELEGANTI",
+    4: "CASCO",
+    5: "PEZZO_DI_ARMATURA_A_SCELTA",
+    6: "PEZZO_DI_ARMATURA_E_CASCO",
+    7: "ABITI_ELEGANTI_E_CASCO_COM",
+    8: "TUTA_NANOGUARDIA_PIU_2_PS"
+  };
+  
+  export const WEAPON_1: { [key: number]: string } = {
+    1: "NULLA",
+    2: "TIRAPUGNI",
+    3: "COLTELLO",
+    4: "SPADA_CORTA",
+    5: "MAZZA_DA_GUERRA",
+    6: "SPADA_LUNGA",
+    7: "ASCIA_DA_GUERRA",
+    8: "FULMILAMA"
+  };
+  
+  export const WEAPON_2: { [key: number]: string } = {
+    1: "NULLA",
+    2: "SPARACHIODI_MINORE_CON_1D6_COLPI",
+    3: "SPARACHIODI_MINORE_CON_2D6_COLPI",
+    4: "SPARACHIODI_RAPIDO_CON_1D6_COLPI",
+    5: "SPARACHIODI_RAPIDO_CON_2D12_COLPI",
+    6: "SPARACHIODI_PESANTE_CON_1D6_COLPI",
+    7: "SPARACHIODI_PESANTE_CON_2D6_COLPI",
+    8: "SPARALAMPO_SCARICA"
+  };
+  
+  export const EQUIP_1: { [key: number]: string } = {
+    1: "ZAINO",
+    2: "ATTREZZI_DA_SCASSO",
+    3: "MEDIKIT_1D6_UTILIZZI",
+    4: "KIT_DA_MECCANICO",
+    5: "ACCENDINO_E_7_SIGARI",
+    6: "TORCIA_DA_CASCO_O_DA_CINTURA",
+    7: "BINOCOLLO_NO_XE",
+    8: "COM"
+  };
+  
+  export const EQUIP_2: { [key: number]: string } = {
+    1: "FIALA_DI_VELENO",
+    2: "CORDA_10M",
+    3: "COPERTA_DI_LANA",
+    4: "SCUDO",
+    5: "FIALA_DI_POX",
+    6: "PISTOLA_RAMPO_CAVO_5M",
+    7: "DISPOSITIVO_APRISKAM",
+    8: "STIVALI_RAGNO"
+  };
+  
+  export const SUSTENANCE: { [key: number]: string } = {
+    1: "ANTIDOTO",
+    2: "BORRACCIA",
+    3: "RAZIONI_LIOFILIZZATE_5",
+    4: "BORRACCIA_E_RAZIONI_5",
+    5: "FIALA_DI_VITA",
+    6: "FIALA_DI_MANA",
+    7: "KIT_EXOCAMP",
+    8: "ELETTROLITA"
+  };
+  
+  export const ELETTROLITA: { [key: number]: string } = {
+    1: "LIME",
+    2: "GRANO",
+    3: "BULBORAGNO",
+    4: "SALTABECCO",
+    5: "MENTA",
+    6: "ORIGINAL"
+  };
+   
 export const mapIdGenetic: { [key: string]: number[] } = {
     "BIOS": [1, 2],
     "NOMADE": [3, 4],

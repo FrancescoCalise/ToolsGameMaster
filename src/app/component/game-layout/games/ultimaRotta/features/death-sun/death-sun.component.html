@@ -1,0 +1,67 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <mat-icon>settings</mat-icon>
+      {{ 'ULTIMA_ROTTA.DEATH_SUN.TITLE' | translate }}
+    </mat-card-title>
+  </mat-card-header>
+
+  <mat-card-content>
+    <!-- Sezione Impostazioni di Partenza -->
+    <div *ngIf="!showRollDice" class="initial-settings">
+      <h3 class="settings-title">{{ 'ULTIMA_ROTTA.DEATH_SUN.INIT' | translate }}</h3>
+
+      <div class="settings-inputs">
+        <mat-form-field appearance="outline" class="settings-field">
+          <mat-label>{{ 'ULTIMA_ROTTA.DEATH_SUN.TEST_BONUS' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="deathSunBonus" [disabled]="deathSunBonus > 20">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline" class="settings-field">
+          <mat-label>{{ 'ULTIMA_ROTTA.DEATH_SUN.GLOBAL_COUNTER' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="counterPermanentDeathOfSun">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div *ngIf="showRollDice">
+      <mat-divider class="settings-divider"></mat-divider>
+
+      <!-- Contenuto del resto del componente -->
+      <div *ngIf="deathSunBonus > 20; else rollDiceTemplate" class="bonus-greater-section">
+        <button mat-raised-button color="accent" (click)="rollSmallDice()" class="dice-button">
+          <mat-icon>casino</mat-icon>
+          {{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_SMALL_DICE' | translate }}
+        </button>
+        <p *ngIf="smallDiceResult !== null" class="dice-result">{{ 'ULTIMA_ROTTA.DEATH_SUN.DICE_RESULT' | translate : { result: smallDiceResult } }}</p>
+
+        <div class="action-text" *ngIf="smallDiceResult === 1">{{ 'ULTIMA_ROTTA.DEATH_SUN.ACTION_RESULT_1' | translate }}</div>
+        <div class="action-text" *ngIf="smallDiceResult === 6">{{ 'ULTIMA_ROTTA.DEATH_SUN.ACTION_RESULT_6' | translate }}</div>
+        <div *ngIf="smallDiceResult !== 1 && smallDiceResult !== 6 && smallDiceResult !== null">
+          {{ 'ULTIMA_ROTTA.DEATH_SUN.NO_ACTION' | translate }}
+        </div>
+      </div>
+
+      <ng-template #rollDiceTemplate>
+        <p class="instruction-text">{{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_DICE_INSTRUCTION' | translate }}</p>
+        <button mat-raised-button color="primary" (click)="rollDice()" class="dice-button">
+          <mat-icon>casino</mat-icon>
+          {{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_DICE' | translate }}
+        </button>
+        <p *ngIf="diceResult !== null" class="dice-result">{{ 'ULTIMA_ROTTA.DEATH_SUN.DICE_RESULT' | translate: { result: diceResult } }}</p>
+
+        <div *ngIf="selectedDeathSun" class="death-sun-result">
+          <strong><p class="death-sun-description">{{ (selectedDeathSun.description || '') | translate }}</p></strong>
+          <p class="death-sun-bonus">{{ 'ULTIMA_ROTTA.DEATH_SUN.TEST_BONUS' | translate }}: {{ selectedDeathSun.bonus }}</p>
+        </div>
+      </ng-template>
+    </div>
+  </mat-card-content>
+
+  <!-- Azioni (Pulsanti di chiusura e conferma) -->
+  <mat-card-actions align="end">
+    <app-field-button colorClass="btn-primary" icon="close"
+                tooltip="{{ 'ULTIMA_ROTTA.DEATH_SUN.CLOS' | translate }}" (buttonClick)="closeDialog()">
+      </app-field-button>
+  </mat-card-actions>
+</mat-card>

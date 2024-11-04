@@ -1,0 +1,69 @@
+.death-sun-card, .death-sun-dialog .mat-dialog-container {
+  max-width: 600px;
+  width: fit-content;
+  height: fit-content;
+  max-width: 90vw;
+  max-height: 90vh;
+  min-width: 300px;
+  min-height: 200px;
+  margin: auto;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  overflow: auto;
+}
+
+.mat-card-title {
+  display: flex;
+  align-items: center;
+  font-size: 1.5rem;
+  gap: 8px;
+}
+
+.highlight-text {
+  font-weight: bold;
+  color: #d32f2f;
+  font-size: 1.2rem;
+  margin-bottom: 12px;
+}
+
+.instruction-text, .dice-result, .action-text, .death-sun-description {
+  margin-top: 12px;
+  font-size: 1.2rem;
+}
+
+.dice-button, .close-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.death-sun-result {
+  margin-top: 16px;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  padding-top: 8px;
+  font-size: 1.2rem;
+}
+
+.bonus-input, .settings-field {
+  width: 100%;
+  margin-top: 20px;
+  font-size: 1.2rem;
+}
+
+.initial-settings {
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+
+.settings-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}

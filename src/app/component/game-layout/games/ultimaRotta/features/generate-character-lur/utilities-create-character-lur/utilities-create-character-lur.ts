@@ -1,7 +1,7 @@
 import { firstValueFrom } from 'rxjs';
 import { RandomNameService } from '../../../../../../../services/randomNameService';
 import { Ability, Attribute, CharacterSheetLUR, CharacterSheetLURTemplate, Genetic, Role, Trait, } from '../charachter-sheet-lur';
-import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails, itemsLUR } from '../data-sheet-lur';
+import { attributeKeys, genetic, geneticTraceMapping, mapIdGenetic, roles, roleTraceMapping, traits, traitTraceMapping, armorDetails, codeItemTableLUR, CLOTHES, WEAPON_1, WEAPON_2, EQUIP_1, EQUIP_2, SUSTENANCE, ELETTROLITA } from '../data-sheet-lur';
 import { FieldResizeConfig } from '../../../../../../../services/pdf.service';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 
@@ -13,7 +13,17 @@ export class UtilitiesCreateCharacterLur {
     static readonly attributeKeys = attributeKeys;
     static readonly traitsDefaultData = traits;
     static readonly armorDetails = armorDetails;
-    static readonly items = itemsLUR;
+    static readonly codeItemTableLUR = codeItemTableLUR;
+
+    static readonly items = {
+        "CLOTHES": CLOTHES,
+        "WEAPON_1": WEAPON_1,
+        "WEAPON_2": WEAPON_2,
+        "EQUIP_1": EQUIP_1,
+        "EQUIP_2": EQUIP_2,
+        "SUSTENANCE": SUSTENANCE,
+        "ELETTROLITA": ELETTROLITA
+    };
 
     static readonly pathTemplateFIle = 'assets/pdfFiles/{0}/ultima-rotta-template.pdf';
 
@@ -45,7 +55,7 @@ export class UtilitiesCreateCharacterLur {
         }
     }
 
-    private static fillGeneticValues(newPg: CharacterSheetLUR, genetic: Genetic) {
+    private static fillGeneticValues(newPg: CharacterSheetLUR, genetic: Genetic, translate: TranslationMessageService): void {
         const defaultGenetics: {
             [key in GeneticType]: {
                 life: number;
@@ -68,25 +78,25 @@ export class UtilitiesCreateCharacterLur {
 
         switch (genetic.code) {
             case GeneticType.Bios:
-                this.applyBiosGenetics(newPg);
+                this.applyBiosGenetics(newPg, translate);
                 break;
             case GeneticType.Nomade:
-                this.applyNomadeGenetics(newPg);
+                this.applyNomadeGenetics(newPg, translate);
                 break;
             case GeneticType.Umanoide:
-                this.applyUmanoideGenetics(newPg);
+                this.applyUmanoideGenetics(newPg, translate);
                 break;
         }
     }
 
-    static applyBiosGenetics(newPg: CharacterSheetLUR) {
+    static applyBiosGenetics(newPg: CharacterSheetLUR, translate: TranslationMessageService) {
         let abilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Bios)?.abilities as Ability[];
         newPg.genetic.abilities = structuredClone(abilities);
 
-        this.updateInventory(["WEAPON_1", "EQUIP_1"], newPg);
+        this.updateInventory(["WEAPON_1", "EQUIP_1"], newPg, translate);
     }
 
-    private static applyNomadeGenetics(newPg: CharacterSheetLUR): void {
+    private static applyNomadeGenetics(newPg: CharacterSheetLUR, translate: TranslationMessageService): void {
         const randomStats = this.getTwoDistinctRandomNumbers(8);
         randomStats.forEach((statIndex) => {
             const attribute = newPg.attributes?.[statIndex - 1];
@@ -95,7 +105,7 @@ export class UtilitiesCreateCharacterLur {
 
         let nomadeAbilities = this.geneticDefaultData.find((r) => r.code === GeneticType.Nomade)?.abilities as Ability[];
         newPg.genetic.abilities = structuredClone(nomadeAbilities);
-        this.updateInventory(["CLOTHES", "WEAPON_1"], newPg);
+        this.updateInventory(["CLOTHES", "WEAPON_1"], newPg, translate);
     }
 
     private static getTwoDistinctRandomNumbers(max: number): number[] {
@@ -106,7 +116,7 @@ export class UtilitiesCreateCharacterLur {
         return [first, second];
     }
 
-    private static applyUmanoideGenetics(newPg: CharacterSheetLUR): void {
+    private static applyUmanoideGenetics(newPg: CharacterSheetLUR, translate: TranslationMessageService): void {
         const genes = this.generateGenes();
         const statUpdates: string[] = [];
         const geneUpdates: string[] = [];
@@ -120,7 +130,7 @@ export class UtilitiesCreateCharacterLur {
             this.processGeneLevel(newPg, gene, geneUpdates, statUpdates, abilities)
         );
         newPg.genetic.genes = genes;
-        this.updateInventory(["CLOTHES", "SUSTENANCE"], newPg);
+        this.updateInventory(["CLOTHES", "SUSTENANCE"], newPg, translate);
     }
 
     private static generateGenes(): string[] {
@@ -283,13 +293,6 @@ export class UtilitiesCreateCharacterLur {
                 info.description = await translationMessageService.translate('ULTIMA_ROTTA.ARMOR.' + info.code);
             }
         });
-
-        let items = this.items;
-        items.forEach(async item => {
-            if (item.code && !item.description) {
-                item.description = await translationMessageService.translate('ULTIMA_ROTTA.ITEMS.' + item.code);
-            }
-        });
     }
 
     public static async initCharacterForTemplate(sessionId: string | undefined, translationMessageService: TranslationMessageService): Promise<CharacterSheetLURTemplate> {
@@ -317,7 +320,7 @@ export class UtilitiesCreateCharacterLur {
 
         try {
             // Fill genetic values
-            this.fillGeneticValues(newPg, newPg.genetic);
+            this.fillGeneticValues(newPg, newPg.genetic, translate);
 
             //Fill eccellence
             let randomStr = this.distinctRandomStat([StatsType.AGILITY, StatsType.COURAGE, StatsType.STRENGTH, StatsType.INTELLIGENCE, StatsType.MAGIC, StatsType.MANUALITY, StatsType.PERCEPTION, StatsType.SOCIALITY], []);
@@ -325,7 +328,7 @@ export class UtilitiesCreateCharacterLur {
             newPg.excellence = attribute?.description || '';
 
             // Fill Traits
-            this.applyTraits(newPg);
+            this.applyTraits(newPg, translate);
 
             let labelTraits = await translate.translate('ULTIMA_ROTTA.SHEET.TRAITS');
             newPg.traits = await this.getTraitDescription(newPg.traits, translate);
@@ -414,7 +417,7 @@ export class UtilitiesCreateCharacterLur {
                 }
             }
 
-            this.applyBonusRole(newPg, roleToSet);
+            this.applyBonusRole(newPg, roleToSet, translate);
             let persistedRoleAbility = newPg.role?.abilities ? structuredClone(newPg.role?.abilities as Ability[]) : [];
             newPg.role = roleToSet;
             newPg.role.abilities = persistedRoleAbility;
@@ -485,7 +488,7 @@ export class UtilitiesCreateCharacterLur {
         return traitsWithDescription;
     }
 
-    static applyBonusRole(newPg: CharacterSheetLUR, roleToSet: Role) {
+    static applyBonusRole(newPg: CharacterSheetLUR, roleToSet: Role, translate: TranslationMessageService) {
 
         switch (roleToSet.code) {
             case RoleType.LEADER: {
@@ -494,7 +497,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newPg.attributes, StatsType.INTELLIGENCE, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, 0, 2);
 
-                this.updateInventory(["WEAPON_2", "EQUIP_1", "EQUIP_2"], newPg);
+                this.updateInventory(["WEAPON_2", "EQUIP_1", "EQUIP_2"], newPg, translate);
 
                 break;
             }
@@ -504,7 +507,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.STRENGTH, 0, 2);
 
-                this.updateInventory(["WEAPON_1", "WEAPON_2", "SUSTENANCE"], newPg);
+                this.updateInventory(["WEAPON_1", "WEAPON_2", "SUSTENANCE"], newPg, translate);
 
                 break;
             }
@@ -513,7 +516,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.INTELLIGENCE, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.MAGIC, 0, 2);
-                this.updateInventory(["WEAPON_1", "SCRAPS", "SUSTENANCE"], newPg);
+                this.updateInventory(["EQUIP_2", "SCRAPS", "SUSTENANCE"], newPg, translate);
                 break;
             }
             case RoleType.DISCEPOLO_OSCURO: {
@@ -521,7 +524,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newPg.attributes, StatsType.INTELLIGENCE, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.MAGIC, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.SOCIALITY, 0, 2);
-                this.updateInventory(["WEAPON_1", "EQUIP_1", "SUSTENANCE"], newPg);
+                this.updateInventory(["WEAPON_1", "EQUIP_2", "SUSTENANCE"], newPg, translate);
                 break;
             }
             case RoleType.CANAGLIA: {
@@ -529,7 +532,7 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newPg.attributes, StatsType.AGILITY, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.MANUALITY, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.PERCEPTION, 0, 2);
-                this.updateInventory(["WEAPON_1", "EQUIP_1", "SCRAPS"], newPg);
+                this.updateInventory(["WEAPON_1", "EQUIP_1", "SCRAPS"], newPg, translate);
                 break;
             }
             case RoleType.RICOGNITORE: {
@@ -537,24 +540,46 @@ export class UtilitiesCreateCharacterLur {
                 this.updateAttributes(newPg.attributes, StatsType.AGILITY, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.COURAGE, 0, 2);
                 this.updateAttributes(newPg.attributes, StatsType.PERCEPTION, 0, 2);
-                this.updateInventory(["WEAPON_2", "EQUIP_2", "EQUIP_2"], newPg);
+                this.updateInventory(["WEAPON_2", "EQUIP_1", "EQUIP_2"], newPg, translate);
                 break;
             }
 
         }
     }
 
-    static updateInventory(itemCodes: string[], currentPG: CharacterSheetLUR) {
-        itemCodes.forEach((itemCode) => {
+     static async updateInventory(itemCodes: string[], currentPG: CharacterSheetLUR, translate: TranslationMessageService) {
+        itemCodes.forEach(async (itemCode:string) => {
             if (itemCode === 'SCRAPS') {
                 let diceResult = this.generateRandomNumber(8);
                 let scrap = diceResult * 10;
                 currentPG.scrap = currentPG.scrap ? currentPG.scrap + scrap : scrap;
             } else {
-                let item = this.items.find((i) => i.code === itemCode);
-                if (item) {
-                    currentPG.inventory?.push(item.description as string);
+                let correctTable: { [key: number]: string } = (this.items as any)[itemCode];
+                let diceResult = this.generateRandomNumber(8);
+                let randomItem  = correctTable[diceResult];
+                let descriptionItem = await translate.translate('ULTIMA_ROTTA.ITEMS.' + randomItem);
+
+                if(itemCode =="WEAPON_1" || itemCode =="WEAPON_2"){
+                    let weaponGradeNumber = this.generateRandomNumber(6);
+                    if(weaponGradeNumber < 5){
+                        let weaponGrade = await translate.translate('ULTIMA_ROTTA.ITEMS.LABEL_DEGRADATION');
+                        descriptionItem = descriptionItem + " - " + weaponGrade;
+                    }
                 }
+
+                if(itemCode =="SUSTENANCE" && diceResult == 8){
+                    let elettrolitaTypeNumber = this.generateRandomNumber(6);
+                    let elettroitaTable: { [key: number]: string } = (this.items as any)["ELETTROLITA"];
+                    let elettrolitaType = elettroitaTable[elettrolitaTypeNumber];
+                    let elettrolitaTypeDescription = await translate.translate('ULTIMA_ROTTA.ITEMS.ELETTROLITA.' + elettrolitaType);
+                    descriptionItem = descriptionItem + " - " + elettrolitaTypeDescription;
+                }
+
+                if (descriptionItem) {
+                    currentPG.inventory?.push(descriptionItem as string);
+                }
+
+              
             }
         });
     }
@@ -569,13 +594,13 @@ export class UtilitiesCreateCharacterLur {
         return trait as Trait;
     }
 
-    private static applyTraits(newPg: CharacterSheetLUR) {
+    private static applyTraits(newPg: CharacterSheetLUR, translate: TranslationMessageService): void {
         let trait = this.generateTraits(20);
-        this.switchTraits(newPg, trait);
+        this.switchTraits(newPg, trait, translate);
 
     }
 
-    private static switchTraits(newPg: CharacterSheetLUR, trait: Trait): void {
+    private static switchTraits(newPg: CharacterSheetLUR, trait: Trait, translate:TranslationMessageService): void {
         newPg.traits?.push(trait);
         try {
             switch (trait.code) {
@@ -633,7 +658,7 @@ export class UtilitiesCreateCharacterLur {
                 case TraitsType.ROTTMATORE: {
                     // Logic for ROTTAMATORE
                     this.updateAttributes(newPg.attributes, StatsType.MANUALITY, 1);
-                    this.updateInventory(["MECHANIC_KIT"], newPg);
+                    this.updateInventory(["MECHANIC_KIT"], newPg, translate);
                     let scrap = this.getMaxRandomValue(20, 3, 0) + 10;
                     newPg.scrap = newPg.scrap ? newPg.scrap + scrap : scrap;
                     break;
@@ -687,7 +712,7 @@ export class UtilitiesCreateCharacterLur {
                             if (availableTraits.length > 0) {
                                 const randomIndex = this.generateRandomNumber(availableTraits.length);
                                 const newTrait = availableTraits[randomIndex - 1];
-                                this.switchTraits(newPg, newTrait);
+                                this.switchTraits(newPg, newTrait, translate);
                             }
                         }
                     }
@@ -696,9 +721,19 @@ export class UtilitiesCreateCharacterLur {
                     }
                     break;
                 }
-                case TraitsType.DUE_VITE:
                 case TraitsType.ARMA_EXTRA_1:
+                    {
+                        // Logic for ARMA_EXTRA_1
+                        this.updateInventory(["WEAPON_1"], newPg, translate);
+                        break
+                    }
                 case TraitsType.ARMA_EXTRA_2:
+                    {
+                        // Logic for ARMA_EXTRA_2
+                        this.updateInventory(["WEAPON_2"], newPg, translate);
+                        break
+                    }
+                case TraitsType.DUE_VITE:
                 case TraitsType.RUOLO_FACILITATO_ARCANISTA_O_DISCEPOLO_OSCURO:
                 case TraitsType.RUOLO_FACILITATO_CANAGLIA_O_RICOGNITORE:
                 case TraitsType.RUOLO_FACILITATO_LEADER_O_SOLDATO:

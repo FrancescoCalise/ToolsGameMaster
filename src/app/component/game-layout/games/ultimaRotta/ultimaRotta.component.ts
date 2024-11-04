@@ -7,6 +7,8 @@ import { ToastService } from '../../../../services/toast.service';
 import { GameConfig } from '../../../../interface/GameConfig';
 import { ultimeRottaConfig } from './ultime-rotta-config';
 import { BreakpointService } from '../../../../services/breakpoint.service';
+import { MatDialog } from '@angular/material/dialog';
+import { DeathSunComponent } from './features/death-sun/death-sun.component';
 
 @Component({
   selector: 'app-game-ultima-rotta',
@@ -25,30 +27,36 @@ import { BreakpointService } from '../../../../services/breakpoint.service';
 
 })
 
-export class UltimaRottaComponent implements OnInit{
+export class UltimaRottaComponent implements OnInit {
   public gameName = '';
   public gameConfig: GameConfig = {} as GameConfig;
 
   showSiteMap = true;
   timerDisplay: string = '30:00';
-  solarDeathTestValue = 0;
-  isDarkIconVisible = true;
+  timerDisplayDefault: string = '30:00';
+  private timeDefualt: number = 1800; // 30 minuti in secondi
+  private timeRemaining: number = 1800; // 30 minuti in secondi
+
+  solarDeathTestValue:number = 0;
+  counterPermanentDeathOfSun: number = 0;
+
+  isDarkIconVisible = false;
   deviceType = '';
 
-  private timeRemaining: number = 1800; // 30 minuti in secondi
   private timerInterval: any;
   private isTimerRunning = false;
-  
+
   constructor(
     private toastService: ToastService,
     private cdr: ChangeDetectorRef,
     private route: ActivatedRoute,
-    private breakPointService: BreakpointService
+    private breakPointService: BreakpointService,
+    private dialog: MatDialog
   ) { }
 
   async ngOnInit(): Promise<void> {
     this.gameName = this.route.snapshot.data['gameName'];
-    if(!this.gameName){
+    if (!this.gameName) {
       throw new Error('route is not properly configured');
     }
     this.gameConfig = ultimeRottaConfig;
@@ -58,13 +66,13 @@ export class UltimaRottaComponent implements OnInit{
         this.deviceType = deviceType;
       });
   }
-  
+
   isSmallDevice(): boolean {
     return this.breakPointService.isSmallDevice(this.deviceType);
   }
-  
+
   // Funzione per avviare il timer
-  startTimer() {
+  handleTimer() {
     if (this.isTimerRunning) {
       // Se il timer è in esecuzione, fermalo
       clearInterval(this.timerInterval);
@@ -82,9 +90,43 @@ export class UltimaRottaComponent implements OnInit{
         } else {
           clearInterval(this.timerInterval);
           this.isTimerRunning = false;
+          this.onTimerComplete(); // Chiamata al metodo quando il timer scade
+
         }
       }, 1000);
     }
+  }
+
+  onTimerComplete() {
+    this.toastService.showInfo("Il timer è scaduto.");
+    this.openDeathSunDialog(); // Apri il dialog alla scadenza del timer
+    this.timeRemaining = this.timeDefualt; // Resetta il timer
+    this.timerDisplay = this.timerDisplayDefault; // Resetta il display del timer
+  }
+
+  initDeathSun(){
+    this.openDeathSunDialog(false);
+  }
+
+  openDeathSunDialog(showRollDice = true) {
+    this.dialog.open(DeathSunComponent, {
+      panelClass: 'death-sun-dialog',
+      data: {
+        solarDeathTestValue: this.solarDeathTestValue,
+        counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
+        showRollDice: showRollDice
+      }
+    }).afterClosed().subscribe((result) => {
+      if (result) {
+        this.solarDeathTestValue = result.deathSunBonus as number;
+        this.counterPermanentDeathOfSun = result.counterPermanentDeathOfSun as number;
+
+        if(this.solarDeathTestValue > 20) {
+          this.isDarkIconVisible = true;
+          this.solarDeathTestValue = 0;
+        }
+      }
+    })
   }
 
   // Formatta il tempo in formato mm:ss
@@ -94,7 +136,6 @@ export class UltimaRottaComponent implements OnInit{
     this.timerDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  
   onToggleSiteMap(show: boolean) {
     this.showSiteMap = show;
     this.cdr.detectChanges();

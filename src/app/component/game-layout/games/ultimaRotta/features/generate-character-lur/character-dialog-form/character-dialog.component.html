@@ -109,6 +109,13 @@
                                     rows="10"></textarea>
                             </mat-form-field>
                         </div>
+                        <div class="col-12 col-md-12 col-lg-12 d-flex flex-column">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>{{ 'ULTIMA_ROTTA.SHEET.BACKGROUND' | translate }}</mat-label>
+                                <textarea matInput [(ngModel)]="character.background" name="background" class="flex-grow-1"
+                                    rows="2"></textarea>
+                            </mat-form-field>
+                        </div>
                     </div>
                 </div>
             </mat-card-content>

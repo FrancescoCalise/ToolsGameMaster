@@ -32,7 +32,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
   readonly attributeKeys = UtilitiesCreateCharacterLur.attributeKeys;
   readonly traits = UtilitiesCreateCharacterLur.traitsDefaultData;
   readonly armorDetails = UtilitiesCreateCharacterLur.armorDetails;
-  readonly pathTemplateFIle = UtilitiesCreateCharacterLur.pathTemplateFIle.replace('{0}', this.translationMessageService.getLang());
+  readonly pathTemplateFIle = UtilitiesCreateCharacterLur.pathTemplateFIle.replace('{0}', this.translationMessageService.getLanguage());
 
   translatedTraitMessage$ = this.translationMessageService.translate('ULTIMA_ROTTA.SHEET.SELECT_TRAITS');
 

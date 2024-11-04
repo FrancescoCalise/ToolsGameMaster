@@ -1,28 +1,45 @@
-.table-wrapper {
-  flex: 1 1 300px;
-  min-width: 280px;
-  max-width: 100%;
-  background-color: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: 4px;
-  padding: 1rem;
-  box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 1rem;
+/* Stile di base per la tabella */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.table-notes {
-  margin-top: 1rem;
-  font-size: 0.9rem;
-  color: #555;
+/* Stile per le intestazioni delle colonne */
+th.mat-header-cell {
+  background-color: #3f51b5; /* Colore di sfondo dell'intestazione */
+  color: #ffffff;
+  font-weight: 600;
+  text-align: left;
+  padding: 12px 16px; /* Aggiunge padding alle celle dell'intestazione */
 }
 
-.table-notes ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+/* Stile per le celle della tabella */
+td.mat-cell {
+  padding: 12px 16px; /* Aggiunge padding alle celle di dati */
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+  color: #333333;
 }
 
-.table-notes li:before {
-  content: "• ";
-  color: #333;
+/* Colore di sfondo per le righe alternate */
+tr.mat-row:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* Colore di sfondo per le righe al passaggio del mouse */
+tr.mat-row:hover {
+  background-color: #f1f1f1;
+}
+
+/* Stile per rendere la tabella responsiva */
+@media (max-width: 768px) {
+  th.mat-header-cell, td.mat-cell {
+    padding: 10px;
+    font-size: 13px;
+  }
 }

@@ -1,46 +1,116 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
+import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { TableConfig } from '../../interface/TableConfig';
-import {  Router } from '@angular/router';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { TranslationMessageService } from '../../services/translation-message-service';
+import { SharedModule } from '../../shared/shared.module';
 
 @Component({
   selector: 'app-dynamic-table',
   templateUrl: './dynamic-table.component.html',
   styleUrls: ['./dynamic-table.component.css'],
   standalone: true,
-  imports: [
-    SharedModule
-  ],
+  imports: [SharedModule],
 })
-export class DynamicTableComponent implements OnInit {
-  notesToShow: { symbol: string; description: string }[] = [];
+export class DynamicTableComponent implements OnInit, OnDestroy {
+  @Input() table!: TableConfig; // Tabella originale non tradotta (input)
+  @Input() excludedColumns: string[] = []; // Colonne da escludere dalla traduzione
+  private originalTable!: TableConfig; // Copia della tabella originale per ricalcolare le traduzioni
+  translatedTable!: TableConfig; // Tabella d'appoggio tradotta
+  columnIds: string[] = []; // ID delle colonne originali
+  translatedColumnHeaders: string[] = []; // Intestazioni tradotte delle colonne
+  notesToShow: { symbol: string; description: string }[] = []; // Note tradotte
 
-  @Input() table!: TableConfig;
+  private langSubscription!: Subscription;
+  private defaultLang = '';
 
-  constructor(private router: Router){
-    
+  constructor(
+    private router: Router,
+    private translationService: TranslationMessageService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
+
+  ngOnDestroy(): void {
+    if (this.langSubscription) {
+      this.langSubscription.unsubscribe();
+    }
   }
 
-  ngOnInit(): void {
-    if (this.table == null) {
+  async ngOnInit(): Promise<void> {
+    if (!this.table) {
       this.router.navigate(['/']);
       throw new Error('TableConfig is null');
     }
 
-    this.generateNotes();
+    // Salviamo la tabella originale per ricalcolare le traduzioni
+    this.originalTable = structuredClone(this.table);
+    this.translatedTable = structuredClone(this.table);
+    this.columnIds = [...this.table.columns];
+
+    this.defaultLang = this.translationService.getLanguage();
+    await this.applyTranslations();
+    await this.generateNotes();
+    this.changeDetectorRef.detectChanges(); // Forza il rilevamento delle modifiche dopo la prima traduzione
+
+    // Sottoscrizione al cambiamento di lingua
+    this.langSubscription = this.translationService.onLanguageChange()
+    .subscribe(async (newLang) => {
+      if (this.defaultLang !== newLang) {
+
+
+        this.translatedTable = {} as TableConfig;
+        this.translatedColumnHeaders =  [];
+        this.notesToShow = [];
+
+        this.defaultLang = newLang;
+
+        this.translatedTable = structuredClone(this.originalTable);
+        await this.applyTranslations();
+        //await this.generateNotes();
+        this.changeDetectorRef.detectChanges(); // Forza il rilevamento delle modifiche
+      }
+    });
   }
 
-  generateNotes(): void {
+  async applyTranslations() {
+    // Traduzione delle intestazioni delle colonne, salvando quelle tradotte
+    this.translatedColumnHeaders = await Promise.all(
+      this.columnIds.map(async (columnId) => await this.translationService.translate(columnId))
+    );
+
+    // Traduzione dei valori nelle righe della tabella d'appoggio, escludendo le colonne specificate
+    this.translatedTable.data = await Promise.all(
+      this.translatedTable.data.map(async (row) => {
+        const translatedRow: { [key: string]: string } = {};
+        for (const key in row) {
+          // Traduci solo se il valore non è vuoto e la colonna non è inclusa in `excludedColumns`
+          translatedRow[key] = (!this.excludedColumns.includes(key) && row[key])
+            ? await this.translationService.translate(row[key])
+            : row[key];
+        }
+        return translatedRow;
+      })
+    );
+  }
+
+  async generateNotes(): Promise<void> {
     const notesMap = new Map<string, string>();
-    this.table.notes?.forEach(note => {
-      if (note != null && note.symbol != '' && !notesMap.has(note.symbol)) {
+
+    this.translatedTable.notes?.forEach((note) => {
+      if (note && note.symbol && !notesMap.has(note.symbol)) {
         notesMap.set(note.symbol, note.description);
       }
     });
-  
-    // Converti in array di oggetti con simbolo e descrizione
-    this.notesToShow = Array.from(notesMap, ([symbol, description]) => ({ symbol, description }));
+
+    // Traduzione delle note e salvataggio in `notesToShow`
+    this.notesToShow = await Promise.all(
+      Array.from(notesMap, async ([symbol, description]) => ({
+        symbol,
+        description: await this.translationService.translate(description),
+      }))
+    );
+
+    // Forza il rilevamento delle modifiche anche per le note
+    this.changeDetectorRef.detectChanges();
   }
-
-
 }

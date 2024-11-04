@@ -1,12 +1,12 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { SharedModule } from '../shared.module';
-import { LanguageService } from '../../services/language.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { Subscription } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
 import { CacheStorageService } from '../../services/cache-storage.service';
+import { TranslationMessageService } from '../../services/translation-message-service';
 
 @Component({
   selector: 'app-system-navbar',
@@ -30,16 +30,17 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
   environment: string = '';
   version: string = '';
   private breakpointSubscription: Subscription = new Subscription;
+  private langSubscription!: Subscription;
 
   constructor(
-    private languageService: LanguageService,
     private authService: AuthService,
     private cdr: ChangeDetectorRef,
     private router: Router,
     private swUpdate: SwUpdate,
-    private cacheStorageService: CacheStorageService
+    private cacheStorageService: CacheStorageService,
+    private translationMessageService: TranslationMessageService
   ) {
-    this.selectedLanguage = this.languageService.getLanguage();
+    this.selectedLanguage = this.translationMessageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
     this.selectedFlag = selectedLang ? selectedLang.flag : 'fi fi-it';
     this.environment = environment.production ? 'prod' : 'test';
@@ -70,17 +71,13 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
   }
 
   ngOnInit(): void {
-
-
-    // Ottieni la lingua salvata nella cache o quella di default
-    this.selectedLanguage = this.languageService.getLanguage();
-    this.updateFlag(this.selectedLanguage); // Aggiorna la flag corrispondente
+    this.updateFlag(this.selectedLanguage);
   }
 
   // Funzione chiamata quando si cambia la lingua
   changeLanguage(languageCode: string): void {
     this.selectedLanguage = languageCode;
-    this.languageService.setLanguage(languageCode); // Salva la lingua nel servizio
+    this.translationMessageService.setLanguage(languageCode); // Salva la lingua nel servizio
     this.updateFlag(languageCode); // Aggiorna la bandiera quando cambia la lingua
 
     const offcanvasElement = document.querySelector('#offcanvasNavbar');
@@ -90,6 +87,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
         (btnClose as HTMLElement).click();
       }
     }
+
+    
   }
 
   // Aggiorna la bandiera in base alla lingua selezionata
@@ -104,8 +103,8 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
   goToHome(): void {
     this.router.navigate(['/']); // Naviga verso la route della homepage
   }
-  
+
   public cleanCache() {
-      this.cacheStorageService.clear();
-  } 
+    this.cacheStorageService.clear();
+  }
 }

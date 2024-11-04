@@ -1,7 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { SharedModule } from '../shared.module';
 import { AuthService, PersonalUser } from '../../services/auth.service';
-import { LanguageService } from '../../services/language.service';
 import { Subscription } from 'rxjs';
 import { ToastService } from '../../services/toast.service';
 import { BreakpointService } from '../../services/breakpoint.service';
@@ -43,7 +42,6 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
 
   constructor(
     private authService: AuthService,
-    private languageService: LanguageService,
     private toastService: ToastService,
     private translationMessageService: TranslationMessageService,
     private breakpointService: BreakpointService,
@@ -58,7 +56,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
 
   async ngOnInit(): Promise<void> {
     this.deviceType = this.breakpointService.currentDeviceType;
-    this.languageSubscription = this.languageService.subscribeToLanguageChanges()
+    this.languageSubscription = this.translationMessageService.onLanguageChange()
       .subscribe(async (newLang: string) => {
         this.currentLang = newLang;
         const currentLink = this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'];
@@ -71,7 +69,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
         this.clearPayPalButtonContainer();
         this.renderPayPalDonateButton(this.linksDonateImg[this.currentLang] || this.linksDonateImg['IT'])
       });
-    this.currentLang = this.languageService.getLanguage();
+    this.currentLang = this.translationMessageService.getLanguage();
 
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
       async (user: PersonalUser | null) => {

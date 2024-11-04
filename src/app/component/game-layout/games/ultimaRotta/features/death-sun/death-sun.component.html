@@ -25,14 +25,13 @@
     </div>
 
     <div *ngIf="showRollDice">
-      <mat-divider class="settings-divider"></mat-divider>
 
       <!-- Contenuto del resto del componente -->
       <div *ngIf="deathSunBonus > 20; else rollDiceTemplate" class="bonus-greater-section">
-        <button mat-raised-button color="accent" (click)="rollSmallDice()" class="dice-button">
-          <mat-icon>casino</mat-icon>
-          {{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_SMALL_DICE' | translate }}
-        </button>
+        <app-field-button *ngIf="!diceRolled" class="dice-button d-flex justify-content-center align-items-center" colorClass="btn-accent" icon="casino"
+                tooltip="{{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_SMALL_DICE' | translate }}" (buttonClick)="rollSmallDice()" [isDisabled]="diceRolled">
+        </app-field-button>
+        <mat-divider class="settings-divider mt-2"></mat-divider>
         <p *ngIf="smallDiceResult !== null" class="dice-result">{{ 'ULTIMA_ROTTA.DEATH_SUN.DICE_RESULT' | translate : { result: smallDiceResult } }}</p>
 
         <div class="action-text" *ngIf="smallDiceResult === 1">{{ 'ULTIMA_ROTTA.DEATH_SUN.ACTION_RESULT_1' | translate }}</div>
@@ -40,28 +39,31 @@
         <div *ngIf="smallDiceResult !== 1 && smallDiceResult !== 6 && smallDiceResult !== null">
           {{ 'ULTIMA_ROTTA.DEATH_SUN.NO_ACTION' | translate }}
         </div>
+        <p *ngIf="counterPermanentDeathOfSun == 3" style="color: red;">{{ 'ULTIMA_ROTTA.DEATH_SUN.SUN_DEATH' | translate }}</p>
       </div>
 
       <ng-template #rollDiceTemplate>
         <p class="instruction-text">{{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_DICE_INSTRUCTION' | translate }}</p>
-        <button mat-raised-button color="primary" (click)="rollDice()" class="dice-button">
-          <mat-icon>casino</mat-icon>
-          {{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_DICE' | translate }}
-        </button>
+        <app-field-button *ngIf="!diceRolled" colorClass="btn-primary" icon="casino" [isDisabled]="diceRolled"
+                tooltip="{{ 'ULTIMA_ROTTA.DEATH_SUN.ROLL_DICE' | translate }}" (buttonClick)="rollDice()" class="d-flex justify-content-center align-items-center">
+        </app-field-button>
+
         <p *ngIf="diceResult !== null" class="dice-result">{{ 'ULTIMA_ROTTA.DEATH_SUN.DICE_RESULT' | translate: { result: diceResult } }}</p>
 
-        <div *ngIf="selectedDeathSun" class="death-sun-result">
+        <div *ngIf="selectedDeathSun && selectedDeathSun.code !== ''" class="death-sun-result">
+          <mat-divider class="settings-divider mb-2"></mat-divider>
           <strong><p class="death-sun-description">{{ (selectedDeathSun.description || '') | translate }}</p></strong>
-          <p class="death-sun-bonus">{{ 'ULTIMA_ROTTA.DEATH_SUN.TEST_BONUS' | translate }}: {{ selectedDeathSun.bonus }}</p>
+          <p class="death-sun-bonus">{{ 'ULTIMA_ROTTA.DEATH_SUN.TEST_BONUS' | translate }}: + {{ selectedDeathSun.bonus }}</p>
         </div>
       </ng-template>
     </div>
   </mat-card-content>
 
+  <mat-divider class="settings-divider mt-2"></mat-divider>
   <!-- Azioni (Pulsanti di chiusura e conferma) -->
-  <mat-card-actions align="end">
+  <mat-card-actions class="d-flex justify-content-center align-items-center">
     <app-field-button colorClass="btn-primary" icon="close"
-                tooltip="{{ 'ULTIMA_ROTTA.DEATH_SUN.CLOS' | translate }}" (buttonClick)="closeDialog()">
+                tooltip="{{ 'ULTIMA_ROTTA.DEATH_SUN.CLOSE' | translate }}" (buttonClick)="closeDialog()">
       </app-field-button>
   </mat-card-actions>
 </mat-card>

@@ -21,11 +21,16 @@ export class DeathSunComponent implements OnInit {
   deathSunBonus: number = 0;
   diceResult: number | null = null; // Risultato del dado, se lanciato
   smallDiceResult: number | null = null; // Risultato del dado a 6 facce per 20+
-  selectedDeathSun: DeathSun | null = null; // Elemento selezionato in base al risultato del dado
+  selectedDeathSun: DeathSun = {
+    result:"",
+    bonus:0,
+    code:""
+  };
   counterPermanentDeathOfSun: number = 0; // Nuovo contatore
+  resetCounter: boolean = false;
 
-  showRollDice:boolean = true;
-
+  showRollDice: boolean = true;
+  diceRolled:boolean = false;
   public tableDeathSun = [
     {
       result: "1-7",
@@ -63,9 +68,9 @@ export class DeathSunComponent implements OnInit {
       bonus: +1
     },
     {
-      result: "21",
+      result: "21-99",
       code: "SOLE_SPENTO",
-      bonus: 0
+      bonus: 21
     }
 
   ] as DeathSun[];
@@ -96,34 +101,36 @@ export class DeathSunComponent implements OnInit {
 
   closeDialog() {
     this.dialogRef.close(
-      { 
-        deathSunBonus: this.deathSunBonus, 
-        counterPermanentDeathOfSun: this.counterPermanentDeathOfSun 
+      {
+        deathSunBonus: this.deathSunBonus + this.selectedDeathSun.bonus as number,
+        counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
+        resetCounter: this.resetCounter
       });
   }
 
- 
+
 
   async rollDice() {
-    this.diceResult = Math.floor(Math.random() * 12) + 1; // Simula un lancio di dado a 6 facce
-    let result = this.diceResult + this.deathSunBonus;
+    let numerRolled = Math.floor(Math.random() * 12) + 1; // Simula un lancio di dado a 6 facce
+    let result = numerRolled + this.deathSunBonus;
+    this.diceResult = result;
     let message = await this.translationMessageService.translate('ULTIMA_ROTTA.DEATH_SUN.DICE_RESULT', { result });
 
     this.toastService.showSuccess(message, undefined, 5000);
 
-    this.selectedDeathSun = this.findDeathSun(result);
-    this.deathSunBonus += this.selectedDeathSun?.bonus || 0;
+    this.selectedDeathSun = this.findDeathSun(this.diceResult);
+    this.diceRolled = true;
   }
 
   // Trova l'elemento corrispondente in base al risultato del dado
-  findDeathSun(diceValue: number): DeathSun | null {
+  findDeathSun(diceValue: number): DeathSun {
     for (const entry of this.tableDeathSun) {
       const [min, max] = entry.result.split('-').map(Number);
       if (max ? diceValue >= min && diceValue <= max : diceValue === min) {
         return entry;
       }
     }
-    return null;
+    throw new Error("MORTE SOLARE NON TROVATA");
   }
 
   async rollSmallDice() {
@@ -136,9 +143,9 @@ export class DeathSunComponent implements OnInit {
     if (this.smallDiceResult === 1) {
       this.counterPermanentDeathOfSun++;
     } else if (this.smallDiceResult === 6) {
-      this.counterPermanentDeathOfSun = 0;
-      this.deathSunBonus = 0;
+      this.resetCounter = true;
     }
+    this.diceRolled =true;
   }
 }
 

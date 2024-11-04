@@ -51,12 +51,12 @@
       </div>
   
       <!-- Test Bonus -->
-      <div class="col-4 d-flex justify-content-center align-items-center">
+      <div *ngIf="solarDeathTestValue < 21" class="col-4 d-flex justify-content-center align-items-center">
         <h4 class="text-white text-center">{{ 'ULTIMA_ROTTA.DEATH_SUN.TEST_BONUS' | translate }}: + {{ solarDeathTestValue }}</h4>
       </div>
   
       <!-- Global Counter (mostrato solo se counterPermanentDeathOfSun > 0) -->
-      <div *ngIf="counterPermanentDeathOfSun > 0" class="col-3 d-flex justify-content-center align-items-center">
+      <div *ngIf="solarDeathTestValue > 20" class="col-3 d-flex justify-content-center align-items-center">
         <h4 class="text-white text-center">{{ 'ULTIMA_ROTTA.DEATH_SUN.GLOBAL_COUNTER' | translate }}: {{ counterPermanentDeathOfSun }}</h4>
       </div>
   

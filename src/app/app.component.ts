@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component,  isDevMode, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SystemNavBarComponent } from '../app/shared/system-navbar/system-navbar.component';
-import { LanguageService } from '../app/services/language.service';
 import { LoadingComponent } from './shared/loading/loading.component';
 import { SpinnerService } from './services/spinner.service';
 import { SystemFooterComponent } from './shared/system-footer/system-footer.component';
@@ -37,8 +36,6 @@ export class AppComponent implements OnInit {
  
   constructor(
     private translationMessage: TranslationMessageService,
-    private translate: TranslateService,
-    private languageService: LanguageService,
     private spinnerService: SpinnerService,
     private swUpdate: SwUpdate,
     private toastService: ToastService,
@@ -47,9 +44,9 @@ export class AppComponent implements OnInit {
   ) {
     console.log('Environment: ', environment);
     spinnerService.show("AppComponent.constructor");
-    let selectedLanguage = this.languageService.getLanguage();
-    this.translate.setDefaultLang(selectedLanguage);
-    this.translate.use(selectedLanguage);
+    let selectedLanguage = this.translationMessage.getLanguage();
+    this.translationMessage.setDefaultLang(selectedLanguage);
+    this.translationMessage.use(selectedLanguage);
     spinnerService.hide("AppComponent.constructor");
   }
 

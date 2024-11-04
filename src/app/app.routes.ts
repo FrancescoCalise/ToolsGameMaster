@@ -51,7 +51,8 @@ export const routes: Routes = [
             path: 'SHOW_WEAPONS',
             component: MultiDynamicTablesComponent,
             data: {
-              data: ultimaRottaWeapon
+              multiTable: ultimaRottaWeapon,
+              excludedColumns:["ULTIMA_ROTTA.COST", "ULTIMA_ROTTA.DURATION", "ULTIMA_ROTTA.DAMAGE"]
             }
           },
           {

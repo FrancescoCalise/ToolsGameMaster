@@ -1,5 +1,5 @@
-<div *ngIf="config" class="w-100 h-100">
-  <div *ngFor="let table of config">
-    <app-dynamic-table [table]="table"></app-dynamic-table>
+<div *ngIf="multiTable" class="w-100 h-100">
+  <div *ngFor="let table of multiTable">
+    <app-dynamic-table [table]="table" [excludedColumns]="excludedColumns"></app-dynamic-table>
   </div>
 </div>

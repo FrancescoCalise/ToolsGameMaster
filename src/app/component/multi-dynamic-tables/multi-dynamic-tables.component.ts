@@ -3,6 +3,7 @@ import { SharedModule } from '../../shared/shared.module';
 import { TableConfig } from '../../interface/TableConfig';
 import { ActivatedRoute } from '@angular/router';
 import { DynamicTableComponent } from '../dynamic-table/dynamic-table.component';
+import { TranslationMessageService } from '../../services/translation-message-service';
 
 @Component({
   selector: 'app-multi-dynamic-table',
@@ -16,16 +17,17 @@ import { DynamicTableComponent } from '../dynamic-table/dynamic-table.component'
 })
 export class MultiDynamicTablesComponent implements OnInit {
 
-  @Input() config!: TableConfig[];
-
-  constructor(private route: ActivatedRoute){
-    
+  @Input() multiTable!: TableConfig[];
+  @Input() excludedColumns!: string[];
+  constructor(private route: ActivatedRoute, private translationService: TranslationMessageService) {
   }
 
   ngOnInit(): void {
     this.route.data.subscribe((data) => {
-      this.config = data['data'];
+      this.multiTable = data['multiTable'];
+      this.excludedColumns = data['excludedColumns']
     });
-
   }
+
+  
 }

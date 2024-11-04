@@ -1,7 +1,7 @@
 import { FeatureConfig } from "../../../../interface/FeatureConfig";
 import { GameConfig } from "../../../../interface/GameConfig";
 import { SessionManagerComponenet } from "../../../session-manager/session-manger.component";
-import { TurnOrderComponent } from "./features/TurnOrderComponent";
+import { TurnOrderComponent } from "./features/turn-order/turn-order.component";
 
 
 export const ultimeRottaConfig: GameConfig =

@@ -32,10 +32,10 @@ export class UltimaRottaComponent implements OnInit {
   public gameConfig: GameConfig = {} as GameConfig;
 
   showSiteMap = true;
-  timerDisplay: string = '30:00';
-  timerDisplayDefault: string = '30:00';
-  private timeDefualt: number = 1800; // 30 minuti in secondi
-  private timeRemaining: number = 1800; // 30 minuti in secondi
+  timerDisplay: string = '00:05';
+  timerDisplayDefault: string = '00:05';
+  private timeDefualt: number = 5; // 30 minuti in secondi
+  private timeRemaining: number = 5; // 30 minuti in secondi
 
   solarDeathTestValue:number = 0;
   counterPermanentDeathOfSun: number = 0;
@@ -120,10 +120,14 @@ export class UltimaRottaComponent implements OnInit {
       if (result) {
         this.solarDeathTestValue = result.deathSunBonus as number;
         this.counterPermanentDeathOfSun = result.counterPermanentDeathOfSun as number;
-
+        let resetCounter = result.resetCounter;
         if(this.solarDeathTestValue > 20) {
           this.isDarkIconVisible = true;
+        }
+        
+        if(resetCounter){
           this.solarDeathTestValue = 0;
+          this.counterPermanentDeathOfSun = 0;
         }
       }
     })

@@ -32,7 +32,8 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     deviceType: string = '';
     private deviceTypeSub: Subscription = new Subscription;
     public hideLabel: boolean = false;
-
+    private langSubscription!: Subscription;
+    
     constructor(
         private dialog: MatDialog,
         private translationMessageService: TranslationMessageService,
@@ -46,6 +47,9 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
         if (this.deviceTypeSub) {
             this.deviceTypeSub.unsubscribe();
         }
+        if(this.langSubscription){
+            this.langSubscription.unsubscribe();
+        }
     }
 
     async ngOnInit(): Promise<void> {
@@ -58,6 +62,11 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
         if (!this.gameConfig.id) {
             throw new Error('GameConfig is required');
         }
+
+        this.langSubscription = this.translationMessageService.onLanguageChange()
+        .subscribe(async (newLang) => {
+            await this.translateGameConfig();
+        });
 
         await this.translateGameConfig();
         this.activatedUrl = this.router.url;

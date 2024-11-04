@@ -2,68 +2,68 @@ import { TableConfig } from "../../../../interface/TableConfig";
 
 export const ultimaRottaWeapon: TableConfig[] = [
   {
-    columns: ['Armi Bianche', 'Danno', 'Distanza', 'Costo'],
+    columns: ['ULTIMA_ROTTA.ARMOR_MELEE', 'ULTIMA_ROTTA.DAMAGE', 'ULTIMA_ROTTA.DISTANCE', 'ULTIMA_ROTTA.COST'],
     data: [
-      { 'Armi Bianche': 'Mani nude', 'Danno': '1', 'Distanza': '', 'Costo': 'GRATIS' },
-      { 'Armi Bianche': 'Tirapugni', 'Danno': 'D4', 'Distanza': '', 'Costo': '30 R' },
-      { 'Armi Bianche': 'Coltello da cucina', 'Danno': 'D4', 'Distanza': '', 'Costo': '20 R' },
-      { 'Armi Bianche': 'Coltello da caccia', 'Danno': 'D6', 'Distanza': 'Dist.10 m.', 'Costo': '40 R' },
-      { 'Armi Bianche': 'Spada corta', 'Danno': 'D8', 'Distanza': '', 'Costo': '60 R' },
-      { 'Armi Bianche': 'Accetta da lancio', 'Danno': 'D8', 'Distanza': 'Dist.10 m.', 'Costo': '80 R' },
-      { 'Armi Bianche': 'Spada, Ascia, Mazza', 'Danno': 'D10', 'Distanza': '', 'Costo': '100 R' },
-      { 'Armi Bianche': 'Ascia a due mani, Spadone', 'Danno': 'D12', 'Distanza': '', 'Costo': '200 R' }
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.BARE_HANDS', 'ULTIMA_ROTTA.DAMAGE': '1', 'ULTIMA_ROTTA.DISTANCE': '', 'ULTIMA_ROTTA.COST': 'Gratis' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.KNUCKLE_DUSTER', 'ULTIMA_ROTTA.DAMAGE': 'D4', 'ULTIMA_ROTTA.DISTANCE': '', 'ULTIMA_ROTTA.COST': '30 R' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.KITCHEN_KNIFE', 'ULTIMA_ROTTA.DAMAGE': 'D4', 'ULTIMA_ROTTA.DISTANCE': '', 'ULTIMA_ROTTA.COST': '20 R' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.HUNTING_KNIFE', 'ULTIMA_ROTTA.DAMAGE': 'D6', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_10_M', 'ULTIMA_ROTTA.COST': '40 R' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.SHORT_SWORD', 'ULTIMA_ROTTA.DAMAGE': 'D8', 'ULTIMA_ROTTA.DISTANCE': '', 'ULTIMA_ROTTA.COST': '60 R' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.THROWING_AXE', 'ULTIMA_ROTTA.DAMAGE': 'D8', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_10_M', 'ULTIMA_ROTTA.COST': '80 R' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.SWORD_AXE_MACE', 'ULTIMA_ROTTA.DAMAGE': 'D10', 'ULTIMA_ROTTA.DISTANCE': '', 'ULTIMA_ROTTA.COST': '100 R' },
+      { 'ULTIMA_ROTTA.ARMOR_MELEE': 'ULTIMA_ROTTA.WEAPONS.GREAT_AXE_SWORD', 'ULTIMA_ROTTA.DAMAGE': 'D12', 'ULTIMA_ROTTA.DISTANCE': '', 'ULTIMA_ROTTA.COST': '200 R' }
     ]
   },
   {
-    columns: ['Armi Energetiche', 'Danno', 'Tipo', 'Durata', 'Costo'],
+    columns: ['ULTIMA_ROTTA.ENERGY_WEAPONS', 'ULTIMA_ROTTA.DAMAGE', 'ULTIMA_ROTTA.TYPE', 'ULTIMA_ROTTA.DURATION', 'ULTIMA_ROTTA.COST'],
     data: [
-      { 'Armi Energetiche': 'Fulmilama', 'Danno': 'D12**', 'Tipo': '', 'Durata': '3*', 'Costo': '300 R' },
-      { 'Armi Energetiche': 'Folgore', 'Danno': 'D20**', 'Tipo': '2 Mani', 'Durata': '1*', 'Costo': '500 R' },
+      { 'ULTIMA_ROTTA.ENERGY_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.FULMILAMA', 'ULTIMA_ROTTA.DAMAGE': 'D12**', 'ULTIMA_ROTTA.TYPE': '', 'ULTIMA_ROTTA.DURATION': '3*', 'ULTIMA_ROTTA.COST': '300 R' },
+      { 'ULTIMA_ROTTA.ENERGY_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.LIGHTNING', 'ULTIMA_ROTTA.DAMAGE': 'D20**', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.TWO_HANDS', 'ULTIMA_ROTTA.DURATION': '1*', 'ULTIMA_ROTTA.COST': '500 R' }
     ],
     notes: [
-      { symbol: '*', idml: '', description: 'La durata indica per quanti combattimenti può venire accessa prima di essere ricaricata' },
-      { symbol: '**', idml: '', description: 'Il danno invariabile non viene modificato da nulla.' }
+      { symbol: '*',  description: 'ULTIMA_ROTTA.NOTE.DURATION_RECHARGE' },
+      { symbol: '**', description: 'ULTIMA_ROTTA.NOTE.DAMAGE_UNMODIFIABLE' }
     ]
   },
   {
-    columns: ['Armi Meccaniche', 'Danno', 'Dist', 'Tipo', 'Colpi', 'Costo'],
+    columns: ['ULTIMA_ROTTA.MECHANICAL_WEAPONS', 'ULTIMA_ROTTA.DAMAGE', 'ULTIMA_ROTTA.DISTANCE', 'ULTIMA_ROTTA.TYPE', 'ULTIMA_ROTTA.SHOTS', 'ULTIMA_ROTTA.COST'],
     data: [
-      { 'Armi Meccaniche': 'Sparachiodi minore', 'Danno': 'D6+Man', 'Dist': '20 m.', 'Tipo': '', 'Colpi': '10', 'Costo': '60 R' },
-      { 'Armi Meccaniche': 'Sparachiodi rapido', 'Danno': 'D6+Man', 'Dist': '20 m.', 'Tipo': 'Raffica***', 'Colpi': '20', 'Costo': '100 R' },
-      { 'Armi Meccaniche': 'Sparachiodi pesante', 'Danno': 'D10+Man', 'Dist': '50 m.', 'Tipo': '', 'Colpi': '6', 'Costo': '200 R' },
-      { 'Armi Meccaniche': 'Sparachiodi greve', 'Danno': 'D12+Man', 'Dist': '100 m.', 'Tipo': '', 'Colpi': '20', 'Costo': '300 R' },
-      { 'Armi Meccaniche': 'Sparachiodi da guerra', 'Danno': 'D12+Man', 'Dist': '100 m.', 'Tipo': 'Raffica***', 'Colpi': '40', 'Costo': '500 R' },
-      { 'Armi Meccaniche': 'Impalatore', 'Danno': 'D20+Man', 'Dist': '50 m.', 'Tipo': '', 'Colpi': '1', 'Costo': '500 R' }
+      { 'ULTIMA_ROTTA.MECHANICAL_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.MINOR_NAILGUN', 'ULTIMA_ROTTA.DAMAGE': 'D6+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_20_M', 'ULTIMA_ROTTA.TYPE': '', 'ULTIMA_ROTTA.SHOTS': '10', 'ULTIMA_ROTTA.COST': '60 R' },
+      { 'ULTIMA_ROTTA.MECHANICAL_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.RAPID_NAILGUN', 'ULTIMA_ROTTA.DAMAGE': 'D6+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_20_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.BURST_FIRE', 'ULTIMA_ROTTA.SHOTS': '20', 'ULTIMA_ROTTA.COST': '100 R' },
+      { 'ULTIMA_ROTTA.MECHANICAL_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.HEAVY_NAILGUN', 'ULTIMA_ROTTA.DAMAGE': 'D10+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_50_M', 'ULTIMA_ROTTA.TYPE': '', 'ULTIMA_ROTTA.SHOTS': '6', 'ULTIMA_ROTTA.COST': '200 R' },
+      { 'ULTIMA_ROTTA.MECHANICAL_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.GRAVE_NAILGUN', 'ULTIMA_ROTTA.DAMAGE': 'D12+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_100_M', 'ULTIMA_ROTTA.TYPE': '', 'ULTIMA_ROTTA.SHOTS': '20', 'ULTIMA_ROTTA.COST': '300 R' },
+      { 'ULTIMA_ROTTA.MECHANICAL_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.WAR_NAILGUN', 'ULTIMA_ROTTA.DAMAGE': 'D12+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_100_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.BURST_FIRE', 'ULTIMA_ROTTA.SHOTS': '40', 'ULTIMA_ROTTA.COST': '500 R' },
+      { 'ULTIMA_ROTTA.MECHANICAL_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.IMPALER', 'ULTIMA_ROTTA.DAMAGE': 'D20+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_50_M', 'ULTIMA_ROTTA.TYPE': '', 'ULTIMA_ROTTA.SHOTS': '1', 'ULTIMA_ROTTA.COST': '500 R' }
     ],
     notes: [
-      { symbol: 'Note', idml: '', description: 'Armi Meccaniche attacco su percesione / Danno su Manualità' },
+      { symbol: 'Note', description: 'ULTIMA_ROTTA.NOTE.MECHANICAL_WEAPONS' }
     ]
   },
   {
-    columns: ['Armi Folgoranti', 'Danno', 'Dist', 'Tipo', 'Costo'],
+    columns: ['ULTIMA_ROTTA.SHOCK_WEAPONS', 'ULTIMA_ROTTA.DAMAGE', 'ULTIMA_ROTTA.DISTANCE', 'ULTIMA_ROTTA.TYPE', 'ULTIMA_ROTTA.COST'],
     data: [
-      { 'Armi Folgoranti': 'Sparalampo', 'Danno': 'D10+Man', 'Dist': '100 m.', 'Tipo': '2 Mani', 'Costo': '500 R' },
-      { 'Armi Folgoranti': 'Sparafulmini', 'Danno': 'D10+Man', 'Dist': '100 m.', 'Tipo': '2 Mani, Raffica ***', 'Costo': '800 R' },
-      { 'Armi Folgoranti': 'Fogolrante', 'Danno': 'D12+Man', 'Dist': '100 m.', 'Tipo': '2 Mani', 'Costo': '1000 R' },
+      { 'ULTIMA_ROTTA.SHOCK_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.SPARKGUN', 'ULTIMA_ROTTA.DAMAGE': 'D10+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_100_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.TWO_HANDS', 'ULTIMA_ROTTA.COST': '500 R' },
+      { 'ULTIMA_ROTTA.SHOCK_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.LIGHTNING_GUN', 'ULTIMA_ROTTA.DAMAGE': 'D10+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_100_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.TWO_HANDS_BURST_FIRE', 'ULTIMA_ROTTA.COST': '800 R' },
+      { 'ULTIMA_ROTTA.SHOCK_WEAPONS': 'ULTIMA_ROTTA.WEAPONS.LIGHTNING_BLADE', 'ULTIMA_ROTTA.DAMAGE': 'D12+Man', 'ULTIMA_ROTTA.DISTANCE': 'ULTIMA_ROTTA.DIST_100_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.TWO_HANDS', 'ULTIMA_ROTTA.COST': '1000 R' }
     ],
     notes: [
-      { symbol: 'Note', idml: '', description: 'Armi Folgoranti attacco su percesione / Danno su Manualità' },
+      { symbol: 'Note', description: 'ULTIMA_ROTTA.NOTE.SHOCK_WEAPONS' }
     ]
   },
   {
-    columns: ['Bombe', 'Danno', 'Raggio', 'Tipo'],
+    columns: ['ULTIMA_ROTTA.BOMBS', 'ULTIMA_ROTTA.DAMAGE', 'ULTIMA_ROTTA.RADIUS', 'ULTIMA_ROTTA.TYPE'],
     data: [
-      { 'Bombe': 'B-Boom', 'Danno': 'D20', 'Dist': '10 m.', 'Tipo': 'Danno invariabile, lancio da 20m.' },
-      { 'Bombe': 'B-Flash', 'Danno': 'D10', 'Dist': '10 m.', 'Tipo': 'Test Coraggio (8) o restare inermi per 2D6 Giri' },
-      { 'ABombe': 'B-Gas', 'Danno': 'Var', 'Dist': '10 m.', 'Tipo': 'Test Forza (8) o subire 2D6 e-1 a tutti i test per 2D6 Giri, lancio 20 m' },
+      { 'ULTIMA_ROTTA.BOMBS': 'ULTIMA_ROTTA.WEAPONS.B_BOOM', 'ULTIMA_ROTTA.DAMAGE': 'D20', 'ULTIMA_ROTTA.RADIUS': 'ULTIMA_ROTTA.RADIUS_10_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.INVAR_DAMAGE_THROW_20_M' },
+      { 'ULTIMA_ROTTA.BOMBS': 'ULTIMA_ROTTA.WEAPONS.B_FLASH', 'ULTIMA_ROTTA.DAMAGE': 'D10', 'ULTIMA_ROTTA.RADIUS': 'ULTIMA_ROTTA.RADIUS_10_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.COURAGE_TEST_8_OR_PARALYZED_2D6' },
+      { 'ULTIMA_ROTTA.BOMBS': 'ULTIMA_ROTTA.WEAPONS.B_GAS', 'ULTIMA_ROTTA.DAMAGE': 'VAR', 'ULTIMA_ROTTA.RADIUS': 'ULTIMA_ROTTA.RADIUS_10_M', 'ULTIMA_ROTTA.TYPE': 'ULTIMA_ROTTA.STRENGTH_TEST_8_PENALTY_2D6' }
     ],
     notes: [
-      { symbol: 'Note', idml: '', description: 'Bombe attacco su percesione / Danno su invariabile' },
-      { symbol: 'Inermme', idml: '', description: 'Cosa fa inerme?' }
+      { symbol: 'Note', description: 'ULTIMA_ROTTA.NOTE.BOMB_WEAPONS' },
+      { symbol: 'Inermme',  description: 'ULTIMA_ROTTA.NOTE.INERT_EFFECT' }
     ]
   }
-
 ];
+
 
 export const ultimaRottaCriticDamage: TableConfig[] = [
   {
@@ -85,8 +85,8 @@ export const ultimaRottaCriticDamage: TableConfig[] = [
       { 'Risultato': '20', 'Area Maciullata': 'Testa', 'Modificatorti': '-2 Percezione e -2 Intelligenza' }
     ],
     notes: [
-      { symbol: 'Note', idml: '', description: 'Da 1 a 6 non succede nulla' },
-      { symbol: '->', idml: '', description: 'Da 7 a 20 Inerme +  modificatori' }
+      { symbol: 'Note', description: 'Da 1 a 6 non succede nulla' },
+      { symbol: '->',  description: 'Da 7 a 20 Inerme +  modificatori' }
     ]
   }
 ]

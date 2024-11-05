@@ -6,13 +6,13 @@
             <app-feature-area [gameConfig]="gameConfig" class="w-100 h-100"    (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
         </div>
 
-        <div class="p-2" [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
-            <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center">
+        <div [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
+            <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center w-100">
                 <ng-container *ngTemplateOutlet="deathSunTemplate"></ng-container>
             </div>
             <!-- Seconda Riga Scrollabile -->
-            <div class="row w-100 overflow-visibile mt-3">
-                <router-outlet class="w-100"></router-outlet>
+            <div class="row m-0 w-100 overflow-visibile mt-3">
+                <router-outlet class="w-100 m-0 p-0"></router-outlet>
             </div>
         </div>
     </div>
@@ -23,14 +23,13 @@
                 (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
         </div>
 
-        <div class="p-2"
-            [ngClass]="showSiteMap ? 'game-area-with-site-map-open-small-device' : 'game-area-with-site-map-closed-small-device'">
-            <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center p-0 m-0">
+        <div [ngClass]="showSiteMap ? 'game-area-with-site-map-open-small-device' : 'game-area-with-site-map-closed-small-device'">
+            <div class="ultima-rotta-info-bar d-flex justify-content-center align-items-center p-0 m-0 w-100">
                 <ng-container *ngTemplateOutlet="deathSunTemplate"></ng-container>
             </div>
 
-            <div class="row w-100 overflow-visibile mt-3">
-                <router-outlet class="w-100"></router-outlet>
+            <div class="row  m-0  w-100 overflow-visibile mt-3">
+                <router-outlet class="w-100 m-0 p-0"></router-outlet>
             </div>
         </div>
     </div>

@@ -1,13 +1,18 @@
-/* Stile di base per la tabella */
-table {
+/* Classe per il contenitore scrollabile */
+.table-wrapper {
   width: 100%;
-  border-collapse: collapse;
-  margin: 16px 0;
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  overflow: hidden;
+  overflow-x: auto; /* Abilita lo scroll orizzontale */
+  overflow-y: hidden; /* Disabilita lo scroll verticale */
+  -webkit-overflow-scrolling: touch; /* Supporto per scorrimento fluido su dispositivi touch */
+  padding-bottom: 1rem; /* Spazio extra per evitare che l'ombra tagli il contenuto */
 }
+
+/* Margine interno per le celle */
+.table-wrapper table {
+  min-width: 100%; /* Imposta la larghezza minima per evitare il ridimensionamento forzato */
+  border-collapse: collapse;
+}
+
 
 /* Stile per le intestazioni delle colonne */
 th.mat-header-cell {

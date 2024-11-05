@@ -121,6 +121,7 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     }
 
     openFeature(component: any, config: MatDialogConfig = {}) {
+        
         const dialogConfig = {
             width: '90vw',
             height: '90vh',

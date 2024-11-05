@@ -1,12 +1,14 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
+import { MatTableDataSource } from '@angular/material/table';
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { SharedFields } from '../../../../../../shared/shared-fields.module';
-import { MatTableDataSource } from '@angular/material/table';
+import { CacheStorageService } from '../../../../../../services/cache-storage.service';
 
 interface Character {
   name: string;
   initiative: number;
+  health: number;
 }
 
 @Component({
@@ -14,47 +16,66 @@ interface Character {
   templateUrl: './turn-order.component.html',
   styleUrls: ['./turn-order.component.css'],
   standalone: true,
-  imports: [
-    SharedModule,
-    SharedFields
-  ]
+  imports: [SharedModule, SharedFields]
 })
-export class TurnOrderComponent {
+export class TurnOrderComponent implements OnInit, OnDestroy {
   characters: Character[] = [];
   dataSource = new MatTableDataSource(this.characters);
-  displayedColumns: string[] = ['name', 'initiative', 'actions'];
+  displayedColumns: string[] = ['name', 'initiative', 'health', 'actions'];
 
-  constructor(private dialogRef: MatDialogRef<TurnOrderComponent>) {}
+  @ViewChild('characterName') characterName!: ElementRef<HTMLInputElement>;
+  @ViewChild('characterInitiative') characterInitiative!: ElementRef<HTMLInputElement>;
+  @ViewChild('characterHealth') characterHealth!: ElementRef<HTMLInputElement>;
 
-  close() {
-    this.dialogRef.close();
+  constructor(
+    private dialogRef: MatDialogRef<TurnOrderComponent>,
+    private cacheStorageService: CacheStorageService
+  ) {}
+
+  ngOnInit(): void {
+    const charactersCached = this.cacheStorageService.getItem(this.cacheStorageService.turnOrderKey);
+    this.characters = charactersCached ? charactersCached : [];
+    if (this.characters.length > 0) {
+      this.dataSource.data = [...this.characters];
+    }
   }
 
-  addCharacter(name: string, initiative?: number): void {
-    // If no initiative value is provided, roll a random initiative
-    const initValue = initiative !== undefined ? initiative : this.rollInitiative();
-    this.characters.push({ name, initiative: initValue });
-    this.updateDataSource();
+  ngOnDestroy(): void {
+    this.cacheStorageService.setItem(this.cacheStorageService.turnOrderKey, this.characters);
   }
 
-  rollInitiative(): number {
-    return Math.floor(Math.random() * 20) + 1;
+  addCharacter(name: string, initiative: number, health: number): void {
+    name = name.trim();
+    initiative = initiative || 0;
+    health = health || 0;
+
+    if (name) {
+      this.characters.push({ name, initiative, health });
+      this.sortCharacters(); // Sort after adding a character
+      this.dataSource.data = [...this.characters]; // Update the data source
+
+      // Clear inputs after adding the character
+      this.characterName.nativeElement.value = '';
+      this.characterInitiative.nativeElement.value = '';
+      this.characterHealth.nativeElement.value = '';
+      this.characterName.nativeElement.focus(); // Focus back on name input
+    }
   }
 
-  rollInitiativeForCharacter(character: Character): void {
-    character.initiative = this.rollInitiative();
-    this.updateDataSource();
+  removeCharacter(character: Character): void {
+    const index = this.characters.indexOf(character);
+    if (index >= 0) {
+      this.characters.splice(index, 1);
+      this.dataSource.data = [...this.characters]; // Update the data source
+    }
   }
 
-  rollInitiativeForAll(): void {
-    this.characters.forEach((character) => {
-      character.initiative = this.rollInitiative();
-    });
-    this.updateDataSource();
-  }
-
-  private updateDataSource(): void {
+  sortCharacters(): void {
     this.characters.sort((a, b) => b.initiative - a.initiative);
-    this.dataSource.data = this.characters;
+    this.dataSource.data = [...this.characters]; // Update the data source to reflect changes
+  }
+
+  close(): void {
+    this.dialogRef.close();
   }
 }

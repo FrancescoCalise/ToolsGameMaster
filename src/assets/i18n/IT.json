@@ -382,7 +382,7 @@
             "MECHANICAL_WEAPONS": "Armi Meccaniche attacco su percezione / Danno su Manualità",
             "SHOCK_WEAPONS": "Armi Folgoranti attacco su percezione / Danno su Manualità",
             "BOMB_WEAPONS": "Bombe attacco su percezione / Danno invariabile",
-            "INERT_EFFECT": "Effetto inerte: cosa fa inerme?"
+            "INERT_EFFECT": "Non puoi compiere Azioni e non puoi Parare finche sei inerme."
         },
         "TABLE":{
             "CRITIC":{
@@ -437,6 +437,22 @@
         "SHOW_CRITIC_DAMAGE": "Danni critici",
         "TOOLTIP_SHOW_CRITIC_DAMAGE": "Visualizza i danni critici",
         "CREATE_CHARACTER_ULTIMA_ROTTA": "Generatore personaggi",
-        "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Genera un personaggio per l'ultima rotta"
+        "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Genera un personaggio per l'ultima rotta",
+        "TURN_ORDER_FEATURE": {
+            "TITLE": "Ordine di Turno",
+            "CHARACTER_NAME": "Nome del Personaggio",
+            "INITIATIVE": "Iniziativa",
+            "HEALTH": "Salute",
+            "ADD": "Aggiungi Personaggio",
+            "CLOSE": "Chiudi",
+            "NAME_COLUMN": "Nome",
+            "INITIATIVE_COLUMN": "Iniziativa",
+            "HEALTH_COLUMN": "Salute",
+            "ACTIONS_COLUMN": "Azioni",
+            "NAME_PLACEHOLDER": "Inserisci nome",
+            "INITIATIVE_PLACEHOLDER": "Inserisci iniziativa",
+            "HEALTH_PLACEHOLDER": "Inserisci salute",
+            "DELETE": "Elimina"
+        }
     }
 }

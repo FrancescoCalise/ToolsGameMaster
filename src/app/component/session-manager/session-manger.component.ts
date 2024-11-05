@@ -33,7 +33,6 @@ export class SessionManagerComponenet implements OnInit {
     default: false
   };
   showForm: boolean = false;
-  editingSession: boolean = false;
 
   defaultSession: SessionManager = {
     sessionName: '',
@@ -86,34 +85,19 @@ export class SessionManagerComponenet implements OnInit {
     }
   }
 
-  toggleForm(): void {
-    this.showForm = !this.showForm;
-    if (!this.editingSession) {
-      this.newSession = {
-        sessionName: '',
-        gameName: this.gameName,
-        default: false
-      }; // Reset form when opening or closing if not editing
-    }
-    this.editingSession = false;
-  }
-
   async createNewSession(): Promise<void> {
-    if (this.editingSession) {
-      const index = this.sessions.findIndex(session =>
-        session.id === this.newSession.id &&
-        session.gameName === this.gameName &&
-        session.ownerId === this.user?.uid);
+    const index = this.sessions.findIndex(session =>
+      session.id === this.newSession.id &&
+      session.gameName === this.gameName &&
+      session.ownerId === this.user?.uid);
 
-      if (index !== -1) {
-        this.sessions[index] = { ...this.newSession };
-
-        await this.firestoreSessionManagerService.updateItem(this.newSession);
+    if (index !== -1) {
+      this.sessions[index] = { ...this.newSession };
+      await this.firestoreSessionManagerService.updateItem(this.newSession);
         if (this.newSession.default) {
           this.cacheService.setItem(this.cacheService.defaultSession, this.newSession)
         };
-      }
-    } else {
+    }else{
       if (this.newSession.sessionName) {
 
         if (this.sessions.length == 0) {
@@ -126,13 +110,21 @@ export class SessionManagerComponenet implements OnInit {
         this.sessions.push({ ...this.newSession });
       }
     }
-    this.toggleForm();
+
+    this.toggleForm(false);
+  }
+
+  toggleForm(open:boolean){
+    this.showForm = open;
+    this.newSession = {
+      sessionName: '',
+      gameName: '',
+      default: false
+    }
   }
 
   editSession(session: SessionManager): void {
     this.newSession = { ...session };
-
-    this.editingSession = !this.editingSession;
     this.showForm = !this.showForm;
   }
 

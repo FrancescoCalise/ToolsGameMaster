@@ -8,6 +8,7 @@ export class CacheStorageService {
   public readonly defaultSession = 'DefaultSession';
   public readonly translationCache = 'translationCache';
   public readonly appLanguageKey = 'appLanguage';
+  public readonly turnOrderKey = 'turnOrder';
   
   constructor() { }
 

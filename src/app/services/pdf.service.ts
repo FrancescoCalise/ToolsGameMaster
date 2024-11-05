@@ -15,6 +15,7 @@ export class PdfService {
     // Carica il PDF e ottieni il modulo
     async loadPdf(pdfPath: string): Promise<void> {
         try {
+            debugger
             const pdfBytes = await fetch(pdfPath).then(res => res.arrayBuffer());
             this.pdfDoc = await PDFDocument.load(pdfBytes);
             this.form = this.pdfDoc.getForm();

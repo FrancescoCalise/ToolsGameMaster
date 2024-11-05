@@ -381,7 +381,7 @@
             "MECHANICAL_WEAPONS": "Mechanical Weapons: attack on perception / Damage on Manual Dexterity",
             "SHOCK_WEAPONS": "Shock Weapons: attack on perception / Damage on Manual Dexterity",
             "BOMB_WEAPONS": "Bomb Weapons: attack on perception / Damage unmodifiable",
-            "INERT_EFFECT": "Inert effect: what does inert do?"
+            "INERT_EFFECT": "You cannot perform Actions and cannot Parry while you are helpless."
         },
         "TABLE": {
             "CRITIC": {
@@ -436,6 +436,22 @@
         "SHOW_CRITIC_DAMAGE": "Critical Damage",
         "TOOLTIP_SHOW_CRITIC_DAMAGE": "View critical damage",
         "CREATE_CHARACTER_ULTIMA_ROTTA": "Character Generator",
-        "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Generate a character for The Last Route"
+        "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Generate a character for The Last Route",
+        "TURN_ORDER_FEATURE": {
+            "TITLE": "Turn Order",
+            "CHARACTER_NAME": "Character Name",
+            "INITIATIVE": "Initiative",
+            "HEALTH": "Health",
+            "ADD": "Add Character",
+            "CLOSE": "Close",
+            "NAME_COLUMN": "Name",
+            "INITIATIVE_COLUMN": "Initiative",
+            "HEALTH_COLUMN": "Health",
+            "ACTIONS_COLUMN": "Actions",
+            "NAME_PLACEHOLDER": "Enter name",
+            "INITIATIVE_PLACEHOLDER": "Enter initiative",
+            "HEALTH_PLACEHOLDER": "Enter health",
+            "DELETE": "Delete"
+    }
     }
 }

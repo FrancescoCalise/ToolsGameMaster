@@ -5,7 +5,7 @@
       colorClass="btn-primary" 
       icon="add" 
       tooltip="{{ 'SESSION_MANAGER.CREATE_NEW_SESSION' | translate }}" 
-      (buttonClick)="toggleForm()">
+      (buttonClick)="toggleForm(true)">
     </app-field-button>
   </div>
 
@@ -17,12 +17,12 @@
         </label>
         <input type="text" id="sessionName" class="form-control" [(ngModel)]="newSession.sessionName" name="sessionName" required style="flex: 1;">
       </div>
-  
+    </form>
       <div class="mb-3 d-flex flex-row justify-content-center">
         <app-field-button colorClass="btn-success" icon="save" tooltip="{{ 'SESSION_MANAGER.SAVE_SESSION' | translate }}" [isDisabled]="!sessionForm.valid"   (buttonClick)="sessionForm.ngSubmit.emit()"> </app-field-button>
-        <app-field-button colorClass="btn-secondary ms-2" icon="cancel" tooltip="{{ 'SESSION_MANAGER.CANCEL' | translate }}" (buttonClick)="toggleForm()"> </app-field-button>
+        <app-field-button colorClass="btn-secondary ms-2" icon="cancel" tooltip="{{ 'SESSION_MANAGER.CANCEL' | translate }}" (buttonClick)="toggleForm(false)"> </app-field-button>
       </div>
-    </form>
+    
   </div>
 
   <div *ngIf="sessions.length > 0; else noSessions" class="row">

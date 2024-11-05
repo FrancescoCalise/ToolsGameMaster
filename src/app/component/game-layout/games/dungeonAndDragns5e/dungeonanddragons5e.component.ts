@@ -27,6 +27,7 @@ import { dnd5eConfig } from './dnd-5e-config';
   ]
 })
 export class DungeonAndDragons5eComponent extends GameBaseComponent implements OnInit {
+
   override async ngOnInit(): Promise<void> {
     this.gameConfig = dnd5eConfig;
     await super.ngOnInit();

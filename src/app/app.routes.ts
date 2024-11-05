@@ -11,7 +11,7 @@ import { MultiDynamicTablesComponent } from './component/multi-dynamic-tables/mu
 import { DungeonAndDragons5eComponent } from './component/game-layout/games/dungeonAndDragns5e/dungeonanddragons5e.component';
 import { UltimaRottaComponent } from './component/game-layout/games/ultimaRotta/ultimaRotta.component';
 import { ultimaRottaCriticDamage, ultimaRottaWeapon } from './component/game-layout/games/ultimaRotta/ultima-rotta-table';
-import { SessionManagerComponenet } from './component/session-manager/session-manger.component';
+import { SessionManagerComponenet } from './component/game-layout/feature-sitemap/session-manager/session-manger.component';
 import { GenerateCharacterLurComponent } from './component/game-layout/games/ultimaRotta/features/generate-character-lur/generate-character-lur.component';
 
 export const routes: Routes = [

@@ -1,9 +1,9 @@
 import { Component, ElementRef, ViewChild, Input, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
-import { SharedModule } from '../../../../../../shared/shared.module';
-import { SharedFields } from '../../../../../../shared/shared-fields.module';
-import { CacheStorageService } from '../../../../../../services/cache-storage.service';
+import { SharedModule } from '../../../../shared/shared.module';
+import { SharedFields } from '../../../../shared/shared-fields.module';
+import { CacheStorageService } from '../../../../services/cache-storage.service';
 
 interface Character {
   name: string;

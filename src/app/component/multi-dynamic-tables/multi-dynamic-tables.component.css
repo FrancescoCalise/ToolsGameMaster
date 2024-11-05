@@ -1,0 +1,12 @@
+.table-card {
+    margin: 0 auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    overflow-x: auto; /* Abilita lo scroll orizzontale se necessario */
+  }
+  
+  .table-card mat-card-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  

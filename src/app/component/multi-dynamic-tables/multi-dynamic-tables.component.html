@@ -1,5 +1,16 @@
 <div *ngIf="multiTable" class="w-100 h-100">
-  <div *ngFor="let table of multiTable">
-    <app-dynamic-table [table]="table" [excludedColumnsToTranslate]="excludedColumnsToTranslate" class="m-0 p-0"></app-dynamic-table>
+  <div *ngFor="let table of multiTable" class="mb-4">
+    <mat-card class="table-card">
+      <mat-card-header *ngIf="table?.title">
+        <mat-card-title>{{ table.title }}</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <app-dynamic-table 
+          [table]="table" 
+          [excludedColumnsToTranslate]="excludedColumnsToTranslate" 
+          class="m-0 p-0">
+        </app-dynamic-table>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

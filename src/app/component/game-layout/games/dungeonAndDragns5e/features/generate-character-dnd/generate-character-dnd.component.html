@@ -1,0 +1,51 @@
+<div class="w-100 h-100 p-3">
+    <div class="d-flex mb-3 w-100 flex-column">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1>
+                <strong>{{ 'DUNGEON_AND_DRAGONS.CREATE_CHARACTER.CREATE_CHARACTER' | translate }}</strong>
+            </h1>
+            <div class="d-flex">
+                <app-field-button colorClass="btn-success me-2" icon="casino"
+                    (buttonClick)="generateRandom(true)"></app-field-button>
+                <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="printPDF()"></app-field-button>
+                <app-field-button colorClass="btn-primary" icon="add"
+                    (buttonClick)="openCharacterDialog()"></app-field-button>
+            </div>
+        </div>
+
+        <div class="d-flex mt-3">
+            <app-session-manager-widget class="me-2" (sessionLoaded)="onSessionLoaded($event)">
+            </app-session-manager-widget>
+        </div>
+    </div>
+
+
+    <div *ngIf="characters.length > 0; else noCharacters" class="row g-2">
+        <div *ngFor="let character of characters" class="col-6 col-md-4 col-lg-2">
+            <mat-card class="h-100 w-100">
+                <mat-card-header class="text-center">
+                    <mat-card-title>
+                        <h4>{{ character.name }}</h4>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content class="text-center">
+                    <h5>{{ character?.genetic_and_role }}</h5>
+                </mat-card-content>
+                <mat-card-actions class="d-flex justify-content-center">
+                    <app-field-button colorClass="btn-primary me-2" icon="edit"
+                        (buttonClick)="openCharacterDialog(character)">
+                    </app-field-button>
+                    <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="printPDF(character)">
+                    </app-field-button>
+                    <app-field-button colorClass="btn-danger" icon="delete" (buttonClick)="deleteCharacter(character)">
+                    </app-field-button>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+
+
+    <ng-template #noCharacters>
+        <div class="alert alert-info text-center">{{ 'DUNGEON_AND_DRAGONS.CREATE_CHARACTER.NO_CHARACTERS' | translate }}</div>
+    </ng-template>
+</div>

@@ -22,10 +22,16 @@ export class MultiDynamicTablesComponent implements OnInit {
   constructor(private route: ActivatedRoute, private translationService: TranslationMessageService) {
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.route.data.subscribe((data) => {
       this.multiTable = data['multiTable'];
       this.excludedColumnsToTranslate = data['excludedColumnsToTranslate']
+    });
+
+    this.multiTable.forEach(async table => {
+      if(table.title){
+        table.title = await this.translationService.translate(table.title);
+      }
     });
   }
 

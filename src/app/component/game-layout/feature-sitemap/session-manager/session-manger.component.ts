@@ -1,15 +1,15 @@
 import { Component, Inject, OnInit, } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
-import { ToastService } from '../../services/toast.service';
+import { SharedModule } from '../../../../shared/shared.module';
+import { ToastService } from '../../../../services/toast.service';
 import { ActivatedRoute } from '@angular/router';
-import { SessionManager } from '../../interface/Document/SessionManager';
-import { SESSION_MANAGER_SERVICE } from '../../firebase-provider';
-import { FirestoreService } from '../../services/firestore.service';
-import { AuthService, PersonalUser } from '../../services/auth.service';
+import { SessionManager } from '../../../../interface/Document/SessionManager';
+import { SESSION_MANAGER_SERVICE } from '../../../../firebase-provider';
+import { FirestoreService } from '../../../../services/firestore.service';
+import { AuthService, PersonalUser } from '../../../../services/auth.service';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
-import { SpinnerService } from '../../services/spinner.service';
-import { CacheStorageService } from '../../services/cache-storage.service';
-import { SharedFields } from '../../shared/shared-fields.module';
+import { SpinnerService } from '../../../../services/spinner.service';
+import { CacheStorageService } from '../../../../services/cache-storage.service';
+import { SharedFields } from '../../../../shared/shared-fields.module';
 
 @Component({
   selector: 'app-session-manger',

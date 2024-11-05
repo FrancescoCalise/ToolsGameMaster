@@ -1,36 +1,40 @@
-import { Component, OnInit } from '@angular/core';
-
-import { Router } from '@angular/router';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
 import { PdfService } from '../../../../services/pdf.service';
+import { MatDialog } from '@angular/material/dialog';
+import { BreakpointService } from '../../../../services/breakpoint.service';
+import { ToastService } from '../../../../services/toast.service';
+import { GameConfig } from '../../../../interface/GameConfig';
+import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
+import { FeatureAreaComponent } from '../../feature-sitemap/feature-area.component';
+import { GameBaseComponent } from '../base/game-base.component';
+import { dnd5eConfig } from './dnd-5e-config';
 
 @Component({
   selector: 'app-game-dugeon-and-dragons-5e',
   templateUrl: './dungeonanddragons5e.component.html',
-  styleUrl: './dungeonanddragons5e.component.css',
+  styleUrls: ['./dungeonanddragons5e.component.css'],
   standalone: true,
   imports: [
-    SharedModule
+    SharedModule,
+    DynamicTableComponent,
+    FeatureAreaComponent,
+    RouterOutlet,
   ],
-
+  providers: [
+    FeatureAreaComponent,
+  ]
 })
-
-export class DungeonAndDragons5eComponent implements OnInit {
-
-  constructor(private router: Router, private pdfService: PdfService) {
-
-  }
-
-  async ngOnInit(): Promise<void> {
-    //this.readPDF();
+export class DungeonAndDragons5eComponent extends GameBaseComponent implements OnInit {
+  override async ngOnInit(): Promise<void> {
+    this.gameConfig = dnd5eConfig;
+    await super.ngOnInit();
   }
 
   async readPDF() {
-    await this.pdfService.loadPdf("assets/pdfFiles/IT/dnd-5e-template.pdf")
-    let fields = await this.pdfService.getAllFields();
-    
+    await this.pdfService.loadPdf("assets/pdfFiles/IT/dnd-5e-template.pdf");
+    const fields = await this.pdfService.getAllFields();
     console.log(fields);
   }
-
-
 }

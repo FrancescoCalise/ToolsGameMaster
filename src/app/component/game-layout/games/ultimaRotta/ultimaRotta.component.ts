@@ -9,6 +9,7 @@ import { ultimeRottaConfig } from './ultime-rotta-config';
 import { BreakpointService } from '../../../../services/breakpoint.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DeathSunComponent } from './features/death-sun/death-sun.component';
+import { GameBaseComponent } from '../base/game-base.component';
 
 @Component({
   selector: 'app-game-ultima-rotta',
@@ -27,11 +28,8 @@ import { DeathSunComponent } from './features/death-sun/death-sun.component';
 
 })
 
-export class UltimaRottaComponent implements OnInit {
-  public gameName = '';
-  public gameConfig: GameConfig = {} as GameConfig;
-
-  showSiteMap = true;
+export class UltimaRottaComponent extends GameBaseComponent implements OnInit {
+ 
   timerDisplay: string = '30:00';
   timerDisplayDefault: string = '30:00';
   private timeDefualt: number = 1800; // 30 minuti in secondi
@@ -41,34 +39,14 @@ export class UltimaRottaComponent implements OnInit {
   counterPermanentDeathOfSun: number = 0;
 
   isDarkIconVisible = false;
-  deviceType = '';
+ 
 
   private timerInterval: any;
   private isTimerRunning = false;
 
-  constructor(
-    private toastService: ToastService,
-    private cdr: ChangeDetectorRef,
-    private route: ActivatedRoute,
-    private breakPointService: BreakpointService,
-    private dialog: MatDialog
-  ) { }
-
-  async ngOnInit(): Promise<void> {
-    this.gameName = this.route.snapshot.data['gameName'];
-    if (!this.gameName) {
-      throw new Error('route is not properly configured');
-    }
+  override async ngOnInit(): Promise<void> {
     this.gameConfig = ultimeRottaConfig;
-    this.deviceType = this.breakPointService.currentDeviceType;
-    this.breakPointService.subscribeToBreakpointChanges().subscribe(
-      (deviceType) => {
-        this.deviceType = deviceType;
-      });
-  }
-
-  isSmallDevice(): boolean {
-    return this.breakPointService.isSmallDevice(this.deviceType);
+    super.ngOnInit();
   }
 
   // Funzione per avviare il timer
@@ -140,8 +118,4 @@ export class UltimaRottaComponent implements OnInit {
     this.timerDisplay = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  onToggleSiteMap(show: boolean) {
-    this.showSiteMap = show;
-    this.cdr.detectChanges();
-  }
 }

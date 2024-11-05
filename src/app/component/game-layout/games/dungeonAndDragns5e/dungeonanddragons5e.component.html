@@ -1,2 +1,28 @@
+<div class="container-fluid m-0 p-0 w-100 h-100">
 
-<h1> DND 5e </h1>
+    <div *ngIf="!isSmallDevice()" class="row h-100 m-0">
+
+        <div [ngClass]="showSiteMap ? 'site-map-open' : 'site-map-closed'">
+            <app-feature-area [gameConfig]="gameConfig" class="w-100 h-100"    (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
+        </div>
+
+        <div class="p-2" [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
+            <div class="row w-100 overflow-visibile mt-3">
+                <router-outlet class="w-100"></router-outlet>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="isSmallDevice()">
+        <div [ngClass]="showSiteMap ? 'site-map-open-small-device' : 'site-map-closed-small-device'">
+            <app-feature-area [gameConfig]="gameConfig" class="w-100 d-flex justify-content-center align-items-center"
+                (toggoleSiteMap)="onToggleSiteMap($event)"></app-feature-area>
+        </div>
+
+        <div class="p-2"  [ngClass]="showSiteMap ? 'game-area-with-site-map-open-small-device' : 'game-area-with-site-map-closed-small-device'">
+            <div class="row w-100 overflow-visibile mt-3">
+                <router-outlet class="w-100"></router-outlet>
+            </div>
+        </div>
+    </div>
+</div>

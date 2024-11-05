@@ -21,7 +21,7 @@ interface Character {
 export class TurnOrderComponent implements OnInit, OnDestroy {
   characters: Character[] = [];
   dataSource = new MatTableDataSource(this.characters);
-  displayedColumns: string[] = ['name', 'initiative', 'health', 'actions'];
+  displayedColumns: string[] = ['initiative','name','health', 'actions'];
 
   @ViewChild('characterName') characterName!: ElementRef<HTMLInputElement>;
   @ViewChild('characterInitiative') characterInitiative!: ElementRef<HTMLInputElement>;

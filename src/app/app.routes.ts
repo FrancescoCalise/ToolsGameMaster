@@ -19,6 +19,9 @@ export const routes: Routes = [
     path:'games/ultima-rotta', redirectTo: '/games/ultima-rotta/SESSION_MANAGER', pathMatch: 'full'
   },
   {
+    path:'games/dungeon-and-dragons-5e', redirectTo: '/games/dungeon-and-dragons-5e/SESSION_MANAGER', pathMatch: 'full'
+  },
+  {
     path: 'games',
     component: GameLayoutComponent,
     canActivate: [authGuard],
@@ -30,16 +33,16 @@ export const routes: Routes = [
           gameName: 'Dungeon-and-dragons-5e'
         },
         children: [
-          // Eventuali sottorotte di Dungeon and Dragons 5e
+          {
+            path: 'SESSION_MANAGER',
+            component: SessionManagerComponenet
+          },
         ]
       },
       {
         path: 'ultima-rotta',
         component: UltimaRottaComponent,
         data: {
-          imgRoot: 'https://static.wixstatic.com/media/5738c7_b85f94f134a14da2918869dfe0bd7f6c~mv2.png/v1/fill/w_502,h_278,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/logo%20lur_edited.png',
-          rootTitle: 'ULTIMA_ROTTA.TITLE',
-          cssTitleRoot: 'ultima-rotta-navbar-title',
           gameName: 'Ultima-rotta'
         },
         children: [

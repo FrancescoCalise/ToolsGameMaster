@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, OnInit, } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, } from '@angular/core';
 import { ActivatedRoute, RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
 import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
@@ -10,6 +10,14 @@ import { BreakpointService } from '../../../../services/breakpoint.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DeathSunComponent } from './features/death-sun/death-sun.component';
 import { GameBaseComponent } from '../base/game-base.component';
+
+export interface DeathOfSunInterface{
+  deathSunBonus: number;
+  remaingTime: number,
+  displayTime: string,
+  counterPermanentDeathOfSun: number
+  isDarkIconVisible: boolean
+}
 
 @Component({
   selector: 'app-game-ultima-rotta',
@@ -28,7 +36,8 @@ import { GameBaseComponent } from '../base/game-base.component';
 
 })
 
-export class UltimaRottaComponent extends GameBaseComponent implements OnInit {
+export class UltimaRottaComponent extends GameBaseComponent implements OnInit,OnDestroy {
+ 
  
   timerDisplay: string = '30:00';
   timerDisplayDefault: string = '30:00';
@@ -37,18 +46,43 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit {
 
   solarDeathTestValue:number = 0;
   counterPermanentDeathOfSun: number = 0;
-
   isDarkIconVisible = false;
- 
 
   private timerInterval: any;
   private isTimerRunning = false;
 
   override async ngOnInit(): Promise<void> {
     this.gameConfig = ultimeRottaConfig;
+    let init = this.cacheStorage.getItem(this.cacheStorage.sunOfDeathKey) as DeathOfSunInterface;
+    if(init){
+      this.timerDisplay = init.displayTime;
+      this.timeRemaining = init.remaingTime;
+      this.solarDeathTestValue = init.deathSunBonus;
+      this.isDarkIconVisible = init.isDarkIconVisible;
+      this.counterPermanentDeathOfSun = init.counterPermanentDeathOfSun;
+    }
     super.ngOnInit();
   }
 
+  ngOnDestroy(): void {
+    this.saveData();
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  beforeUnloadHandler(event: Event): void {
+    this.saveData();
+  }
+
+  saveData(){
+    let data: DeathOfSunInterface = {
+      displayTime: this.timerDisplay,
+      remaingTime: this.timeRemaining,
+      deathSunBonus: this.solarDeathTestValue,
+      counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
+      isDarkIconVisible: this.isDarkIconVisible
+    }
+    this.cacheStorage.setItem(this.cacheStorage.sunOfDeathKey,data)
+  }
   // Funzione per avviare il timer
   handleTimer() {
     if (this.isTimerRunning) {
@@ -92,7 +126,8 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit {
       data: {
         solarDeathTestValue: this.solarDeathTestValue,
         counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
-        showRollDice: showRollDice
+        showRollDice: showRollDice,
+        remaingTime: this.timeRemaining
       }
     }).afterClosed().subscribe((result) => {
       if (result) {
@@ -106,6 +141,11 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit {
         if(resetCounter){
           this.solarDeathTestValue = 0;
           this.counterPermanentDeathOfSun = 0;
+        }
+
+        if(result.remaingTime && this.timeRemaining !== result.remaingTime){
+          this.timeRemaining = result.remaingTime;
+          this.updateTimerDisplay();
         }
       }
     })

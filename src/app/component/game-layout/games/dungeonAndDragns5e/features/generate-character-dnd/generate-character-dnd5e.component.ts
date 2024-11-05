@@ -16,9 +16,9 @@ import { CharacterSheetDND5ETemplate } from './charachter-sheet-dnd5e';
 import { MethodNotImplementedError } from 'pdf-lib';
 
 @Component({
-  selector: 'app-generate-character-lur',
-  templateUrl: './generate-character-lur.component.html',
-  styleUrls: ['./generate-character-lur.component.css'],
+  selector: 'app-generate-character-dnd5e',
+  templateUrl: './generate-character-dnd5e.component.html',
+  styleUrls: ['./generate-character-dnd5e.component.css'],
   standalone: true,
   imports: [
     SharedModule,
@@ -26,7 +26,7 @@ import { MethodNotImplementedError } from 'pdf-lib';
     SessionManagerWidgetComponent,
   ],
 })
-export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
+export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
   
 
   sessionLoaded = false;

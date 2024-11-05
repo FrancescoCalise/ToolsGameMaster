@@ -4,6 +4,7 @@ import { TranslationMessageService } from '../../../../../../services/translatio
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { ToastService } from '../../../../../../services/toast.service';
 import { SharedFields } from '../../../../../../shared/shared-fields.module';
+import { CacheStorageService } from '../../../../../../services/cache-storage.service';
 
 @Component({
   selector: 'app-death-sun',
@@ -21,6 +22,7 @@ export class DeathSunComponent implements OnInit {
   deathSunBonus: number = 0;
   diceResult: number | null = null; // Risultato del dado, se lanciato
   smallDiceResult: number | null = null; // Risultato del dado a 6 facce per 20+
+  remaingTime: number;
   selectedDeathSun: DeathSun = {
     result:"",
     bonus:0,
@@ -79,21 +81,24 @@ export class DeathSunComponent implements OnInit {
     public dialogRef: MatDialogRef<DeathSunComponent>,
     private translationMessageService: TranslationMessageService,
     private toastService: ToastService,
+    private cacheSessionStorage: CacheStorageService,
     @Inject(MAT_DIALOG_DATA) public data: {
       solarDeathTestValue: number,
       counterPermanentDeathOfSun: number
       showRollDice: boolean
+      remaingTime:number
     }
   ) {
 
     this.deathSunBonus = data.solarDeathTestValue;
     this.counterPermanentDeathOfSun = data.counterPermanentDeathOfSun;
     this.showRollDice = data.showRollDice;
+    this.remaingTime = data.remaingTime;
   }
+
 
   async ngOnInit(): Promise<void> {
     this.title = await this.translationMessageService.translate('ULTIMA_ROTTA.DEATH_SUN.TITLE');
-
     this.tableDeathSun.forEach(async element => {
       element.description = await this.translationMessageService.translate('ULTIMA_ROTTA.DEATH_SUN.' + element.code);
     });
@@ -104,7 +109,8 @@ export class DeathSunComponent implements OnInit {
       {
         deathSunBonus: this.deathSunBonus + this.selectedDeathSun.bonus as number,
         counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
-        resetCounter: this.resetCounter
+        resetCounter: this.resetCounter,
+        remaingTime: this.remaingTime
       });
   }
 

@@ -13,6 +13,7 @@ import { UltimaRottaComponent } from './component/game-layout/games/ultimaRotta/
 import { ultimaRottaCriticDamage, ultimaRottaWeapon } from './component/game-layout/games/ultimaRotta/ultima-rotta-table';
 import { SessionManagerComponenet } from './component/game-layout/feature-sitemap/session-manager/session-manger.component';
 import { GenerateCharacterLurComponent } from './component/game-layout/games/ultimaRotta/features/generate-character-lur/generate-character-lur.component';
+import { GenerateCharacterDND5EComponent } from './component/game-layout/games/dungeonAndDragns5e/features/generate-character-dnd/generate-character-dnd5e.component';
 
 export const routes: Routes = [
   {
@@ -37,6 +38,10 @@ export const routes: Routes = [
             path: 'SESSION_MANAGER',
             component: SessionManagerComponenet
           },
+          {
+            path: 'CREATE_CHARACTER_ULTIMA_ROTTA',
+            component: GenerateCharacterDND5EComponent,
+          }
         ]
       },
       {

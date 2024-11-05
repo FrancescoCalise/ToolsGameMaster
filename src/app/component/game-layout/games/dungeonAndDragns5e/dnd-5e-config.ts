@@ -2,6 +2,7 @@ import { FeatureConfig } from "../../../../interface/FeatureConfig";
 import { GameConfig } from "../../../../interface/GameConfig";
 import { SessionManagerComponenet } from "../../feature-sitemap/session-manager/session-manger.component";
 import { TurnOrderComponent } from "../../feature-sitemap/turn-order/turn-order.component";
+import { GenerateCharacterDND5EComponent } from "./features/generate-character-dnd/generate-character-dnd5e.component";
 
 
 export const dnd5eConfig: GameConfig =
@@ -23,5 +24,11 @@ export const dnd5eConfig: GameConfig =
       icon: 'turn_slight_right',
       changePage: false
     },
+    {
+      id: 'CREATE_CHARACTER_ULTIMA_ROTTA',
+      component:GenerateCharacterDND5EComponent,
+      icon: 'turn_slight_right',
+      changePage: true
+    }
   ] as FeatureConfig[]
 };

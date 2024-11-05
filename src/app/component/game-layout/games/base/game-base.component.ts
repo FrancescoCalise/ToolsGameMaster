@@ -5,6 +5,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { BreakpointService } from "../../../../services/breakpoint.service";
 import { PdfService } from "../../../../services/pdf.service";
 import { ToastService } from "../../../../services/toast.service";
+import { CacheStorageService } from "../../../../services/cache-storage.service";
 
 @Directive()
 export class GameBaseComponent implements OnInit {
@@ -21,6 +22,7 @@ export class GameBaseComponent implements OnInit {
         protected cdr: ChangeDetectorRef,
         protected breakPointService: BreakpointService,
         protected dialog: MatDialog,
+        protected cacheStorage: CacheStorageService
     ) {}
 
     async ngOnInit(): Promise<void> {

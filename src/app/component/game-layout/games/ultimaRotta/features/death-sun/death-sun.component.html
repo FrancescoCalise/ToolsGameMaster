@@ -21,6 +21,12 @@
           <mat-label>{{ 'ULTIMA_ROTTA.DEATH_SUN.GLOBAL_COUNTER' | translate }}</mat-label>
           <input matInput type="number" [(ngModel)]="counterPermanentDeathOfSun">
         </mat-form-field>
+
+        <mat-form-field appearance="outline" class="settings-field">
+          <mat-label>{{ 'ULTIMA_ROTTA.DEATH_SUN.RIMANING_TIME' | translate }}</mat-label>
+          <input matInput type="number" [(ngModel)]="remaingTime">
+          <span matSuffix class="p-1">Secondi</span>
+        </mat-form-field>
       </div>
     </div>
 

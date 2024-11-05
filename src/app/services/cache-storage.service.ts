@@ -9,7 +9,8 @@ export class CacheStorageService {
   public readonly translationCache = 'translationCache';
   public readonly appLanguageKey = 'appLanguage';
   public readonly turnOrderKey = 'turnOrder';
-  
+  public readonly sunOfDeathKey = 'sunOfDeath';
+
   constructor() { }
 
   public setItem(key: string, value: any) {

@@ -350,7 +350,8 @@
             "CLOSE": "Chiudi",
             "GLOBAL_COUNTER": "Contantore morte permamente",
             "INIT": "Inizializza il Test Morte Solare",
-            "SUN_DEATH":"Il sole è esploso. Nulla è sopravvisuto. Cambiate gioco"
+            "SUN_DEATH":"Il sole è esploso. Nulla è sopravvisuto. Cambiate gioco",
+            "RIMANING_TIME": "Tempo rimanente"
         },
         "WEAPONS": {
             "BARE_HANDS": "Mani nude",

@@ -34,7 +34,7 @@ export const ultimeRottaConfig: GameConfig =
       changePage: true
     },
     {
-      id: 'CREATE_CHARACTER_ULTIMA_ROTTA',
+      id: 'CREATE_CHARACTER',
       icon: 'turn_slight_right',
       changePage: true
     }

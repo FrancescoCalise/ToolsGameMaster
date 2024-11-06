@@ -9,15 +9,15 @@ import { SharedFields } from '../../../../../../../shared/shared-fields.module';
 
 @Component({
     selector: 'app-character-dialog',
-    templateUrl: './character-dialog.component.html',
-    styleUrls: ['./character-dialog.component.css'],
+    templateUrl: './character-dialog-lur.component.html',
+    styleUrls: ['./character-dialog-lur.component.css'],
     standalone: true,
     imports: [
         SharedModule,
         SharedFields
     ]
 })
-export class CharacterDialogComponent implements OnInit {
+export class CharacterDialogLURComponent implements OnInit {
 
     readonly rolesDefaultData = UtilitiesCreateCharacterLur.rolesDefaultData;
     readonly geneticDefaultData = UtilitiesCreateCharacterLur.geneticDefaultData;
@@ -37,7 +37,7 @@ export class CharacterDialogComponent implements OnInit {
     selectedArmorDetails: ArmorInfo[] = [];
 
     constructor(
-        public dialogRef: MatDialogRef<CharacterDialogComponent>,
+        public dialogRef: MatDialogRef<CharacterDialogLURComponent>,
         @Inject(MAT_DIALOG_DATA) public data: { 
             character: CharacterSheetLURTemplate
             sessionId: string| undefined

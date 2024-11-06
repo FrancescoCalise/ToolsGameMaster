@@ -1,0 +1,83 @@
+<mat-tab-group class="p-3">
+
+    <!-- Tab 1: Configura il Prompt -->
+    <mat-tab label="Configura il Prompt" class="h-100">
+        <mat-card class="h-100 d-flex flex-column">
+            <mat-card-content class="flex-grow-1 d-flex flex-column">
+                <form [formGroup]="formGroup" class="w-100 h-100 d-flex flex-column">
+                    <p class="step-description">Seleziona le informazioni del tuo personaggio per generare il prompt:</p>
+                    
+                    <div class="row">
+                        <div class="col-2 p-1" *ngFor="let field of formFields">
+                            <mat-form-field class="w-100" appearance="fill">
+                                <mat-label>{{ field.label }}</mat-label>
+                                <input matInput [type]="field.type" [formControlName]="field.controlName" (input)="updatePromptPart1($event)">                 
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    
+                    <!-- Textarea for additional information -->
+                    <div class="row mt-3">
+                        <div class="col-12">
+                            <mat-form-field class="w-100" appearance="fill">
+                                <mat-label>Informazioni aggiuntive</mat-label>
+                                <textarea matInput [(ngModel)]="promptPart3" placeholder="Enter additional information" [ngModelOptions]="{standalone: true}"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    
+                    <p class="prompt-preview-title mt-3"><strong>Anteprima Prompt:</strong></p>
+                    <pre class="prompt-preview w-100 p-2">{{ promptUserInfo }}</pre>
+                </form>
+            </mat-card-content>
+            
+            <mat-card-actions class="d-flex justify-content-center">
+                <button mat-raised-button color="primary" (click)="copyPrompt()">Copia</button>
+                <div *ngIf="promptCopied" class="prompt-copied-message p-2 ml-3">Prompt copiato!</div>
+            </mat-card-actions>
+        </mat-card>
+    </mat-tab>
+    
+    
+
+    <!-- Tab 2: Incolla il Risultato da ChatGPT -->
+    <mat-tab label="Incolla il Risultato" class="h-100">
+        <mat-card class="h-100 d-flex flex-column">
+            <mat-card-content class="flex-grow-1 d-flex flex-column">
+                <form [formGroup]="jsonForm" class="w-100 h-100 d-flex flex-column">
+                    <p class="step-description">
+                        Ora, vai su ChatGPT, incolla il prompt e ottieni il risultato. Incolla qui sotto il JSON di risposta:
+                    </p>
+                    
+                    <div class="row">
+                        <div class="col-12">
+                            <mat-form-field appearance="fill" class="w-100">
+                                <mat-label>Incolla il JSON qui</mat-label>
+                                <textarea matInput placeholder="Incolla il JSON qui" formControlName="jsonResponse" rows="5"></textarea>
+                                
+                                <mat-error *ngIf="jsonForm.get('jsonResponse')?.hasError('invalidJsonFormat')">
+                                    Il formato JSON non è valido.
+                                </mat-error>
+                                <mat-error *ngIf="jsonForm.get('jsonResponse')?.hasError('invalidJsonTemplate')">
+                                    Il JSON non rispetta la struttura richiesta.
+                                </mat-error>
+                            </mat-form-field>
+                            
+                        </div>
+                    </div>
+                </form>
+            </mat-card-content>
+            
+            <mat-card-actions class="d-flex justify-content-between">
+                <!-- Link a ChatGPT -->
+                <a mat-raised-button color="accent" href="https://chat.openai.com/" target="_blank" rel="noopener noreferrer">
+                    Vai a ChatGPT
+                </a>
+                <button mat-raised-button color="primary" [disabled]="!jsonForm.valid" (click)="finish()">Fine</button>
+            </mat-card-actions>
+        </mat-card>
+    </mat-tab>
+    
+    
+    
+</mat-tab-group>

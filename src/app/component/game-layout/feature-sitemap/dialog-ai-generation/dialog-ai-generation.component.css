@@ -1,0 +1,15 @@
+.step-description {
+    margin-bottom: 8px;
+}
+
+.prompt-preview {
+    background: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    max-height: 150px;
+    overflow: auto;
+}
+
+.prompt-copied-message {
+    color: green;
+}

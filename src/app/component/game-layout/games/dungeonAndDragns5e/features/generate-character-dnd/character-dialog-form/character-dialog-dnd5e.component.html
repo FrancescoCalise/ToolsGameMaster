@@ -1,0 +1,199 @@
+<div class="container">
+    <form [formGroup]="characterForm" class="form-group">
+        <mat-tab-group>
+            <!-- Tab 1: Character Information -->
+            <mat-tab label="Character Information">
+                <div class="row mb-3">
+                    <div class="col-12 text-center">
+                        <h2>Character Sheet</h2>
+                    </div>
+                </div>
+
+                <!-- Character Details -->
+                <div class="row mb-3">
+                    <div class="col-md-4 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Character Name</mat-label>
+                            <input matInput formControlName="CharacterName" placeholder="Enter name">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Class</mat-label>
+                            <input matInput formControlName="Class" placeholder="Enter class">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Level</mat-label>
+                            <input matInput type="number" formControlName="Level" placeholder="Enter level">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Basic Information -->
+                <div class="row mb-3">
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Race</mat-label>
+                            <input matInput formControlName="Race" placeholder="Enter race">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Background</mat-label>
+                            <input matInput formControlName="Background" placeholder="Enter background">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Alignment</mat-label>
+                            <input matInput formControlName="Alignment" placeholder="Enter alignment">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-sm-6 col-md-3 mb-3">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Gender</mat-label>
+                            <input matInput formControlName="Gender" placeholder="Enter gender">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Attributes -->
+                <div class="row mb-3">
+                    <div class="col-md-2" *ngFor="let attribute of attributes">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ attribute.label }}</mat-label>
+                            <input matInput type="number" [formControlName]="attribute.control">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Additional Modifiers -->
+                <div class="row mb-3">
+                    <div class="col-md-2" *ngFor="let mod of modifiers">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>{{ mod }}</mat-label>
+                            <input matInput type="number" [formControlName]="mod">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Proficiency and Combat Stats -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Proficiency Bonus</mat-label>
+                            <input matInput type="number" formControlName="ProficiencyBonus">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>HP Max</mat-label>
+                            <input matInput type="number" formControlName="HPMax">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Armor Class (AC)</mat-label>
+                            <input matInput type="number" formControlName="AC">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Other Combat Details -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Initiative</mat-label>
+                            <input matInput type="number" formControlName="Initiative">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-4">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Speed</mat-label>
+                            <input matInput type="number" formControlName="Speed">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Proficiencies and Languages -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Weapon Proficiency</mat-label>
+                            <input matInput formControlName="WeaponProfency">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Tools Proficiency</mat-label>
+                            <input matInput formControlName="ToolsProfency">
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Languages</mat-label>
+                            <textarea matInput formControlName="Languages" rows="2"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <!-- Traits and Features -->
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Racial Traits</mat-label>
+                            <textarea matInput formControlName="RacialTraits" rows="3"></textarea>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Background Feature</mat-label>
+                            <textarea matInput formControlName="BackgroundFeature" rows="3"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <mat-form-field appearance="fill" class="w-100">
+                            <mat-label>Class Privileges</mat-label>
+                            <textarea matInput formControlName="ClassPrivilegs" rows="3"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <!-- Tab 2: Placeholder for Future Content -->
+            <mat-tab label="Additional Information">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <p>Additional information can be added here in the future.</p>
+                    </div>
+                </div>
+            </mat-tab>
+
+            <!-- Tab 3: Placeholder for Future Content -->
+            <mat-tab label="Other Details">
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <p>More details can be added here in the future.</p>
+                    </div>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+
+        <!-- Save and Cancel Buttons -->
+        <div class="row mt-4">
+            <div class="col text-start">
+                <button mat-raised-button color="primary" (click)="save()">Save Changes</button>
+            </div>
+            <div class="col text-end">
+                <button mat-raised-button color="warn" (click)="close()">Cancel</button>
+            </div>
+        </div>
+        
+    </form>
+</div>

@@ -1,0 +1,124 @@
+<div class="card shadow-lg p-3 mb-5 bg-white rounded">
+    <div #pngCard class="card-body">
+        <h2 class="card-title">{{ data.name }}</h2>
+        <p class="card-subtitle text-muted"><em>
+                {{ data.size }}
+                {{ data.type }}
+                <span *ngIf="data.alignment">
+                    , {{ data.alignment }}
+                </span>
+            </em>
+        </p>
+        <hr class="divider">
+
+        <p *ngIf="data.armorClass"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.ARMOR_CLASS' | translate
+                }}</strong>: {{ data.armorClass }}</p>
+        <p *ngIf="data.hitPoints"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.HIT_POINTS' | translate
+                }}</strong>: {{ data.hitPoints }}</p>
+        <p *ngIf="data.speed"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SPEED' | translate }}</strong>:
+            {{ data.speed }}</p>
+        <hr class="divider">
+
+        <table *ngIf="data.attributes" class="table table-bordered stats-table">
+            <thead class="thead-light">
+                <tr>
+                    <th>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.STRENGTH' | translate }}</th>
+                    <th>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DEXTERITY' | translate }}</th>
+                    <th>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CONSTITUTION' | translate }}</th>
+                    <th>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.INTELLIGENCE' | translate }}</th>
+                    <th>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.WISDOM' | translate }}</th>
+                    <th>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CHARISMA' | translate }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td *ngIf="data.attributes.strength">{{ data.attributes.strength }}</td>
+                    <td *ngIf="data.attributes.dexterity">{{ data.attributes.dexterity }}</td>
+                    <td *ngIf="data.attributes.constitution">{{ data.attributes.constitution }}</td>
+                    <td *ngIf="data.attributes.intelligence">{{ data.attributes.intelligence }}</td>
+                    <td *ngIf="data.attributes.wisdom">{{ data.attributes.wisdom }}</td>
+                    <td *ngIf="data.attributes.charisma">{{ data.attributes.charisma }}</td>
+                </tr>
+            </tbody>
+        </table>
+        <hr class="divider">
+
+        <p *ngIf="!isObjectEmpty(data.savingThrows)"><strong>{{
+                'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SAVING_THROWS' | translate }}</strong>:
+            <span *ngIf="data.savingThrows.strength">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.STRENGTH' |
+                translate }} {{ data.savingThrows.strength }},</span>
+            <span *ngIf="data.savingThrows.dexterity">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DEXTERITY' |
+                translate }} {{ data.savingThrows.dexterity }},</span>
+            <span *ngIf="data.savingThrows.constitution">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CONSTITUTION'
+                | translate }} {{ data.savingThrows.constitution }},</span>
+            <span *ngIf="data.savingThrows.intelligence">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.INTELLIGENCE'
+                | translate }} {{ data.savingThrows.intelligence }},</span>
+            <span *ngIf="data.savingThrows.wisdom">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.WISDOM' | translate
+                }} {{ data.savingThrows.wisdom }},</span>
+            <span *ngIf="data.savingThrows.charisma">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CHARISMA' |
+                translate }} {{ data.savingThrows.charisma }}</span>
+        </p>
+
+        <p *ngIf="data.skills && data.skills.length > 0 && !isObjectEmpty(data.skills)"><strong>{{
+                'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SKILLS' | translate }}</strong>: {{ data.skills.join(', ')
+            }}</p>
+        <p *ngIf="data.damageResistances"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DAMAGE_RESISTANCES' |
+                translate }}</strong>: {{ data.damageResistances }}</p>
+        <p *ngIf="data.damageVulnerabilities"><strong>{{
+                'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DAMAGE_VULNERABILITIES' | translate }}</strong>: {{
+            data.damageVulnerabilities }}</p>
+        <p *ngIf="data.damageImmunities"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DAMAGE_IMMUNITIES' |
+                translate }}</strong>: {{ data.damageImmunities }}</p>
+        <p *ngIf="data.conditionImmunities"><strong>{{
+                'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CONDITION_IMMUNITIES' | translate }}</strong>: {{
+            data.conditionImmunities }}</p>
+        <p *ngIf="data.senses"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SENSES' | translate }}</strong>:
+            {{ data.senses }}</p>
+        <p *ngIf="data.passivePerception"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.PASSIVE_PERCEPTION' |
+                translate }}</strong>: {{ data.passivePerception }}</p>
+        <p *ngIf="data.languages"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.LANGUAGES' | translate
+                }}</strong>: {{ data.languages }}</p>
+        <p *ngIf="data.challengeRating"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CHALLENGE_RATING' |
+                translate }}</strong>: {{ data.challengeRating }}</p>
+        <hr class="divider">
+
+        <h4 *ngIf="data.traits && data.traits.length > 0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.TRAITS' |
+            translate }}</h4>
+        <div *ngFor="let trait of data.traits" class="mb-2">
+            <p *ngIf="trait.name"><strong>{{ trait.name }}</strong>: {{ trait.description }}</p>
+            <p *ngIf="trait.attack"><em>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.TRAIT_ATTACK' | translate
+                    }}</em>: {{ trait.attack }}</p>
+        </div>
+
+        <h4 *ngIf="data.actions && data.actions.length > 0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.ACTIONS' |
+            translate }}</h4>
+        <div *ngFor="let action of data.actions" class="mb-2">
+            <p *ngIf="action.name"><strong>{{ action.name }}</strong>: {{ action.description }}</p>
+            <p *ngIf="action.attack"><em>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.ACTION_ATTACK' | translate
+                    }}</em>: {{ action.attack }}</p>
+        </div>
+
+        <h4 *ngIf="data.legendaryActions && data.legendaryActions.length > 0">{{
+            'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.LEGENDARY_ACTIONS' | translate }}</h4>
+        <div *ngFor="let legendaryAction of data.legendaryActions" class="mb-2">
+            <p *ngIf="legendaryAction.name"><strong>{{ legendaryAction.name }}</strong>: {{ legendaryAction.description
+                }}</p>
+        </div>
+
+        <h4 *ngIf="data.spells && data.spells.length > 0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SPELLS' |
+            translate }}</h4>
+        <div *ngFor="let spell of data.spells" class="mb-2">
+            <p><strong *ngIf="spell.level">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SPELL_LEVEL' | translate }}
+                    {{ spell.level }}</strong>: {{ spell.spellName }}</p>
+        </div>
+    </div>
+    <!-- Button group for download and close actions -->
+    <div class="card-footer d-flex justify-content-end">
+        <button mat-button (click)="downloadPNG()" class="btn btn-primary me-2">
+            {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DOWNLOAD_PNG' | translate }}
+        </button>
+        <button mat-button (click)="close()" class="btn btn-secondary">
+            {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CLOSE' | translate }}
+        </button>
+    </div>
+</div>

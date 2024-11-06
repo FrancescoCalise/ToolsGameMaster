@@ -6,6 +6,7 @@ import { BreakpointService } from "../../../../services/breakpoint.service";
 import { PdfService } from "../../../../services/pdf.service";
 import { ToastService } from "../../../../services/toast.service";
 import { CacheStorageService } from "../../../../services/cache-storage.service";
+import { TranslationMessageService } from "../../../../services/translation-message-service";
 
 @Directive()
 export class GameBaseComponent implements OnInit {
@@ -13,7 +14,7 @@ export class GameBaseComponent implements OnInit {
     public gameConfig: GameConfig = {} as GameConfig;
     public deviceType = '';
     public showSiteMap = true;
-
+    
     constructor(
         protected route: ActivatedRoute,
         protected router: Router, 
@@ -22,7 +23,8 @@ export class GameBaseComponent implements OnInit {
         protected cdr: ChangeDetectorRef,
         protected breakPointService: BreakpointService,
         protected dialog: MatDialog,
-        protected cacheStorage: CacheStorageService
+        protected cacheStorage: CacheStorageService,
+        protected translationMessageService: TranslationMessageService
     ) {}
 
     async ngOnInit(): Promise<void> {

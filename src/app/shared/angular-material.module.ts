@@ -23,6 +23,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatTooltip } from '@angular/material/tooltip';
+import { MatStepperModule } from '@angular/material/stepper';
 
 @NgModule({
   imports: [
@@ -48,7 +49,8 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatSortModule,
     MatSliderModule,
     MatSlideToggleModule,
-    MatTooltip
+    MatTooltip,
+    MatStepperModule
   ],
   exports: [
     MatButtonModule,
@@ -73,7 +75,8 @@ import { MatTooltip } from '@angular/material/tooltip';
     MatSortModule,
     MatSliderModule,
     MatSlideToggleModule,
-    MatTooltip
+    MatTooltip,
+    MatStepperModule
   ]
 })
 export class AngularMaterialModule { }

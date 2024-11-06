@@ -1,0 +1,75 @@
+.card {
+  background-color: #fdf1dc;
+  border: 2px solid #a52a2a;
+  color: #5a2a2a;
+  padding: 1rem;
+  border-radius: 4px;
+  font-family: Georgia, serif;
+  max-width: 700px;
+  margin: auto;
+}
+
+.card h2 {
+  font-size: 1.8rem;
+  color: #a52a2a;
+  text-transform: uppercase;
+  font-weight: bold;
+  border-bottom: 2px solid #a52a2a;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.2rem;
+}
+
+.card .subtype {
+  font-style: italic;
+  color: #5a2a2a;
+  font-size: 1.1rem;
+}
+
+.card .divider {
+  border-top: 2px solid #a52a2a;
+  margin: 0.5rem 0;
+}
+
+.card p, .card li {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: #5a2a2a;
+}
+
+.card .stats-table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  margin-top: 0.5rem;
+}
+
+.card .stats-table th, .card .stats-table td {
+  padding: 0.3rem;
+  border: 1px solid #a52a2a;
+  font-weight: bold;
+}
+
+.card h3, .card h4 {
+  color: #a52a2a;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 1.3rem;
+  margin-top: 1rem;
+  border-bottom: 1px solid #a52a2a;
+  padding-bottom: 0.2rem;
+}
+
+.card .button-group {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+.card-footer button {
+  margin-left: 0.5rem;
+}
+
+.card em, .card strong {
+  color: #a52a2a;
+  font-style: italic;
+}

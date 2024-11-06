@@ -15,7 +15,6 @@ export class PdfService {
     // Carica il PDF e ottieni il modulo
     async loadPdf(pdfPath: string): Promise<void> {
         try {
-            debugger
             const pdfBytes = await fetch(pdfPath).then(res => res.arrayBuffer());
             this.pdfDoc = await PDFDocument.load(pdfBytes);
             this.form = this.pdfDoc.getForm();
@@ -58,7 +57,7 @@ export class PdfService {
     }
 
     // Mappa i campi del PDF con i campi dell'oggetto usando un dizionario
-    updateValues(fieldValues: { [pdfFieldName: string]: any }, fieldMap: { [pdfFieldName: string]: string }): void {
+    updateFieldsWithMap(fieldValues: { [pdfFieldName: string]: any }, fieldMap: { [pdfFieldName: string]: string }): void {
         if (!this.form) return;
         Object.keys(fieldMap).forEach(pdfFieldName => {
             const objectFieldValue = this.getObjectFieldValue(fieldValues, fieldMap[pdfFieldName]);
@@ -80,6 +79,43 @@ export class PdfService {
             }
         });
     }
+
+    updateFieldsFromJson(jsonData: { [key: string]: any }, pdfFields: PdfField[]): void {
+        if (!this.form) return;
+        // Convertiamo pdfFields in una mappa per accedere rapidamente ai campi per nome
+        const pdfFieldMap: { [name: string]: PdfField } = {};
+        pdfFields.forEach(field => {
+            pdfFieldMap[field.name] = field;
+        });
+    
+        // Iteriamo su ciascun campo del JSON
+        Object.keys(jsonData).forEach(jsonFieldName => {
+            const fieldValue = jsonData[jsonFieldName];
+            const pdfField = pdfFieldMap[jsonFieldName];
+            
+            // Controlla che il pdfField esista
+            if (pdfField) {
+                const pdfFieldName = pdfField.name;
+                
+                // Gestione dei campi di testo
+                if (typeof fieldValue === 'string') {
+                    const textField = this.form.getTextField(pdfFieldName);
+                    if (textField) textField.setText(fieldValue);
+                }
+                // Gestione dei campi numerici
+                else if (typeof fieldValue === 'number') {
+                    const textField = this.form.getTextField(pdfFieldName);
+                    if (textField) textField.setText(fieldValue === 0 ? '' : fieldValue.toString());
+                }
+                // Gestione delle caselle di controllo
+                else if (typeof fieldValue === 'boolean') {
+                    const checkBox = this.form.getCheckBox(pdfFieldName);
+                    if (checkBox) fieldValue ? checkBox.check() : checkBox.uncheck();
+                }
+            }
+        });
+    }
+    
 
     getObjectFieldValue(newChar: { [pdfFieldName: string]: any; }, elementToGet: string): any {
         // Verifica se `elementToGet` contiene una struttura di array (es. "attributes[0].value")

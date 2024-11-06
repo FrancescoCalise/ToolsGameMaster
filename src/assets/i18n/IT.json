@@ -320,7 +320,7 @@
             "MENTA": "Menta",
             "ORIGINAL": "Original"
         },
-        "ELETTROLITA_TYPE":{
+        "ELETTROLITA_TYPE": {
             "LIME": "Lime",
             "GRANO": "Grano",
             "BULBORAGNO": "Bulboragno",
@@ -350,7 +350,7 @@
             "CLOSE": "Chiudi",
             "GLOBAL_COUNTER": "Contantore morte permamente",
             "INIT": "Inizializza il Test Morte Solare",
-            "SUN_DEATH":"Il sole è esploso. Nulla è sopravvisuto. Cambiate gioco",
+            "SUN_DEATH": "Il sole è esploso. Nulla è sopravvisuto. Cambiate gioco",
             "RIMANING_TIME": "Tempo rimanente"
         },
         "WEAPONS": {
@@ -385,8 +385,8 @@
             "BOMB_WEAPONS": "Bombe attacco su percezione / Danno invariabile",
             "INERT_EFFECT": "Non puoi compiere Azioni e non puoi Parare finche sei inerme."
         },
-        "TABLE":{
-            "CRITIC":{
+        "TABLE": {
+            "CRITIC": {
                 "RESULT": "Risultato",
                 "CRITIC_AREA": "Area Maciullata",
                 "MODIFIERS": "Modificatori",
@@ -413,7 +413,106 @@
         }
     },
     "DUNGEON_AND_DRAGONS_5E": {
-        "TITLE": "Dungeon & Dragons 5E"
+        "TITLE": "Dungeon & Dragons 5E",
+        "CREATE_CHARACTER": {
+            "LEVEL": "Livello",
+            "NO_CHARACTERS":"Nessun personaggio disponibile. Crea il tuo personaggio!."
+        },
+        "PNG_GENERATOR": {
+            "EDIT_MONSTER_DETAILS": "Modifica i dettagli del mostro",
+            "INIT_FROM_TEMPLATE": "Inizializza da modello",
+            "SEARCH_TEMPLATES": "Cerca modelli...",
+            "NAME": "Nome",
+            "SIZE": "Taglia",
+            "TYPE": "Tipo",
+            "ALIGNMENT": "Allineamento",
+            "ARMOR_CLASS": "Classe armatura (CA)",
+            "HIT_POINTS": "Punti ferita",
+            "ATTRIBUTES": "Attributi",
+            "STRENGTH": "Forza",
+            "DEXTERITY": "Destrezza",
+            "CONSTITUTION": "Costituzione",
+            "INTELLIGENCE": "Intelligenza",
+            "WISDOM": "Saggezza",
+            "CHARISMA": "Carisma",
+            "SAVING_THROWS": "Tiri salvezza",
+            "STRENGTH_SAVE": "Tiro salvezza forza",
+            "DEXTERITY_SAVE": "Tiro salvezza destrezza",
+            "CONSTITUTION_SAVE": "Tiro salvezza costituzione",
+            "INTELLIGENCE_SAVE": "Tiro salvezza intelligenza",
+            "WISDOM_SAVE": "Tiro salvezza saggezza",
+            "CHARISMA_SAVE": "Tiro salvezza carisma",
+            "SKILLS": "Abilità",
+            "SKILL": "Abilità",
+            "ADDITIONAL_DETAILS": "Dettagli aggiuntivi",
+            "SPEED": "Velocità",
+            "SENSES": "Sensi",
+            "PASSIVE_PERCEPTION": "Percezione passiva",
+            "LANGUAGES": "Linguaggi",
+            "CHALLENGE_RATING": "Grado sfida",
+            "DAMAGE_RESISTANCES": "Resistenze ai danni",
+            "DAMAGE_VULNERABILITIES": "Vulnerabilità ai danni",
+            "DAMAGE_IMMUNITIES": "Immunità ai danni",
+            "CONDITION_IMMUNITIES": "Immunità alle condizioni",
+            "TRAITS": "Tratti",
+            "TRAIT_NAME": "Nome tratto",
+            "ENTER_TRAIT_NAME": "Inserisci nome tratto",
+            "TRAIT_DESCRIPTION": "Descrizione tratto",
+            "ENTER_TRAIT_DESCRIPTION": "Inserisci descrizione tratto",
+            "TRAIT_ATTACK": "Attacco tratto",
+            "ENTER_TRAIT_ATTACK": "Inserisci attacco tratto",
+            "ACTIONS": "Azioni",
+            "ACTION_NAME": "Nome azione",
+            "ENTER_ACTION_NAME": "Inserisci nome azione",
+            "ACTION_DESCRIPTION": "Descrizione azione",
+            "ENTER_ACTION_DESCRIPTION": "Inserisci descrizione azione",
+            "ACTION_ATTACK": "Attacco azione",
+            "ENTER_ACTION_ATTACK": "Inserisci attacco azione",
+            "LEGENDARY_ACTIONS": "Azioni leggendarie",
+            "LEGENDARY_ACTION_NAME": "Nome azione leggendaria",
+            "ENTER_LEGENDARY_ACTION_NAME": "Inserisci nome azione leggendaria",
+            "LEGENDARY_ACTION_DESCRIPTION": "Descrizione azione leggendaria",
+            "ENTER_LEGENDARY_ACTION_DESCRIPTION": "Inserisci descrizione azione leggendaria",
+            "SPELLS": "Incantesimi",
+            "SPELL_LEVEL": "Livello incantesimo",
+            "ENTER_SPELL_LEVEL": "Inserisci livello incantesimo",
+            "SPELL_NAME": "Nome incantesimo",
+            "ENTER_SPELL_NAME": "Inserisci nome incantesimo",
+            "SPELL_SLOTS": "Slot incantesimo",
+            "ENTER_SPELL_SLOTS": "Inserisci slot incantesimo",
+            "SHOW_PREVIEW": "Mostra anteprima",
+            "LOAD_FROM_AI": "Carica da AI",
+            "PREVIEW": {
+                "ARMOR_CLASS": "Classe Armatura",
+                "HIT_POINTS": "Punti Ferita",
+                "SPEED": "Velocità",
+                "STRENGTH": "Forza",
+                "DEXTERITY": "Destrezza",
+                "CONSTITUTION": "Costituzione",
+                "INTELLIGENCE": "Intelligenza",
+                "WISDOM": "Saggezza",
+                "CHARISMA": "Carisma",
+                "SAVING_THROWS": "Tiri Salvezza",
+                "SKILLS": "Abilità",
+                "DAMAGE_RESISTANCES": "Resistenze ai Danni",
+                "DAMAGE_VULNERABILITIES": "Vulnerabilità ai Danni",
+                "DAMAGE_IMMUNITIES": "Immunità ai Danni",
+                "CONDITION_IMMUNITIES": "Immunità alle Condizioni",
+                "SENSES": "Sensi",
+                "PASSIVE_PERCEPTION": "Percezione Passiva",
+                "LANGUAGES": "Linguaggi",
+                "CHALLENGE_RATING": "Grado di Sfida",
+                "TRAITS": "Tratti",
+                "TRAIT_ATTACK": "Attacco del Tratto",
+                "ACTIONS": "Azioni",
+                "ACTION_ATTACK": "Attacco dell'Azione",
+                "LEGENDARY_ACTIONS": "Azioni Leggendarie",
+                "SPELLS": "Incantesimi",
+                "SPELL_LEVEL": "Livello dell'Incantesimo",
+                "DOWNLOAD_PNG": "Scarica come PNG",
+                "CLOSE": "Chiudi"
+            }
+        }
     },
     "SESSION_MANAGER": {
         "TITLE": "Gestione Sessioni",
@@ -430,15 +529,10 @@
     },
     "FEATURE": {
         "SESSION_MANAGER": "Gestione sessioni",
-        "TOOLTIP_SESSION_MANAGER": "Gestisci le sessioni di gioco",
         "TURN_ORDER": "Gestione turni",
-        "TOOLTIP_TURN_ORDER": "Gestisci l'ordine di turno dei giocatori",
         "SHOW_WEAPONS": "Armi",
-        "TOOLTIP_SHOW_WEAPONS": "Visualizza le armi",
         "SHOW_CRITIC_DAMAGE": "Danni critici",
-        "TOOLTIP_SHOW_CRITIC_DAMAGE": "Visualizza i danni critici",
-        "CREATE_CHARACTER_ULTIMA_ROTTA": "Generatore personaggi",
-        "TOOLTIP_CREATE_CHARACTER_ULTIMA_ROTTA": "Genera un personaggio per l'ultima rotta",
+        "CREATE_CHARACTER": "Generatore personaggi",
         "TURN_ORDER_FEATURE": {
             "TITLE": "Ordine di Turno",
             "CHARACTER_NAME": "Nome del Personaggio",
@@ -454,6 +548,10 @@
             "INITIATIVE_PLACEHOLDER": "Inserisci iniziativa",
             "HEALTH_PLACEHOLDER": "Inserisci salute",
             "DELETE": "Elimina"
-        }
+        },
+        "PNG_GENERATOR": "Generatore di PNG"
+    },
+    "STEPPER_DIALOG":{
+        "PROMPT_4": "Utilizza i Metri come sistema di unita di misura e dammi in output solamente il JSON in lingua {{lang}}"
     }
 }

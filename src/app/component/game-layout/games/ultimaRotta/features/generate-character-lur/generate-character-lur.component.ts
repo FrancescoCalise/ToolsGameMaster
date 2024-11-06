@@ -11,7 +11,7 @@ import { SessionManagerWidgetComponent } from '../../../../../session-manager-wi
 import { fieldMapPDFLUR, UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
 import { RandomNameService } from '../../../../../../services/randomNameService';
 import { MatDialog } from '@angular/material/dialog';
-import { CharacterDialogComponent } from './character-dialog-form/character-dialog.component';
+import { CharacterDialogLURComponent } from './character-dialog-form/character-dialog-lur.component';
 import { PdfService } from '../../../../../../services/pdf.service';
 import { SharedFields } from '../../../../../../shared/shared-fields.module';
 
@@ -60,7 +60,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
 
   openCharacterDialog(character?: CharacterSheetLURTemplate) {
     const isMobile = window.innerWidth < 768;
-    const dialogRef = this.dialog.open(CharacterDialogComponent, {
+    const dialogRef = this.dialog.open(CharacterDialogLURComponent, {
       width: isMobile ? '100%' : '80%',
       height: isMobile ? '100%' : '90%',
       minHeight: '90%',
@@ -130,7 +130,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     let newChar = character ? character : await this.generateRandom(false);
     if (newChar) {
       await this.pdfService.loadPdf(this.pathTemplateFIle);
-      this.pdfService.updateValues(newChar, fieldMapPDFLUR);
+      this.pdfService.updateFieldsWithMap(newChar, fieldMapPDFLUR);
       let pdf = await this.pdfService.getPDFUpdated();
       let fileName = `${newChar.name}_${newChar.genetic_and_role}.pdf`;
       this.pdfService.downloadPdf(pdf, fileName);

@@ -1,0 +1,87 @@
+.editor {
+  width: 100%;
+  background-color: #fff;
+  padding: 15px;
+  border: 1px solid #d3b67d;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  color: #8a2b1d;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.form-control {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.card {
+  width: 350px;
+  background-color: #fbf5e9;
+  color: #3b2214;
+  padding: 20px;
+  border: 1px solid #d3b67d;
+  border-radius: 5px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.card h2 {
+  color: #8a2b1d;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.subtype {
+  font-size: 14px;
+  color: #553b26;
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid #d3b67d;
+  margin: 10px 0;
+}
+
+.stats-table {
+  width: 100%;
+  text-align: center;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.stats-table th,
+.stats-table td {
+  padding: 5px;
+  border: 1px solid #d3b67d;
+  font-size: 14px;
+}
+
+button {
+  margin-top: 20px;
+  background-color: #8a2b1d;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+button:hover {
+  background-color: #6e2117;
+}
+.dropdown-item{
+  padding: auto;
+  max-width: 100%;
+  overflow-x: hidden;
+}

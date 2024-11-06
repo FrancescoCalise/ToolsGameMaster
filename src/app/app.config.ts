@@ -20,6 +20,7 @@ import { provideToastr } from 'ngx-toastr'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GlobalErrorHandler } from './services/gobal-error-handler.service';
 import { FireBaseProviders } from './firebase-provider';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);

@@ -9,11 +9,14 @@ import { SpinnerService } from '../../../../../../services/spinner.service';
 import { SessionManagerWidgetComponent } from '../../../../../session-manager-widget/session-manager-widget.component';
 import { RandomNameService } from '../../../../../../services/randomNameService';
 import { MatDialog } from '@angular/material/dialog';
-import { CharacterDialogComponent } from './character-dialog-form/character-dialog.component';
+import { CharacterDialogDND5eComponent } from './character-dialog-form/character-dialog-dnd5e.component';
 import { PdfService } from '../../../../../../services/pdf.service';
 import { SharedFields } from '../../../../../../shared/shared-fields.module';
-import { CharacterSheetDND5ETemplate } from './charachter-sheet-dnd5e';
-import { MethodNotImplementedError } from 'pdf-lib';
+import { CharacterSheetDND5ETemplate, initializeCharacterSheet } from './charachter-sheet-dnd5e';
+import { UtilitiesCreateCharacterDND5 } from './utilities-create-character-dnd5e/utilities-create-character-dnd5e';
+import { FormField, DialogAiGeneration, StepperData } from '../../../../feature-sitemap/dialog-ai-generation/dialog-ai-generation.component';
+import { firstValueFrom } from 'rxjs';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-generate-character-dnd5e',
@@ -27,11 +30,11 @@ import { MethodNotImplementedError } from 'pdf-lib';
   ],
 })
 export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
-  
-
+  readonly pathTemplateFIle = UtilitiesCreateCharacterDND5.pathTemplateFIle.replace('{0}', this.translationMessageService.getLanguage());
   sessionLoaded = false;
   defaultSession: SessionManager | undefined = undefined;
   characters: CharacterSheetDND5ETemplate[] = [];
+  aiPrompt_1: string = 'Generami un PG per D&D 5e. Vorrei fosse {Name} un {Race} {Class} di livello {Level}.\n';
 
   constructor(private translationMessageService: TranslationMessageService,
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetDND5ETemplate>,
@@ -55,7 +58,7 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
 
   openCharacterDialog(character?: CharacterSheetDND5ETemplate) {
     const isMobile = window.innerWidth < 768;
-    const dialogRef = this.dialog.open(CharacterDialogComponent, {
+    const dialogRef = this.dialog.open(CharacterDialogDND5eComponent, {
       width: isMobile ? '100%' : '80%',
       height: isMobile ? '100%' : '90%',
       minHeight: '90%',
@@ -106,14 +109,79 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
     this.characters = await this.firestoreLurSheetService.getItemsWhere(whereConditions);
   }
 
-
-  async generateRandom(save: boolean): Promise<CharacterSheetDND5ETemplate> {
-
-    throw new MethodNotImplementedError("DND 5e", "generateRandom NON IMPLEMENTATO")
+  async addRandomCharacter() {
+    let pg = await this.openSteperCreationPG();
+    if (pg) {
+      this.addCharacter(pg);
+    }
   }
 
-  async printPDF(character?: CharacterSheetDND5ETemplate) {
-    throw new MethodNotImplementedError("DND 5e", "printPDF NON IMPLEMENTATO")
+  async printRandomCharacter() {
+    let pg = await this.openSteperCreationPG();
+    if (pg) {
+      this.printPDF(pg);
+    }
   }
 
+  async printPDF(character: CharacterSheetDND5ETemplate) {
+    await this.pdfService.loadPdf(this.pathTemplateFIle);
+    const fields = await this.pdfService.getAllFields();
+
+    this.pdfService.updateFieldsFromJson(character, fields);
+    let pdf = await this.pdfService.getPDFUpdated();
+    let fileName = `${character.CharacterName}_${character.Class}_${character.Race}.pdf`;
+    this.pdfService.downloadPdf(pdf, fileName);
+  }
+
+  async openSteperCreationPG(): Promise<CharacterSheetDND5ETemplate | undefined> {
+    let formBuilder = new FormGroup({
+      Name: new FormControl(''),
+      Class: new FormControl(''),
+      Race: new FormControl(''),
+      Level: new FormControl('', [Validators.min(1), Validators.max(20)]),
+    });
+
+    let labelLevel = await this.translationMessageService.translate('DUNGEON_AND_DRAGONS_5E.SHEET.LEVEL')
+    let labelName = await this.translationMessageService.translate('DUNGEON_AND_DRAGONS_5E.SHEET.NAME')
+    let labelClass = await this.translationMessageService.translate('DUNGEON_AND_DRAGONS_5E.SHEET.CLASS')
+    let labelRace = await this.translationMessageService.translate('DUNGEON_AND_DRAGONS_5E.SHEET.RACE')
+
+    let formFields: FormField[] = [
+      { label: labelName, controlName: 'Name', type: 'text' },
+      { label: labelRace, controlName: 'Race', type: 'text' },
+      { label: labelClass, controlName: 'Class', type: 'text' },
+      { label: labelLevel, controlName: 'Level', type: 'number' },
+    ];
+
+    let newPG = initializeCharacterSheet();
+
+    let stepperData: StepperData = {
+      template: newPG,
+      prompt_1: this.aiPrompt_1,
+      formGroup: formBuilder,
+      formFields: formFields
+    }
+    const dialogRef = this.dialog.open(DialogAiGeneration, {
+      width: '80%',
+      height: 'auto',
+      minHeight: 'auto',
+      data: stepperData,
+    });
+
+    try {
+      const result = await firstValueFrom(dialogRef.afterClosed());
+
+      if (result && JSON.parse(result) as CharacterSheetDND5ETemplate) {
+        return JSON.parse(result) as CharacterSheetDND5ETemplate;
+      } else if (result) {
+        throw new Error("Error in the creation of the character");
+      }
+      return;
+    } catch (error) {
+      console.error(error);
+      throw new Error("Dialog closed without a result or error in character creation.");
+    }
+  }
 }
+
+

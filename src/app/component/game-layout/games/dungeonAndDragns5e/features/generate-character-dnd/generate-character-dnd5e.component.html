@@ -2,12 +2,12 @@
     <div class="d-flex mb-3 w-100 flex-column">
         <div class="d-flex justify-content-between align-items-center">
             <h1>
-                <strong>{{ 'DUNGEON_AND_DRAGONS.CREATE_CHARACTER.CREATE_CHARACTER' | translate }}</strong>
+                <strong>{{ 'FEATURE.CREATE_CHARACTER' | translate }}</strong>
             </h1>
             <div class="d-flex">
                 <app-field-button colorClass="btn-success me-2" icon="casino"
-                    (buttonClick)="generateRandom(true)"></app-field-button>
-                <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="printPDF()"></app-field-button>
+                    (buttonClick)="addRandomCharacter()"></app-field-button>
+                <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="printRandomCharacter()"></app-field-button>
                 <app-field-button colorClass="btn-primary" icon="add"
                     (buttonClick)="openCharacterDialog()"></app-field-button>
             </div>
@@ -25,11 +25,11 @@
             <mat-card class="h-100 w-100">
                 <mat-card-header class="text-center">
                     <mat-card-title>
-                        <h4>NOME</h4>
+                        <h4>{{character.CharacterName}}</h4>
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content class="text-center">
-                    <h5>RAZZA</h5>
+                    <h5>{{character.Race}} {{character.Class}} - {{'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.LEVEL' | translate}} {{character.Level}}</h5>
                 </mat-card-content>
                 <mat-card-actions class="d-flex justify-content-center">
                     <app-field-button colorClass="btn-primary me-2" icon="edit"
@@ -44,8 +44,10 @@
         </div>
     </div>
 
-
+    <div>
+        
+    </div>
     <ng-template #noCharacters>
-        <div class="alert alert-info text-center">{{ 'DUNGEON_AND_DRAGONS.CREATE_CHARACTER.NO_CHARACTERS' | translate }}</div>
+        <div class="alert alert-info text-center">{{ 'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.NO_CHARACTERS' | translate }}</div>
     </ng-template>
 </div>

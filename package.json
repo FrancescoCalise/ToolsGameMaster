@@ -32,6 +32,7 @@
     "firebase": "^10.12.1",
     "flag-icons": "^7.2.3",
     "fontkit": "^2.0.4",
+    "html2canvas": "^1.4.1",
     "ngx-spinner": "^17.0.0",
     "ngx-toastr": "^19.0.0",
     "pdf-lib": "^1.17.1",

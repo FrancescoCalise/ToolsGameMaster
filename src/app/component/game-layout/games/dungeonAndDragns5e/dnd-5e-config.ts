@@ -3,6 +3,7 @@ import { GameConfig } from "../../../../interface/GameConfig";
 import { SessionManagerComponenet } from "../../feature-sitemap/session-manager/session-manger.component";
 import { TurnOrderComponent } from "../../feature-sitemap/turn-order/turn-order.component";
 import { GenerateCharacterDND5EComponent } from "./features/generate-character-dnd/generate-character-dnd5e.component";
+import { PNGGenerator5eComponent } from "./features/png-generator/png-generator-5e.component";
 
 
 export const dnd5eConfig: GameConfig =
@@ -25,8 +26,14 @@ export const dnd5eConfig: GameConfig =
       changePage: false
     },
     {
-      id: 'CREATE_CHARACTER_ULTIMA_ROTTA',
+      id: 'CREATE_CHARACTER',
       component:GenerateCharacterDND5EComponent,
+      icon: 'turn_slight_right',
+      changePage: true
+    },
+    {
+      id: 'PNG_GENERATOR',
+      component:PNGGenerator5eComponent,
       icon: 'turn_slight_right',
       changePage: true
     }

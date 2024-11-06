@@ -82,7 +82,7 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
         this.activeFeatures = this.gameConfig.features;
         for (const feature of this.activeFeatures) {
             feature.description = await this.translationMessageService.translate(`FEATURE.${feature.id}`);
-            feature.tooltip = await this.translationMessageService.translate(`FEATURE.TOOLTIP_${feature.id}`);
+            //feature.tooltip = await this.translationMessageService.translate(`FEATURE.TOOLTIP_${feature.id}`);
         }
 
     }

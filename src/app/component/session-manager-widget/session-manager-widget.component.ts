@@ -1,4 +1,4 @@
-import { Component,EventEmitter,Inject,OnDestroy,OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SharedModule } from '../../shared/shared.module';
 import { SessionManager } from '../../interface/Document/SessionManager';
 import { ActivatedRoute } from '@angular/router';
@@ -25,31 +25,36 @@ export class SessionManagerWidgetComponent implements OnInit, OnDestroy {
   };
   gameName = '';
   @Output() sessionLoaded = new EventEmitter<SessionManager>()
+  @Input() gameNameInput: string = "";
 
   constructor(
     private route: ActivatedRoute,
     private cacheService: CacheStorageService,
     @Inject(SESSION_MANAGER_SERVICE) private firestoreSessionManagerService: FirestoreService<SessionManager>
-  ) { 
-    
+  ) {
+
   }
 
   ngOnDestroy(): void {
-    
+
   }
 
   async ngOnInit(): Promise<void> {
-    this.route.parent?.data.subscribe(data => {
-      this.gameName = data['gameName'];
-    });
-    if (!this.gameName) {
-      throw new Error('route is not properly configured');
+    if (this.gameNameInput !== "") {
+      this.gameName = this.gameNameInput;
+    } else {
+      this.route.parent?.data.subscribe(data => {
+        this.gameName = data['gameName'];
+      });
+      if (!this.gameName) {
+        throw new Error('route is not properly configured');
+      }
     }
     await this.setDefaultSession();
   }
 
   async setDefaultSession(): Promise<void> {
-    
+
     let defaultSession = this.cacheService.getItem(this.cacheService.defaultSession) as SessionManager;
     if (!defaultSession) {
       let whereConditions: QueryFieldFilterConstraint[] = [];
@@ -60,7 +65,7 @@ export class SessionManagerWidgetComponent implements OnInit, OnDestroy {
       if (sessions && sessions.length > 0) {
         defaultSession = sessions[0];
         this.cacheService.setItem(this.cacheService.defaultSession, defaultSession);
-      }else{
+      } else {
         this.defaultSession = {
           sessionName: '',
           gameName: '',

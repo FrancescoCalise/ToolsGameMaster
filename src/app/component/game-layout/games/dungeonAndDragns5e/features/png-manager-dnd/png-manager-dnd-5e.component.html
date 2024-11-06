@@ -5,11 +5,9 @@
                 <strong>{{ 'FEATURE.CREATE_CHARACTER' | translate }}</strong>
             </h1>
             <div class="d-flex">
-                <app-field-button colorClass="btn-success me-2" icon="casino"
-                    (buttonClick)="addRandomCharacter()"></app-field-button>
-                <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="printRandomCharacter()"></app-field-button>
-                <app-field-button colorClass="btn-primary" icon="add"
-                    (buttonClick)="openCharacterDialog()"></app-field-button>
+                <app-field-button colorClass="btn-success" icon="close"
+                    tooltip="{{ 'DUNGEON_AND_DRAGONS_5E.FEATURE.PNG_MANAGER.CLOSE' | translate }}" (buttonClick)="close()">
+                    </app-field-button>
             </div>
         </div>
 
@@ -19,25 +17,24 @@
         </div>
     </div>
 
-
-    <div *ngIf="characters.length > 0; else noCharacters" class="row g-2">
-        <div *ngFor="let character of characters" class="col-6 col-md-4 col-lg-2">
+    <div *ngIf="pngList.length > 0; else noPng" class="row g-2">
+        <div *ngFor="let png of pngList" class="col-6 col-md-4 col-lg-2">
             <mat-card class="h-100 w-100">
                 <mat-card-header class="text-center">
                     <mat-card-title>
-                        <h4>{{character.CharacterName}}</h4>
+                        <h4>{{png.name}}</h4>
                     </mat-card-title>
                 </mat-card-header>
                 <mat-card-content class="text-center">
-                    <h5>{{character.Race}} {{character.Class}} - {{'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.LEVEL' | translate}} {{character.Level}}</h5>
+                    <h5>{{png.size}} {{png.type}} - {{'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.LEVEL' | translate}} {{png.challengeRating}}</h5>
                 </mat-card-content>
                 <mat-card-actions class="d-flex justify-content-center">
                     <app-field-button colorClass="btn-primary me-2" icon="edit"
-                        (buttonClick)="openCharacterDialog(character)">
+                        (buttonClick)="goToEdit(png)">
                     </app-field-button>
-                    <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="printPDF(character)">
+                    <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="openPreview(png)">
                     </app-field-button>
-                    <app-field-button colorClass="btn-danger" icon="delete" (buttonClick)="deleteCharacter(character)">
+                    <app-field-button colorClass="btn-danger" icon="delete" (buttonClick)="deleteCharacter(png)">
                     </app-field-button>
                 </mat-card-actions>
             </mat-card>
@@ -47,7 +44,7 @@
     <div>
         
     </div>
-    <ng-template #noCharacters>
+    <ng-template #noPng>
         <div class="alert alert-info text-center">{{ 'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.NO_CHARACTERS' | translate }}</div>
     </ng-template>
 </div>

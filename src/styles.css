@@ -192,3 +192,24 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
     -moz-appearance: textfield;
 }
+
+.content-scroll {
+  overflow-y: auto;
+  overflow-x: auto;
+  max-height: calc(80vh - 100px); /* Lascia spazio per header e footer */
+}
+
+.png-preview-dialog{
+  width: auto;
+  max-width: 100vw!important;
+  max-height: 100vh!important;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.mat-mdc-dialog-surface{
+  overflow: hidden!important;
+}

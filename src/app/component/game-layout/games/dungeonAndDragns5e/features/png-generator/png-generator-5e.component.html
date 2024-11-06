@@ -1,17 +1,42 @@
+<div class="row ">
+  <app-session-manager-widget class="me-2" (sessionLoaded)="onSessionLoaded($event)">
+  </app-session-manager-widget>
+</div>
+
 <div class="editor container">
 
   <div class="d-flex justify-content-between align-items-center mb-3">
     <h3 class="mb-0">{{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.EDIT_MONSTER_DETAILS' | translate}}</h3>
     
     <!-- Pulsante Carica da AI -->
-     <button class="btn btn-info me-2" (click)="loadFromAI()">
+     <button class="btn btn-success me-2" (click)="loadFromAI()">
       {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LOAD_FROM_AI' | translate }}
     </button>
 
     <!-- Dropdown InitFromTemplate -->
     <div class="dropdown">
-      <button class="btn btn-secondary dropdown-toggle" type="button" id="initFromTemplateDropdown"
-        data-bs-toggle="dropdown" aria-expanded="false">
+      <button class="btn btn-warning dropdown-toggle" type="button" id="initFromSession"
+        data-bs-toggle="dropdown" aria-expanded="false" [disabled]="pngFromSession.length == 0">
+        {{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.INIT_FROM_SESSION' | translate}}
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="initFromSession"
+        style="width: 100%; max-height: 400px; overflow-y: hidden; ">
+        <!-- Campo di input per il filtro -->
+        <li class="p-2">
+          <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
+            (input)="filterPngFromSession()" />
+        </li>
+        <!-- Elenco filtrato e limitato a 10 elementi -->
+        <li *ngFor="let template of filteredPngFromSession | slice:0:10">
+          <a class="dropdown-item" (click)="selectTemplate(template)">{{ template.name }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Dropdown InitFromTemplate -->
+    <div class="dropdown">
+      <button class="btn btn-warning dropdown-toggle" type="button" id="initFromTemplateDropdown"
+        data-bs-toggle="dropdown" aria-expanded="false" [disabled]="templates.length == 0">
         {{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.INIT_FROM_TEMPLATE' | translate}}
       </button>
       <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="initFromTemplateDropdown"
@@ -101,7 +126,7 @@
     <div class="col-12 mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILLS' | translate }}</h4>
-        <button (click)="addSkill()" class="btn btn-secondary">
+        <button (click)="addSkill()" class="btn btn-secondary dnd-5e">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -205,7 +230,7 @@
     <div class="col-12 mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAITS' | translate }}</h4>
-        <button mat-icon-button color="primary" (click)="addTrait()" aria-label="Add trait">
+        <button mat-icon-button color="primary dnd-5e" (click)="addTrait()" aria-label="Add trait">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -237,7 +262,7 @@
         </div>
 
         <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1" (click)="removeTrait(i)" aria-label="Remove trait">
+          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeTrait(i)" aria-label="Remove trait">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -248,7 +273,7 @@
     <div class="col-12 mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTIONS' | translate }}</h4>
-        <button mat-icon-button color="primary" (click)="addAction()" aria-label="Add action">
+        <button mat-icon-button color="primary dnd-5e" (click)="addAction()" aria-label="Add action">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -280,7 +305,7 @@
         </div>
 
         <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1" (click)="removeAction(i)" aria-label="Remove action">
+          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeAction(i)" aria-label="Remove action">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -291,7 +316,7 @@
     <div class="col-12 mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTIONS' | translate }}</h4>
-        <button mat-icon-button color="primary" (click)="addLegendaryAction()" aria-label="Add legendary action">
+        <button mat-icon-button color="primary dnd-5e" (click)="addLegendaryAction()" aria-label="Add legendary action">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -316,7 +341,7 @@
         </div>
 
         <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1" (click)="removeLegendaryAction(i)" aria-label="Remove legendary action">
+          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeLegendaryAction(i)" aria-label="Remove legendary action">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -328,7 +353,7 @@
     <div class="col-12 mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELLS' | translate }}</h4>
-        <button mat-icon-button color="primary" (click)="addSpell()" aria-label="Add spell">
+        <button mat-icon-button color="primary dnd-5e" (click)="addSpell()" aria-label="Add spell">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -352,7 +377,7 @@
         </div>
 
         <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1" (click)="removeSpell(i)" aria-label="Remove spell">
+          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeSpell(i)" aria-label="Remove spell">
             <mat-icon>delete</mat-icon>
           </button>
         </div>
@@ -372,5 +397,5 @@
 
 <div class="d-flex justify-content-center my-3">
   <button (click)="showPreview()" class="btn btn-primary mx-2">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SHOW_PREVIEW' | translate }}</button>
-  <button (click)="savePng()" class="btn btn-success mx-2">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVE_MONSTER' | translate }}</button>
+  <button (click)="savePng()" class="btn btn-success mx-2" [disabled]="!defaultSession">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVE_MONSTER' | translate }}</button>
 </div>

@@ -419,7 +419,7 @@
             "NO_CHARACTERS":"Nessun personaggio disponibile. Crea il tuo personaggio!."
         },
         "PNG_GENERATOR": {
-            "EDIT_MONSTER_DETAILS": "Modifica i dettagli del mostro",
+            "EDIT_MONSTER_DETAILS": "Modifica i dettagli del PNG",
             "INIT_FROM_TEMPLATE": "Inizializza da modello",
             "SEARCH_TEMPLATES": "Cerca modelli...",
             "NAME": "Nome",
@@ -435,6 +435,12 @@
             "INTELLIGENCE": "Intelligenza",
             "WISDOM": "Saggezza",
             "CHARISMA": "Carisma",
+            "SHORT_STRENGTH": "FOR",
+            "SHORT_DEXTERITY": "DES",
+            "SHORT_CONSTITUTION": "COS",
+            "SHORT_INTELLIGENCE": "INT",
+            "SHORT_WISDOM": "SAG",
+            "SHORT_CHARISMA": "CAR",
             "SAVING_THROWS": "Tiri salvezza",
             "STRENGTH_SAVE": "Tiro salvezza forza",
             "DEXTERITY_SAVE": "Tiro salvezza destrezza",
@@ -482,6 +488,8 @@
             "ENTER_SPELL_SLOTS": "Inserisci slot incantesimo",
             "SHOW_PREVIEW": "Mostra anteprima",
             "LOAD_FROM_AI": "Carica da AI",
+            "SAVE_MONSTER": "Salva png",
+            "INIT_FROM_SESSION":"Carica",
             "PREVIEW": {
                 "ARMOR_CLASS": "Classe Armatura",
                 "HIT_POINTS": "Punti Ferita",

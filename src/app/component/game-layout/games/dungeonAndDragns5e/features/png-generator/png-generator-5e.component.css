@@ -67,7 +67,7 @@ h3 {
   font-size: 14px;
 }
 
-button {
+.dnd-5e {
   margin-top: 20px;
   background-color: #8a2b1d;
   color: #fff;
@@ -77,7 +77,7 @@ button {
   font-size: 14px;
 }
 
-button:hover {
+.dnd-5e:hover {
   background-color: #6e2117;
 }
 .dropdown-item{

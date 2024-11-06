@@ -4,10 +4,10 @@ import { FeatureConfig } from '../../../interface/FeatureConfig';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { TranslationMessageService } from '../../../services/translation-message-service';
 import { ToastService } from '../../../services/toast.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { GameConfig } from '../../../interface/GameConfig';
 import { BreakpointService } from '../../../services/breakpoint.service';
-import { Subscription } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 import { DialogService } from '../../../services/dialog.sevice';
 
 
@@ -31,10 +31,11 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     activatedUrl: string = '';
     menuOpen: boolean = true;
     deviceType: string = '';
-    private deviceTypeSub: Subscription = new Subscription;
+    private deviceTypeSub: Subscription = new Subscription();
+    private routeChangeSub: Subscription = new Subscription();
     public hideLabel: boolean = false;
     private langSubscription!: Subscription;
-    
+
     constructor(
         private translationMessageService: TranslationMessageService,
         private route: ActivatedRoute,
@@ -47,8 +48,11 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
         if (this.deviceTypeSub) {
             this.deviceTypeSub.unsubscribe();
         }
-        if(this.langSubscription){
+        if (this.langSubscription) {
             this.langSubscription.unsubscribe();
+        }
+        if (this.routeChangeSub) {
+            this.routeChangeSub.unsubscribe();
         }
     }
 
@@ -64,8 +68,15 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
         }
 
         this.langSubscription = this.translationMessageService.onLanguageChange()
-        .subscribe(async (newLang) => {
-            await this.translateGameConfig();
+            .subscribe(async (newLang) => {
+                await this.translateGameConfig();
+            });
+
+        // Sottoscrizione per aggiornare `activatedUrl` quando cambia la route
+        this.routeChangeSub = this.router.events
+        .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+            this.activatedUrl = event.urlAfterRedirects.split('?')[0].split('#')[0];
         });
 
         await this.translateGameConfig();
@@ -73,7 +84,7 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     }
 
     isSmallDevice(): boolean {
-       return this.breakPointService.isSmallDevice(this.deviceType);
+        return this.breakPointService.isSmallDevice(this.deviceType);
     }
 
     async translateGameConfig() {
@@ -101,6 +112,7 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     activateFeature(feature: FeatureConfig) {
         if (feature.changePage) {
             let navigateTo = `/${this.getFullPath(this.route)}/${feature.id}`;
+            navigateTo = navigateTo.split('?')[0].split('#')[0];
             this.activatedUrl = navigateTo;
             this.router.navigateByUrl(navigateTo);
         } else {

@@ -6,23 +6,31 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 })
 export class DialogService {
     width: string = '90vw';
-    height: string = 'auto';
+    minHeight: string = '200px'; // Altezza minima per la dialog
     maxWidth: string = '90vw';
-    maxHeight: string = '90vh';
+    maxHeight: string = '80vh'; // Limita l’altezza massima all’80% dell’altezza visibile
     panelClass: string = '';
 
     constructor(private matDialog: MatDialog) { }
 
     public open(component: any, config: MatDialogConfig = {}): MatDialogRef<any> {
 
-        const dialogConfig = {
-            width: config.width ? config.width : this.width,
-            height: config.height ? config.height : this.height,
-            maxWidth: config.maxWidth ? config.maxWidth : this.maxWidth,
-            maxHeight: config.maxHeight ? config.maxHeight : this.maxHeight,
-            panelClass: config.panelClass ? config.panelClass : this.panelClass,
-            ...config
-        };
+        let dialogConfig = {};
+        if (config.panelClass) {
+            dialogConfig = {
+                panelClass: config.panelClass,
+                ...config
+            }
+        } else {
+            dialogConfig = {
+                width: config.width ? config.width : this.width,
+                maxWidth: config.maxWidth ? config.maxWidth : this.maxWidth,
+                maxHeight: config.maxHeight ? config.maxHeight : this.maxHeight,
+                minHeight: config.minHeight ? config.minHeight : this.minHeight,
+                
+                ...config
+            };
+        }
         return this.matDialog.open(component, dialogConfig);
     }
 

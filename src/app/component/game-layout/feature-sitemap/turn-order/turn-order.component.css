@@ -1,20 +1,27 @@
 /* Ensure text wraps within cells to prevent overflow */
 .text-wrap {
-    white-space: normal;
-    word-wrap: break-word;
-  }
-  
-  /* Control column widths */
-  .small-col {
-    max-width: 100px;
-  }
-  
-  .action-col {
-    width: 50px; /* Fix width for action buttons */
-  }
-  
-  /* Responsive table styling */
-  .table-wrapper {
-    overflow-x: auto; /* For smaller screens */
-  }
-  
+  white-space: normal;
+  word-wrap: break-word;
+}
+
+/* Control column widths */
+.small-col {
+  max-width: 100px;
+}
+
+.action-col {
+  width: 50px;
+  /* Fix width for action buttons */
+}
+
+/* Responsive table styling */
+.table-wrapper {
+  overflow-x: auto;
+  /* For smaller screens */
+}
+.turn-order-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-height: 100%;
+}

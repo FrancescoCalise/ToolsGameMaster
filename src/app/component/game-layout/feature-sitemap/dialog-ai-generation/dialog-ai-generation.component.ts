@@ -154,7 +154,6 @@ export class DialogAiGeneration implements OnInit {
     jsonTemplateValidatorAsync(template: any): AsyncValidatorFn {
         return (control: AbstractControl): Observable<ValidationErrors | null> => {
             try {
-                debugger;
                 const parsedValue = JSON.parse(control.value);
 
                 const isValid = this.validateTemplate(parsedValue, template);

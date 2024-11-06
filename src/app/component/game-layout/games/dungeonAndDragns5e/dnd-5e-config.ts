@@ -4,6 +4,7 @@ import { SessionManagerComponenet } from "../../feature-sitemap/session-manager/
 import { TurnOrderComponent } from "../../feature-sitemap/turn-order/turn-order.component";
 import { GenerateCharacterDND5EComponent } from "./features/generate-character-dnd/generate-character-dnd5e.component";
 import { PNGGenerator5eComponent } from "./features/png-generator/png-generator-5e.component";
+import { PNGManagerDnd5e } from "./features/png-manager-dnd/png-manager-dnd-5e.component";
 
 
 export const dnd5eConfig: GameConfig =
@@ -36,6 +37,12 @@ export const dnd5eConfig: GameConfig =
       component:PNGGenerator5eComponent,
       icon: 'turn_slight_right',
       changePage: true
+    },
+    {
+      id: 'PNG_MANAGER',
+      component:PNGManagerDnd5e,
+      icon: 'turn_slight_right',
+      changePage: false
     }
   ] as FeatureConfig[]
 };

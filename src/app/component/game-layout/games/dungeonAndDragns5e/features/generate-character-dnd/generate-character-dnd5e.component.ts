@@ -18,6 +18,7 @@ import { FormField, DialogAiGeneration, StepperData } from '../../../../feature-
 import { firstValueFrom } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../../../../../../services/dialog.sevice';
+import { dnd5eConfig } from '../../dnd-5e-config';
 
 @Component({
   selector: 'app-generate-character-dnd5e',
@@ -36,6 +37,7 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
   defaultSession: SessionManager | undefined = undefined;
   characters: CharacterSheetDND5ETemplate[] = [];
   aiPrompt_1: string = 'Generami un PG per D&D 5e. Vorrei fosse {Name} un {Race} {Class} di livello {Level}.\n';
+  public configGame = dnd5eConfig;
 
   constructor(private translationMessageService: TranslationMessageService,
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetDND5ETemplate>,

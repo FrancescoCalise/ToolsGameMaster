@@ -1,7 +1,7 @@
 import { BaseDocument } from "../../../../../interface/Document/BaseModel";
 
 export interface PNG_5E extends BaseDocument {
-  sessiondId?: string;
+  sessionId?: string;
   name: string;
   size: string;
   type: string;

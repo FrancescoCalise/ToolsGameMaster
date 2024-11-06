@@ -7,6 +7,7 @@ import { PdfService } from "../../../../services/pdf.service";
 import { ToastService } from "../../../../services/toast.service";
 import { CacheStorageService } from "../../../../services/cache-storage.service";
 import { TranslationMessageService } from "../../../../services/translation-message-service";
+import { DialogService } from "../../../../services/dialog.sevice";
 
 @Directive()
 export class GameBaseComponent implements OnInit {
@@ -22,7 +23,7 @@ export class GameBaseComponent implements OnInit {
         protected toastService: ToastService,
         protected cdr: ChangeDetectorRef,
         protected breakPointService: BreakpointService,
-        protected dialog: MatDialog,
+        protected dialogService: DialogService,
         protected cacheStorage: CacheStorageService,
         protected translationMessageService: TranslationMessageService
     ) {}

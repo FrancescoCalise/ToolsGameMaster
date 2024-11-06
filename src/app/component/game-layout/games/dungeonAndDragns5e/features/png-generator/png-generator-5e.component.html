@@ -5,7 +5,7 @@
     
     <!-- Pulsante Carica da AI -->
      <button class="btn btn-info me-2" (click)="loadFromAI()">
-      {{ 'DUNGEON_AND_DRAGONS_5E.PGN_GENERATOR.LOAD_FROM_AI' | translate }}
+      {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LOAD_FROM_AI' | translate }}
     </button>
 
     <!-- Dropdown InitFromTemplate -->
@@ -35,7 +35,7 @@
     <div class="col-2 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.NAME' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.name"
+        <input matInput [(ngModel)]="png.name"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.NAME' | translate }}">
       </mat-form-field>
     </div>
@@ -43,7 +43,7 @@
     <div class="col-2 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SIZE' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.size"
+        <input matInput [(ngModel)]="png.size"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SIZE' | translate }}">
       </mat-form-field>
     </div>
@@ -51,7 +51,7 @@
     <div class="col-2 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TYPE' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.type"
+        <input matInput [(ngModel)]="png.type"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TYPE' | translate }}">
       </mat-form-field>
     </div>
@@ -59,7 +59,7 @@
     <div class="col-2 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ALIGNMENT' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.alignment"
+        <input matInput [(ngModel)]="png.alignment"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ALIGNMENT' | translate }}">
       </mat-form-field>
     </div>
@@ -67,7 +67,7 @@
     <div class="col-2 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.armorClass"
+        <input matInput [(ngModel)]="png.armorClass"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}">
       </mat-form-field>
     </div>
@@ -75,7 +75,7 @@
     <div class="col-2 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.hitPoints"
+        <input matInput [(ngModel)]="png.hitPoints"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}">
       </mat-form-field>
     </div>
@@ -84,7 +84,7 @@
     <div class="col-2 mb-3" *ngFor="let attr of attributes">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ translationIds[attr] | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.attributes[attr]" placeholder="{{ translationIds[attr] | translate }}">
+        <input matInput [(ngModel)]="png.attributes[attr]" placeholder="{{ translationIds[attr] | translate }}">
       </mat-form-field>
     </div>
 
@@ -92,7 +92,7 @@
     <div class="col-2 mb-3" *ngFor="let save of savingThrows">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ translationIds[save + 'Save'] | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.savingThrows[save]"
+        <input matInput [(ngModel)]="png.savingThrows[save]"
           placeholder="{{ translationIds[save + 'Save'] | translate }}">
       </mat-form-field>
     </div>
@@ -108,11 +108,11 @@
 
       <!-- Lista delle skill esistenti -->
       <div class="row mt-3">
-        <div class="col-2 mb-2 d-flex " *ngFor="let skill of monster.skills; let i = index; trackBy: trackByIndex">
+        <div class="col-2 mb-2 d-flex " *ngFor="let skill of png.skills; let i = index; trackBy: trackByIndex">
           <div class="d-flex col-10">
             <mat-form-field appearance="outline" class="w-100">
               <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILL' | translate }}</mat-label>
-              <input matInput [(ngModel)]="monster.skills[i]"
+              <input matInput [(ngModel)]="png.skills[i]"
                 placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILL' | translate }}">
             </mat-form-field>
           </div>
@@ -128,7 +128,7 @@
       <div class="col-4 col-md-2 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.speed"
+          <input matInput [(ngModel)]="png.speed"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}">
         </mat-form-field>
       </div>
@@ -136,7 +136,7 @@
       <div class="col-4 col-md-3 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.senses"
+          <input matInput [(ngModel)]="png.senses"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}">
         </mat-form-field>
       </div>
@@ -144,7 +144,7 @@
       <div class="col-4 col-md-2 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PASSIVE_PERCEPTION' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.passivePerception" type="number"
+          <input matInput [(ngModel)]="png.passivePerception" type="number"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_PASSIVE_PERCEPTION' | translate }}">
         </mat-form-field>
       </div>
@@ -152,7 +152,7 @@
       <div class="col-6 col-md-3 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LANGUAGES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.languages"
+          <input matInput [(ngModel)]="png.languages"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LANGUAGES' | translate }}">
         </mat-form-field>
       </div>
@@ -160,7 +160,7 @@
       <div class="col-6 col-md-2 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.challengeRating"
+          <input matInput [(ngModel)]="png.challengeRating"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}">
         </mat-form-field>
       </div>
@@ -171,7 +171,7 @@
       <div class="col-6 col-md-3 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.damageResistances"
+          <input matInput [(ngModel)]="png.damageResistances"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate }}">
         </mat-form-field>
       </div>
@@ -179,7 +179,7 @@
       <div class="col-6 col-md-3 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.damageVulnerabilities"
+          <input matInput [(ngModel)]="png.damageVulnerabilities"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate }}">
         </mat-form-field>
       </div>
@@ -187,7 +187,7 @@
       <div class="col-6 col-md-3 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.damageImmunities"
+          <input matInput [(ngModel)]="png.damageImmunities"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}">
         </mat-form-field>
       </div>
@@ -195,7 +195,7 @@
       <div class="col-6 col-md-3 mb-3">
         <mat-form-field appearance="outline" class="w-100">
           <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="monster.conditionImmunities"
+          <input matInput [(ngModel)]="png.conditionImmunities"
             placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate }}">
         </mat-form-field>
       </div>
@@ -211,11 +211,11 @@
       </div>
 
       <!-- Lista dei trait esistenti -->
-      <div *ngFor="let trait of monster.traits; let i = index" class="row mt-3">
+      <div *ngFor="let trait of png.traits; let i = index" class="row mt-3">
         <div class="col-4 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.traits[i].name"
+            <input matInput [(ngModel)]="png.traits[i].name"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_TRAIT_NAME' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -223,7 +223,7 @@
         <div class="col-4 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_DESCRIPTION' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.traits[i].description"
+            <input matInput [(ngModel)]="png.traits[i].description"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_TRAIT_DESCRIPTION' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -231,7 +231,7 @@
         <div class="col-3 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_ATTACK' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.traits[i].attack"
+            <input matInput [(ngModel)]="png.traits[i].attack"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_TRAIT_ATTACK' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -254,11 +254,11 @@
       </div>
 
       <!-- Lista delle actions esistenti -->
-      <div *ngFor="let action of monster.actions; let i = index" class="row mt-3">
+      <div *ngFor="let action of png.actions; let i = index" class="row mt-3">
         <div class="col-4 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.actions[i].name"
+            <input matInput [(ngModel)]="png.actions[i].name"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_NAME' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -266,7 +266,7 @@
         <div class="col-4 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_DESCRIPTION' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.actions[i].description"
+            <input matInput [(ngModel)]="png.actions[i].description"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_DESCRIPTION' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -274,7 +274,7 @@
         <div class="col-3 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_ATTACK' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.actions[i].attack"
+            <input matInput [(ngModel)]="png.actions[i].attack"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_ATTACK' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -297,11 +297,11 @@
       </div>
 
       <!-- Lista delle legendary actions esistenti -->
-      <div *ngFor="let action of monster.legendaryActions; let i = index" class="row mt-3">
+      <div *ngFor="let action of png.legendaryActions; let i = index" class="row mt-3">
         <div class="col-4 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTION_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.legendaryActions[i].name"
+            <input matInput [(ngModel)]="png.legendaryActions[i].name"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_LEGENDARY_ACTION_NAME' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -310,7 +310,7 @@
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTION_DESCRIPTION' | translate }} {{i +
               1}}</mat-label>
-            <input matInput [(ngModel)]="monster.legendaryActions[i].description"
+            <input matInput [(ngModel)]="png.legendaryActions[i].description"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_LEGENDARY_ACTION_DESCRIPTION' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -334,11 +334,11 @@
       </div>
 
       <!-- Lista degli spell esistenti -->
-      <div *ngFor="let spell of monster.spells; let i = index" class="row mt-3">
+      <div *ngFor="let spell of png.spells; let i = index" class="row mt-3">
         <div class="col-3 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_LEVEL' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.spells[i].level" type="number"
+            <input matInput [(ngModel)]="png.spells[i].level" type="number"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_SPELL_LEVEL' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -346,7 +346,7 @@
         <div class="col-8 mb-2">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="monster.spells[i].spellName"
+            <input matInput [(ngModel)]="png.spells[i].spellName"
               placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_SPELL_NAME' | translate }} {{i + 1}}">
           </mat-form-field>
         </div>
@@ -363,7 +363,7 @@
     <div class="col-12 col-lg-12 mb-3">
       <mat-form-field appearance="outline" class="w-100">
         <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_SLOTS' | translate }}</mat-label>
-        <input matInput [(ngModel)]="monster.spellSlots" type="number"
+        <input matInput [(ngModel)]="png.spellSlots" type="number"
           placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_SPELL_SLOTS' | translate }}">
       </mat-form-field>
     </div>
@@ -371,6 +371,6 @@
 </div>
 
 <div class="d-flex justify-content-center my-3">
-  <button (click)="showPreview()" class="btn btn-primary">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SHOW_PREVIEW' |
-    translate }}</button>
+  <button (click)="showPreview()" class="btn btn-primary mx-2">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SHOW_PREVIEW' | translate }}</button>
+  <button (click)="savePng()" class="btn btn-success mx-2">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVE_MONSTER' | translate }}</button>
 </div>

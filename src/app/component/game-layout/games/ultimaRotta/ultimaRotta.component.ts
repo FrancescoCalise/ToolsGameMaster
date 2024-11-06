@@ -121,7 +121,7 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit,On
   }
 
   openDeathSunDialog(showRollDice = true) {
-    this.dialog.open(DeathSunComponent, {
+    this.dialogService.open(DeathSunComponent, {
       panelClass: 'death-sun-dialog',
       data: {
         solarDeathTestValue: this.solarDeathTestValue,

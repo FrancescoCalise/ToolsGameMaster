@@ -1,8 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { SharedFields } from "../../../../../../shared/shared-fields.module";
 import { SharedModule } from "../../../../../../shared/shared.module";
-import { createEmptyMonster, Monster } from "../../interface/bestiary-interface";
-import { MatDialog } from "@angular/material/dialog";
+import { createEmptyPng, PNG_5E } from "../../interface/png_5e-interface";
 import { PNGreviewDialogComponent } from "./png-card-pewview/png-card-preview-componenet";
 import { HttpClient } from "@angular/common/http";
 import { firstValueFrom } from "rxjs";
@@ -10,6 +9,7 @@ import { SpinnerService } from "../../../../../../services/spinner.service";
 import { FormField, DialogAiGeneration, StepperData } from "../../../../feature-sitemap/dialog-ai-generation/dialog-ai-generation.component";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { TranslationMessageService } from "../../../../../../services/translation-message-service";
+import { DialogService } from "../../../../../../services/dialog.sevice";
 
 @Component({
     selector: 'app-png-generator-5e',
@@ -22,13 +22,13 @@ import { TranslationMessageService } from "../../../../../../services/translatio
     ]
 })
 export class PNGGenerator5eComponent implements OnInit {
-    templates: Monster[] = []; // Variabile per contenere gli elementi della dropdown
-    filteredTemplates: Monster[] = [];
+    templates: PNG_5E[] = []; // Variabile per contenere gli elementi della dropdown
+    filteredTemplates: PNG_5E[] = [];
     filterText: string = '';
-    monster: Monster = createEmptyMonster();
+    png: PNG_5E = createEmptyPng();
     // Definizione degli attributi e tiri salvezza con tipi espliciti
-    attributes: Array<keyof Monster['attributes']> = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-    savingThrows: Array<keyof Monster['savingThrows']> = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+    attributes: Array<keyof PNG_5E['attributes']> = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
+    savingThrows: Array<keyof PNG_5E['savingThrows']> = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
 
     translationIds: { [key: string]: string } = {
         // Attributi
@@ -50,7 +50,12 @@ export class PNGGenerator5eComponent implements OnInit {
 
     aiPrompt_1: string = 'Generami un mostro / PNG per D&D 5e di grado sfida {challengeRating}.\n';
 
-    constructor(private dialog: MatDialog, private http: HttpClient, private spinnerService: SpinnerService, private translationMessageService: TranslationMessageService) {
+    constructor(
+        private dialogService: DialogService, 
+        private http: HttpClient, 
+        private spinnerService: SpinnerService,
+        private translationMessageService: TranslationMessageService
+    ) {
     }
 
     async ngOnInit(): Promise<void> {
@@ -61,7 +66,7 @@ export class PNGGenerator5eComponent implements OnInit {
 
     async loadTemplates(): Promise<void> {
         try {
-            const data: Monster[] = await firstValueFrom(this.http.get<Monster[]>('/assets/dnd/bestiary/bestiary.json'));
+            const data: PNG_5E[] = await firstValueFrom(this.http.get<PNG_5E[]>('/assets/dnd/bestiary/bestiary.json'));
             this.templates = data;
             console.log('Templates:', data.length);
             this.filteredTemplates = data; // Imposta i dati iniziali filtrati
@@ -78,16 +83,16 @@ export class PNGGenerator5eComponent implements OnInit {
         );
     }
 
-    selectTemplate(template: Monster): void {
-        this.monster = { ...template };
+    selectTemplate(template: PNG_5E): void {
+        this.png = { ...template };
     }
 
     addSkill() {
-        this.monster.skills = [...this.monster.skills, '']; // Aggiunge una skill vuota
+        this.png.skills = [...this.png.skills, '']; // Aggiunge una skill vuota
     }
 
     removeSkill(index: number) {
-        this.monster.skills = this.monster.skills.filter((_, i) => i !== index); // Rimuove la skill all'indice specificato
+        this.png.skills = this.png.skills.filter((_, i) => i !== index); // Rimuove la skill all'indice specificato
     }
 
     trackByIndex(index: number, item: any): number {
@@ -96,47 +101,47 @@ export class PNGGenerator5eComponent implements OnInit {
 
     // Metodi per Traits
     addTrait() {
-        this.monster.traits.push({ name: '', description: '', attack: '' });
+        this.png.traits.push({ name: '', description: '', attack: '' });
     }
 
     removeTrait(index: number) {
-        this.monster.traits.splice(index, 1);
+        this.png.traits.splice(index, 1);
     }
 
     // Metodi per Actions
     addAction() {
-        this.monster.actions.push({ name: '', description: '', attack: '' });
+        this.png.actions.push({ name: '', description: '', attack: '' });
     }
 
     removeAction(index: number) {
-        this.monster.actions.splice(index, 1);
+        this.png.actions.splice(index, 1);
     }
 
     // Metodi per Legendary Actions
     addLegendaryAction() {
-        this.monster.legendaryActions.push({ name: '', description: '' });
+        this.png.legendaryActions.push({ name: '', description: '' });
     }
 
     removeLegendaryAction(index: number) {
-        this.monster.legendaryActions.splice(index, 1);
+        this.png.legendaryActions.splice(index, 1);
     }
 
     // Metodi per Spells
     addSpell() {
-        this.monster.spells.push({ level: 0, spellName: '' });
+        this.png.spells.push({ level: 0, spellName: '' });
     }
 
     removeSpell(index: number) {
-        this.monster.spells.splice(index, 1);
+        this.png.spells.splice(index, 1);
     }
 
     // Metodo per Spell Slots
     addSpellSlot() {
-        this.monster.spellSlots.push(0); // Aggiunge uno slot con valore predefinito 0
+        this.png.spellSlots.push(0); // Aggiunge uno slot con valore predefinito 0
     }
 
     removeSpellSlot(index: number) {
-        this.monster.spellSlots.splice(index, 1);
+        this.png.spellSlots.splice(index, 1);
     }
 
     async loadFromAI(){
@@ -148,7 +153,7 @@ export class PNGGenerator5eComponent implements OnInit {
             { label: labelLevel, controlName: 'challengeRating', type: 'number' }
         ];
 
-        let sheetPrefill = structuredClone(this.monster);
+        let sheetPrefill = structuredClone(this.png);
         sheetPrefill.attributes = {
             strength: 0,
             dexterity: 0,
@@ -178,16 +183,15 @@ export class PNGGenerator5eComponent implements OnInit {
             formGroup: formBuilder,
             formFields: formFields
         }
-        let dialogRef = this.dialog.open(DialogAiGeneration, {
-            maxWidth: '100vw',
-            maxHeight: '100vh',
+
+       const dialogRef = this.dialogService.open(DialogAiGeneration, {
             data: stepperData
         });
         
         try {
             const result = await firstValueFrom(dialogRef.afterClosed());
-            if (result && JSON.parse(result) as Monster) {
-               this.monster = JSON.parse(result) as Monster;
+            if (result && JSON.parse(result) as PNG_5E) {
+               this.png = JSON.parse(result) as PNG_5E;
             } else if(result){
                 throw new Error("Error in the creation of the character");
             }
@@ -201,9 +205,12 @@ export class PNGGenerator5eComponent implements OnInit {
 
     // Metodo per visualizzare l'anteprima
     showPreview() {
-        this.dialog.open(PNGreviewDialogComponent, {
-            panelClass: 'png-container-dialog',
-            data: this.monster
+        this.dialogService.open(PNGreviewDialogComponent, {
+            data: this.png
         });
+    }
+
+    savePng() {
+
     }
 }

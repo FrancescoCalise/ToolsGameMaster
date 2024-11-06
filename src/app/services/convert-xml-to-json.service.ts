@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Monster } from '../component/game-layout/games/dungeonAndDragns5e/interface/bestiary-interface';
+import { PNG_5E } from '../component/game-layout/games/dungeonAndDragns5e/interface/png_5e-interface';
 import { map } from 'rxjs';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { map } from 'rxjs';
 })
 export class ConvertXmlToJson {
 
-  monsterData: Monster[] | null = null
+  monsterData: PNG_5E[] | null = null
 
   constructor(private http: HttpClient) {
 
@@ -19,17 +19,17 @@ export class ConvertXmlToJson {
       .pipe(
         map((xmlData: string) => this.parseXMLToJson(xmlData))
       )
-      .subscribe((json: Monster[]) => {
+      .subscribe((json: PNG_5E[]) => {
         this.monsterData = json;
         this.downloadJson();
       });
   }
 
-  parseXMLToJson(xmlData: string): Monster[] {
+  parseXMLToJson(xmlData: string): PNG_5E[] {
     const parser = new DOMParser();
     const xmlDoc = parser.parseFromString(xmlData, 'application/xml');
     const monsterNodes = xmlDoc.getElementsByTagName('monster');
-    const monsters: Monster[] = [];
+    const monsters: PNG_5E[] = [];
 
     Array.from(monsterNodes).forEach(monsterNode => {
       const monster = this.processSingleNode(monsterNode);

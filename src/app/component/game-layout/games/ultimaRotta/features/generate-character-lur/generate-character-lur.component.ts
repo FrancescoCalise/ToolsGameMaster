@@ -10,10 +10,10 @@ import { SpinnerService } from '../../../../../../services/spinner.service';
 import { SessionManagerWidgetComponent } from '../../../../../session-manager-widget/session-manager-widget.component';
 import { fieldMapPDFLUR, UtilitiesCreateCharacterLur } from './utilities-create-character-lur/utilities-create-character-lur';
 import { RandomNameService } from '../../../../../../services/randomNameService';
-import { MatDialog } from '@angular/material/dialog';
 import { CharacterDialogLURComponent } from './character-dialog-form/character-dialog-lur.component';
 import { PdfService } from '../../../../../../services/pdf.service';
 import { SharedFields } from '../../../../../../shared/shared-fields.module';
+import { DialogService } from '../../../../../../services/dialog.sevice';
 
 @Component({
   selector: 'app-generate-character-lur',
@@ -42,7 +42,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetLURTemplate>,
     private spinnerService: SpinnerService,
     private randomNameService: RandomNameService,
-    private dialog: MatDialog,
+    private dialogService: DialogService,
     private pdfService: PdfService,
   ) {
     firestoreLurSheetService.setCollectionName('character-sheet-lur');
@@ -59,11 +59,7 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
   }
 
   openCharacterDialog(character?: CharacterSheetLURTemplate) {
-    const isMobile = window.innerWidth < 768;
-    const dialogRef = this.dialog.open(CharacterDialogLURComponent, {
-      width: isMobile ? '100%' : '80%',
-      height: isMobile ? '100%' : '90%',
-      minHeight: '90%',
+    const dialogRef = this.dialogService.open(CharacterDialogLURComponent, {
       data: {
         character: character ? { ...character } : undefined,
         sessionId: this.defaultSession?.id,

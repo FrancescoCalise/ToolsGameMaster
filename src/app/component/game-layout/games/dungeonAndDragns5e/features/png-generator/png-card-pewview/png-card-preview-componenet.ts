@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef, Inject } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import html2canvas from "html2canvas";
-import { Monster } from "../../../interface/bestiary-interface";
+import { PNG_5E } from "../../../interface/png_5e-interface";
 import { SharedModule } from "../../../../../../../shared/shared.module";
 
 @Component({
@@ -18,7 +18,7 @@ export class PNGreviewDialogComponent {
 
     constructor(
         public dialogRef: MatDialogRef<PNGreviewDialogComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: Monster
+        @Inject(MAT_DIALOG_DATA) public data: PNG_5E
     ) { }
 
     public downloadPNG(): void {

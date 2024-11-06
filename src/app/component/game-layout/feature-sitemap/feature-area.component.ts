@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { GameConfig } from '../../../interface/GameConfig';
 import { BreakpointService } from '../../../services/breakpoint.service';
 import { Subscription } from 'rxjs';
+import { DialogService } from '../../../services/dialog.sevice';
 
 
 @Component({
@@ -35,12 +36,11 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     private langSubscription!: Subscription;
     
     constructor(
-        private dialog: MatDialog,
         private translationMessageService: TranslationMessageService,
-        private toastService: ToastService,
         private route: ActivatedRoute,
         private router: Router,
-        private breakPointService: BreakpointService
+        private breakPointService: BreakpointService,
+        private dialogService: DialogService
     ) { }
 
     ngOnDestroy(): void {
@@ -121,15 +121,6 @@ export class FeatureAreaComponent implements OnInit, OnDestroy {
     }
 
     openFeature(component: any, config: MatDialogConfig = {}) {
-        
-        const dialogConfig = {
-            width: '90vw',
-            height: '90vh',
-            maxWidth: '90vw',
-            maxHeight: '90vh',
-            panelClass: 'full-screen-dialog',
-            ...config
-        };
-        this.dialog.open(component, dialogConfig);
+        this.dialogService.open(component);
     }
 }

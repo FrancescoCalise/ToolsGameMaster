@@ -17,6 +17,7 @@ import { UtilitiesCreateCharacterDND5 } from './utilities-create-character-dnd5e
 import { FormField, DialogAiGeneration, StepperData } from '../../../../feature-sitemap/dialog-ai-generation/dialog-ai-generation.component';
 import { firstValueFrom } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { DialogService } from '../../../../../../services/dialog.sevice';
 
 @Component({
   selector: 'app-generate-character-dnd5e',
@@ -39,10 +40,9 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
   constructor(private translationMessageService: TranslationMessageService,
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetDND5ETemplate>,
     private spinnerService: SpinnerService,
-    private randomNameService: RandomNameService,
     private dialog: MatDialog,
     private pdfService: PdfService,
-  ) {
+    private dialogService: DialogService) {
     firestoreLurSheetService.setCollectionName('character-sheet-dnd5e');
   }
 
@@ -57,15 +57,11 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
   }
 
   openCharacterDialog(character?: CharacterSheetDND5ETemplate) {
-    const isMobile = window.innerWidth < 768;
-    const dialogRef = this.dialog.open(CharacterDialogDND5eComponent, {
-      width: isMobile ? '100%' : '80%',
-      height: isMobile ? '100%' : '90%',
-      minHeight: '90%',
+    const dialogRef = this.dialogService.open(CharacterDialogDND5eComponent, {
       data: {
         character: character ? { ...character } : undefined,
         sessionId: this.defaultSession?.id,
-      },
+      }
     });
 
     dialogRef.afterClosed().subscribe((result: CharacterSheetDND5ETemplate | undefined) => {
@@ -161,10 +157,7 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
       formGroup: formBuilder,
       formFields: formFields
     }
-    const dialogRef = this.dialog.open(DialogAiGeneration, {
-      width: '80%',
-      height: 'auto',
-      minHeight: 'auto',
+    const dialogRef = this.dialogService.open(DialogAiGeneration, {
       data: stepperData,
     });
 

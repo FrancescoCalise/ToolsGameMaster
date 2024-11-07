@@ -1,401 +1,436 @@
-<div class="row ">
-  <app-session-manager-widget class="me-2" (sessionLoaded)="onSessionLoaded($event)">
-  </app-session-manager-widget>
-</div>
-
-<div class="editor container">
-
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="mb-0">{{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.EDIT_MONSTER_DETAILS' | translate}}</h3>
-    
-    <!-- Pulsante Carica da AI -->
-     <button class="btn btn-success me-2" (click)="loadFromAI()">
-      {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LOAD_FROM_AI' | translate }}
-    </button>
-
-    <!-- Dropdown InitFromTemplate -->
-    <div class="dropdown">
-      <button class="btn btn-warning dropdown-toggle" type="button" id="initFromSession"
-        data-bs-toggle="dropdown" aria-expanded="false" [disabled]="pngFromSession.length == 0">
-        {{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.INIT_FROM_SESSION' | translate}}
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="initFromSession"
-        style="width: 100%; max-height: 400px; overflow-y: hidden; ">
-        <!-- Campo di input per il filtro -->
-        <li class="p-2">
-          <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
-            (input)="filterPngFromSession()" />
-        </li>
-        <!-- Elenco filtrato e limitato a 10 elementi -->
-        <li *ngFor="let template of filteredPngFromSession | slice:0:10">
-          <a class="dropdown-item" (click)="selectTemplate(template)">{{ template.name }}</a>
-        </li>
-      </ul>
-    </div>
-
-    <!-- Dropdown InitFromTemplate -->
-    <div class="dropdown">
-      <button class="btn btn-warning dropdown-toggle" type="button" id="initFromTemplateDropdown"
-        data-bs-toggle="dropdown" aria-expanded="false" [disabled]="templates.length == 0">
-        {{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.INIT_FROM_TEMPLATE' | translate}}
-      </button>
-      <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="initFromTemplateDropdown"
-        style="width: 100%; max-height: 400px; overflow-y: hidden; ">
-        <!-- Campo di input per il filtro -->
-        <li class="p-2">
-          <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
-            (input)="filterTemplates()" />
-        </li>
-        <!-- Elenco filtrato e limitato a 10 elementi -->
-        <li *ngFor="let template of filteredTemplates | slice:0:10">
-          <a class="dropdown-item" (click)="selectTemplate(template)">{{ template.name }}</a>
-        </li>
-      </ul>
-    </div>
+<div class="container-fluid h-100">
+  <div class="container-fluid p-0">
+    <app-session-manager-widget class="me-2" (sessionLoaded)="onSessionLoaded($event)">
+    </app-session-manager-widget>
   </div>
 
-  <div class="row">
+  <div class="editor container">
 
-    <!-- Basic Details -->
-    <div class="col-2 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.NAME' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.name"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.NAME' | translate }}">
-      </mat-form-field>
-    </div>
-
-    <div class="col-2 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SIZE' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.size"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SIZE' | translate }}">
-      </mat-form-field>
-    </div>
-
-    <div class="col-2 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TYPE' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.type"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TYPE' | translate }}">
-      </mat-form-field>
-    </div>
-
-    <div class="col-2 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ALIGNMENT' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.alignment"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ALIGNMENT' | translate }}">
-      </mat-form-field>
-    </div>
-
-    <div class="col-2 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.armorClass"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}">
-      </mat-form-field>
-    </div>
-
-    <div class="col-2 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.hitPoints"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}">
-      </mat-form-field>
-    </div>
-
-    <!-- Attributes -->
-    <div class="col-2 mb-3" *ngFor="let attr of attributes">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ translationIds[attr] | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.attributes[attr]" placeholder="{{ translationIds[attr] | translate }}">
-      </mat-form-field>
-    </div>
-
-    <!-- savingThrows -->
-    <div class="col-2 mb-3" *ngFor="let save of savingThrows">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ translationIds[save + 'Save'] | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.savingThrows[save]"
-          placeholder="{{ translationIds[save + 'Save'] | translate }}">
-      </mat-form-field>
-    </div>
-
-    <!-- Skills -->
-    <div class="col-12 mb-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILLS' | translate }}</h4>
-        <button (click)="addSkill()" class="btn btn-secondary dnd-5e">
-          <mat-icon>add</mat-icon>
-        </button>
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3">
+      <div class="col-12 col-md-auto mb-2 mb-md-0">
+          <h3 class="mb-0 text-md-start text-center">
+              {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.EDIT_MONSTER_DETAILS' | translate }}
+          </h3>
       </div>
+      <div class="col-12 col-md-auto d-flex flex-wrap justify-content-center justify-content-md-end gap-2">
+          <!-- Pulsante Carica da AI -->
+          <button class="btn btn-success" (click)="loadFromAI()">
+              {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LOAD_FROM_AI' | translate }}
+          </button>
 
-      <!-- Lista delle skill esistenti -->
-      <div class="row mt-3">
-        <div class="col-2 mb-2 d-flex " *ngFor="let skill of png.skills; let i = index; trackBy: trackByIndex">
-          <div class="d-flex col-10">
-            <mat-form-field appearance="outline" class="w-100">
-              <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILL' | translate }}</mat-label>
-              <input matInput [(ngModel)]="png.skills[i]"
-                placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILL' | translate }}">
-            </mat-form-field>
+          <!-- Dropdown InitFromSession -->
+          <div class="dropdown">
+              <button class="btn btn-warning dropdown-toggle" type="button" id="initFromSession"
+                  data-bs-toggle="dropdown" aria-expanded="false" [disabled]="pngFromSession.length == 0">
+                  {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.INIT_FROM_SESSION' | translate }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="initFromSession"
+                  style="width: 100%; max-height: 400px; overflow-y: hidden;">
+                  <!-- Campo di input per il filtro -->
+                  <li class="p-2">
+                      <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
+                          (input)="filterPngFromSession()" />
+                  </li>
+                  <!-- Elenco filtrato e limitato a 10 elementi -->
+                  <li *ngFor="let template of filteredPngFromSession | slice:0:10">
+                      <a class="dropdown-item" (click)="selectTemplate(template)">{{ template.name }}</a>
+                  </li>
+              </ul>
           </div>
-          <div class="col-2 d-flex text-center">
-            <mat-icon (click)="removeSkill(i)" class="text-danger" style="cursor: pointer;">delete</mat-icon>
+
+          <!-- Dropdown InitFromTemplate -->
+          <div class="dropdown">
+              <button class="btn btn-warning dropdown-toggle" type="button" id="initFromTemplateDropdown"
+                  data-bs-toggle="dropdown" aria-expanded="false" [disabled]="templates.length == 0">
+                  {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.INIT_FROM_TEMPLATE' | translate }}
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="initFromTemplateDropdown"
+                  style="width: 100%; max-height: 400px; overflow-y: hidden;">
+                  <!-- Campo di input per il filtro -->
+                  <li class="p-2">
+                      <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
+                          (input)="filterTemplates()" />
+                  </li>
+                  <!-- Elenco filtrato e limitato a 10 elementi -->
+                  <li *ngFor="let template of filteredTemplates | slice:0:10">
+                      <a class="dropdown-item" (click)="selectTemplate(template)">{{ template.name }}</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+    </div>  
+
+
+    <div class="container-fluid p-0">
+
+      <!-- Basic Details -->
+      <div class="row p-0">
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.NAME' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.name"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.NAME' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SIZE' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.size"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SIZE' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TYPE' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.type"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TYPE' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ALIGNMENT' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.alignment"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ALIGNMENT' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.armorClass"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.hitPoints"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Attributes -->
+      <div class="row p-0">
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3" *ngFor="let attr of attributes">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ translationIds[attr] | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.attributes[attr]" placeholder="{{ translationIds[attr] | translate }}">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- savingThrows -->
+      <div class="row p-0">
+        <div class="col-12">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVEING_THROWS' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.save">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Skills -->
+      <div class="row p-0">
+        <div class="col-12 mb-3">
+          <div class="d-flex justify-content-between align-items-center">
+            <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILLS' | translate }}</h4>
+            <button (click)="addSkill()" class="btn btn-secondary dnd-5e">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <!-- Lista delle skill esistenti -->
+          <div class="row p-0 mt-3">
+            <div class="col-6 col-sm-6 col-md-4 col-lg-4 d-flex" *ngFor="let skill of png.skills; let i = index; trackBy: trackByIndex">
+              <div class="d-flex col-10">
+                <mat-form-field appearance="outline" class="w-100">
+                  <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILL' | translate }}</mat-label>
+                  <input matInput [(ngModel)]="png.skills[i]"
+                    placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILL' | translate }}">
+                </mat-form-field>
+              </div>
+              <div class="col-2 d-flex text-center">
+                <mat-icon (click)="removeSkill(i)" class="text-danger" style="cursor: pointer;">delete</mat-icon>
+              </div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- Additional Details -->
-    <div class="row">
-      <div class="col-4 col-md-2 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.speed"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-4 col-md-3 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.senses"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-4 col-md-2 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PASSIVE_PERCEPTION' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.passivePerception" type="number"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_PASSIVE_PERCEPTION' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LANGUAGES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.languages"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LANGUAGES' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-6 col-md-2 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.challengeRating"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}">
-        </mat-form-field>
-      </div>
-    </div>
-
-    <!-- resistence Details -->
-    <div class="row">
-      <div class="col-6 col-md-3 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.damageResistances"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.damageVulnerabilities"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.damageImmunities"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}">
-        </mat-form-field>
-      </div>
-
-      <div class="col-6 col-md-3 mb-3">
-        <mat-form-field appearance="outline" class="w-100">
-          <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate }}</mat-label>
-          <input matInput [(ngModel)]="png.conditionImmunities"
-            placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate }}">
-        </mat-form-field>
-      </div>
-    </div>
-
-    <!-- Traits -->
-    <div class="col-12 mb-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAITS' | translate }}</h4>
-        <button mat-icon-button color="primary dnd-5e" (click)="addTrait()" aria-label="Add trait">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-
-      <!-- Lista dei trait esistenti -->
-      <div *ngFor="let trait of png.traits; let i = index" class="row mt-3">
-        <div class="col-4 mb-2">
+      <!-- Additional Details -->
+      <div class="row p-0">
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.traits[i].name"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_TRAIT_NAME' | translate }} {{i + 1}}">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.speed"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}">
           </mat-form-field>
         </div>
 
-        <div class="col-4 mb-2">
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_DESCRIPTION' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.traits[i].description"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_TRAIT_DESCRIPTION' | translate }} {{i + 1}}">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.senses"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}">
           </mat-form-field>
         </div>
 
-        <div class="col-3 mb-2">
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_ATTACK' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.traits[i].attack"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_TRAIT_ATTACK' | translate }} {{i + 1}}">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PASSIVE_PERCEPTION' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.passivePerception" type="number"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PASSIVE_PERCEPTION' | translate }}">
           </mat-form-field>
         </div>
 
-        <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeTrait(i)" aria-label="Remove trait">
-            <mat-icon>delete</mat-icon>
-          </button>
+        <div class="col-4 col-sm-4 col-md-4 col-lg-4 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LANGUAGES' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.languages"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LANGUAGES' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.challengeRating"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}">
+          </mat-form-field>
+        </div>
+
+      <!-- resistence Details -->
+  
+        <div class="col-4 col-sm-4 col-md-3 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.damageResistances"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-3 col-lg-2 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.damageVulnerabilities"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-3 col-lg-3 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.damageImmunities"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}">
+          </mat-form-field>
+        </div>
+
+        <div class="col-4 col-sm-4 col-md-3 col-lg-3 mb-3">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate }}</mat-label>
+            <input matInput [(ngModel)]="png.conditionImmunities"
+              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate }}">
+          </mat-form-field>
         </div>
       </div>
-    </div>
 
-    <!-- Actions -->
-    <div class="col-12 mb-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTIONS' | translate }}</h4>
-        <button mat-icon-button color="primary dnd-5e" (click)="addAction()" aria-label="Add action">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
+      <!-- Traits -->
+      <div class="d-flex flex-row p-0">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAITS' | translate }}</h4>
+            <button mat-icon-button color="primary dnd-5e" (click)="addTrait()" aria-label="Add trait">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
 
-      <!-- Lista delle actions esistenti -->
-      <div *ngFor="let action of png.actions; let i = index" class="row mt-3">
-        <div class="col-4 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.actions[i].name"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_NAME' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
+          <!-- Lista dei trait esistenti -->
+          <div *ngFor="let trait of png.traits; let i = index" class="row p-0">
+            <div class="col-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_NAME' | translate }}</mat-label>
+                <input matInput [(ngModel)]="png.traits[i].name" placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_NAME' | translate }}">
+              </mat-form-field>
+            </div>
+            
+            <div class="col-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_ATTACK' | translate }} </mat-label>
+                <input matInput [(ngModel)]="png.traits[i].attack" placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_ATTACK' | translate }}">
+              </mat-form-field>
+            </div>
 
-        <div class="col-4 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_DESCRIPTION' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.actions[i].description"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_DESCRIPTION' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
+            <div class="col-10">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_DESCRIPTION' | translate }} </mat-label>
+                <textarea matInput [(ngModel)]="png.traits[i].description" placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_DESCRIPTION' | translate }}" ></textarea>
+              </mat-form-field>
+            </div>
 
-        <div class="col-3 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_ATTACK' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.actions[i].attack"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_ATTACK' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
-
-        <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeAction(i)" aria-label="Remove action">
-            <mat-icon>delete</mat-icon>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Legendary Actions -->
-    <div class="col-12 mb-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTIONS' | translate }}</h4>
-        <button mat-icon-button color="primary dnd-5e" (click)="addLegendaryAction()" aria-label="Add legendary action">
-          <mat-icon>add</mat-icon>
-        </button>
-      </div>
-
-      <!-- Lista delle legendary actions esistenti -->
-      <div *ngFor="let action of png.legendaryActions; let i = index" class="row mt-3">
-        <div class="col-4 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTION_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.legendaryActions[i].name"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_LEGENDARY_ACTION_NAME' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
-
-        <div class="col-5 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTION_DESCRIPTION' | translate }} {{i +
-              1}}</mat-label>
-            <input matInput [(ngModel)]="png.legendaryActions[i].description"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_LEGENDARY_ACTION_DESCRIPTION' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
-
-        <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeLegendaryAction(i)" aria-label="Remove legendary action">
-            <mat-icon>delete</mat-icon>
-          </button>
+            <div class="col-2">
+              <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeTrait(i)" aria-label="Remove trait">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
+      <!-- Actions -->
+      <div class="d-flex flex-row p-0">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTIONS' | translate }}</h4>
+            <button mat-icon-button color="primary dnd-5e" (click)="addAction()" aria-label="Add action">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
 
-    <!-- Spells -->
-    <div class="col-12 mb-3">
-      <div class="d-flex justify-content-between align-items-center">
-        <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELLS' | translate }}</h4>
-        <button mat-icon-button color="primary dnd-5e" (click)="addSpell()" aria-label="Add spell">
-          <mat-icon>add</mat-icon>
-        </button>
+          <!-- Lista delle actions esistenti -->
+          <div *ngFor="let action of png.actions; let i = index" class="row p-0">
+            <div class="col-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_NAME' | translate }}</mat-label>
+                <input matInput [(ngModel)]="png.actions[i].name" placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_NAME' | translate }}">
+              </mat-form-field>
+            </div>
+            <div class="col-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_ATTACK' | translate }}</mat-label>
+                <input matInput [(ngModel)]="png.actions[i].attack" placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_ATTACK' | translate }}">
+              </mat-form-field>
+            </div>
+            <div class="col-10">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTION_DESCRIPTION' | translate }}</mat-label>
+                <input matInput [(ngModel)]="png.actions[i].description" placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_ACTION_DESCRIPTION' | translate }}">
+              </mat-form-field>
+            </div>
+            <div class="col-2">
+              <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeAction(i)" aria-label="Remove action">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Lista degli spell esistenti -->
-      <div *ngFor="let spell of png.spells; let i = index" class="row mt-3">
-        <div class="col-3 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_LEVEL' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.spells[i].level" type="number"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_SPELL_LEVEL' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
+      <!-- Legendary Actions -->
+      <div class="d-flex flex-row p-0">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center  mb-3">
+            <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTIONS' | translate }}</h4>
+            <button mat-icon-button color="primary dnd-5e" (click)="addLegendaryAction()"  aria-label="Add legendary action">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
 
-        <div class="col-8 mb-2">
-          <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_NAME' | translate }} {{i + 1}}</mat-label>
-            <input matInput [(ngModel)]="png.spells[i].spellName"
-              placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_SPELL_NAME' | translate }} {{i + 1}}">
-          </mat-form-field>
-        </div>
+          <!-- Lista delle legendary actions esistenti -->
+          <div *ngFor="let action of png.legendaryActions; let i = index" class="row p-0">
+            <div class="col-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTION_NAME' | translate }}</mat-label>
+                <input matInput [(ngModel)]="png.legendaryActions[i].name"
+                  placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_LEGENDARY_ACTION_NAME' | translate }}">
+              </mat-form-field>
+            </div>
 
-        <div class="col-1 d-flex align-items-start">
-          <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeSpell(i)" aria-label="Remove spell">
-            <mat-icon>delete</mat-icon>
-          </button>
+            <div class="col-10 col-md-6 col-lg-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTION_DESCRIPTION' | translate }}</mat-label>
+                <textarea matInput [(ngModel)]="png.legendaryActions[i].description"
+                  placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_LEGENDARY_ACTION_DESCRIPTION' | translate }}"> 
+                </textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="col-2">
+              <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeLegendaryAction(i)"
+                aria-label="Remove legendary action">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Spell Slots -->
-    <div class="col-12 col-lg-12 mb-3">
-      <mat-form-field appearance="outline" class="w-100">
-        <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_SLOTS' | translate }}</mat-label>
-        <input matInput [(ngModel)]="png.spellSlots" type="number"
-          placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ENTER_SPELL_SLOTS' | translate }}">
-      </mat-form-field>
-    </div>
+      <!-- Spells -->
+
+      <div class="d-flex flex-row p-0">
+        <div class="col-12">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELLS' | translate }}</h4>
+            <button mat-icon-button color="primary dnd-5e" (click)="addSpell()" aria-label="Add spell">
+              <mat-icon>add</mat-icon>
+            </button>
+          </div>
+
+          <!-- Lista degli spell esistenti -->
+          <div *ngFor="let spell of png.spells; let i = index" class="row p-0">
+            <div class="col-12 col-md-4 col-lg-4">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_LEVEL' | translate }}</mat-label>
+                <input matInput [(ngModel)]="png.spells[i].level" type="number"
+                  placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_LEVEL' | translate }}">
+              </mat-form-field>
+            </div>
+
+            <div class="col-10 col-md-6 col-lg-6">
+              <mat-form-field appearance="outline" class="w-100">
+                <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_NAME' | translate }}</mat-label>
+                <textarea matInput [(ngModel)]="png.spells[i].spellName"
+                  placeholder="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_NAME' | translate }}"></textarea>
+              </mat-form-field>
+            </div>
+
+            <div class="col-2">
+              <button mat-icon-button color="warn mt-1 dnd-5e" (click)="removeSpell(i)" aria-label="Remove spell">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spell Slots -->
+      <div class="row p-0">
+        <div class="col-12 mb-3">
+          <h4>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_SLOTS' | translate }}</h4>
+        </div>
+      
+        <!-- Loop for each spell level input -->
+        <div class="col-6 col-md-4 col-lg-3 mb-3" *ngFor="let level of levels; let i = index">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>{{ 'Level ' + (i + 1) }}</mat-label>
+            <input matInput [(ngModel)]="spellSlots[i]" type="number" min="0" 
+                   placeholder="{{ 'Enter spell slots for level ' + (i + 1) }}" (input)="updateSpellSlots()">
+          </mat-form-field>
+        </div>
+      </div>
+      
+      
+      
+
+  <div class="d-flex justify-content-center my-3">
+    <app-field-button 
+        colorClass="btn-primary" 
+        icon="visibility" 
+        tooltip="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SHOW_PREVIEW' | translate }}" 
+        (buttonClick)="showPreview()">
+    </app-field-button>
+
+    <app-field-button 
+        colorClass="btn-success" 
+        icon="save" 
+        tooltip="{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVE_MONSTER' | translate }}" 
+        [isDisabled]="!defaultSession" 
+        (buttonClick)="savePng()">
+    </app-field-button>
+
   </div>
-</div>
-
-<div class="d-flex justify-content-center my-3">
-  <button (click)="showPreview()" class="btn btn-primary mx-2">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SHOW_PREVIEW' | translate }}</button>
-  <button (click)="savePng()" class="btn btn-success mx-2" [disabled]="!defaultSession">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVE_MONSTER' | translate }}</button>
 </div>

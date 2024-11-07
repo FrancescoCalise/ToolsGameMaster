@@ -1,17 +1,16 @@
-<app-dynamic-wrapper-modal>
-    <mat-tab-group class="p-3">
-        <!-- Tab 1: Configura il Prompt -->
-        <mat-tab label="Configura il Prompt" class="h-100">
-            <mat-card class="h-100 d-flex flex-column">
-                <mat-card-content class="flex-grow-1 d-flex flex-column content-scroll">
+<app-dynamic-wrapper-modal class="h-100">
+    <mat-tab-group class="p-3" style="height: 80%">
+        <!-- Tab 1: Configure Prompt -->
+        <mat-tab label="{{ 'GENERATE_FROM_AI.CONFIGURE_PROMPT' | translate }}" class="h-100" style="min-height: 100%">
+            <mat-card class="h-100 d-flex flex-column" style="min-height: 100%">
+                <mat-card-content class="flex-grow-1 d-flex flex-column content-scroll h-100">
                     <form [formGroup]="formGroup" class="w-100 h-100 d-flex flex-column">
-                        <p class="step-description">Seleziona le informazioni del tuo personaggio per generare il
-                            prompt:</p>
+                        <p class="step-description">{{ 'GENERATE_FROM_AI.SELECT_CHARACTER_INFO' | translate }}</p>
 
                         <div class="row">
                             <div class="col-2 p-1" *ngFor="let field of formFields">
                                 <mat-form-field class="w-100" appearance="fill">
-                                    <mat-label>{{ field.label }}</mat-label>
+                                    <mat-label>{{ field.label | translate }}</mat-label>
                                     <input matInput [type]="field.type" [formControlName]="field.controlName"
                                         (input)="updatePromptPart1($event)">
                                 </mat-form-field>
@@ -21,66 +20,76 @@
                         <div class="row mt-3">
                             <div class="col-12">
                                 <mat-form-field class="w-100" appearance="fill">
-                                    <mat-label>Informazioni aggiuntive</mat-label>
+                                    <mat-label>{{ 'GENERATE_FROM_AI.ADDITIONAL_INFORMATION' | translate }}</mat-label>
                                     <textarea matInput [(ngModel)]="promptPart3"
-                                        placeholder="Enter additional information"
+                                        placeholder="{{ 'GENERATE_FROM_AI.ADDITIONAL_INFORMATION_PLACEHOLDER' | translate }}"
                                         [ngModelOptions]="{standalone: true}"></textarea>
                                 </mat-form-field>
                             </div>
                         </div>
 
-                        <p class="prompt-preview-title mt-3"><strong>Anteprima Prompt:</strong></p>
+                        <p class="prompt-preview-title mt-3"><strong>{{ 'GENERATE_FROM_AI.PROMPT_PREVIEW' | translate
+                                }}:</strong></p>
                         <pre class="prompt-preview w-100 p-2">{{ promptUserInfo }}</pre>
                     </form>
                 </mat-card-content>
 
                 <mat-card-actions class="d-flex justify-content-center">
-                    <button mat-raised-button color="primary" (click)="copyPrompt()">Copia</button>
-                    <div *ngIf="promptCopied" class="prompt-copied-message p-2 ml-3">Prompt copiato!</div>
+                    <app-field-button colorClass="btn-primary" icon="content_copy"
+                        tooltip="{{ 'GENERATE_FROM_AI.COPY' | translate }}" (buttonClick)="copyPrompt()">
+                    </app-field-button>
+                    <div *ngIf="promptCopied" class="prompt-copied-message p-2 ml-3">
+                        {{ 'GENERATE_FROM_AI.PROMPT_COPIED' | translate }}
+                    </div>
                 </mat-card-actions>
             </mat-card>
         </mat-tab>
 
-        <!-- Tab 2: Incolla il Risultato da ChatGPT -->
-        <mat-tab label="Incolla il Risultato" class="h-100">
+        <!-- Tab 2: Paste Result from ChatGPT -->
+        <mat-tab label="{{ 'GENERATE_FROM_AI.PASTE_RESULT' | translate }}" class="h-100">
             <mat-card class="h-100 d-flex flex-column">
+                <mat-card-actions class="d-flex justify-content-end">
+                    <app-field-button colorClass="btn-info" icon="open_in_new"
+                        tooltip="{{ 'GENERATE_FROM_AI.GO_TO_CHATGPT' | translate }}" (buttonClick)="openChatGPT()">
+                    </app-field-button>
+                </mat-card-actions>
                 <mat-card-content class="flex-grow-1 d-flex flex-column content-scroll">
                     <form [formGroup]="jsonForm" class="w-100 h-100 d-flex flex-column">
                         <p class="step-description">
-                            Ora, vai su ChatGPT, incolla il prompt e ottieni il risultato. Incolla qui sotto il JSON di
-                            risposta:
+                            {{ 'GENERATE_FROM_AI.PASTE_PROMPT_INSTRUCTION' | translate }}
                         </p>
 
                         <div class="row">
                             <div class="col-12">
                                 <mat-form-field appearance="fill" class="w-100">
-                                    <mat-label>Incolla il JSON qui</mat-label>
-                                    <textarea matInput placeholder="Incolla il JSON qui" formControlName="jsonResponse"
-                                        rows="5"></textarea>
+                                    <mat-label>{{ 'GENERATE_FROM_AI.PASTE_JSON_HERE' | translate }}</mat-label>
+                                    <textarea matInput
+                                        placeholder="{{ 'GENERATE_FROM_AI.PASTE_JSON_PLACEHOLDER' | translate }}"
+                                        formControlName="jsonResponse" rows="15"></textarea>
 
                                     <mat-error *ngIf="jsonForm.get('jsonResponse')?.hasError('invalidJsonFormat')">
-                                        Il formato JSON non è valido.
+                                        {{ 'GENERATE_FROM_AI.INVALID_JSON_FORMAT' | translate }}
                                     </mat-error>
                                     <mat-error *ngIf="jsonForm.get('jsonResponse')?.hasError('invalidJsonTemplate')">
-                                        Il JSON non rispetta la struttura richiesta.
+                                        {{ 'GENERATE_FROM_AI.INVALID_JSON_TEMPLATE' | translate }}
                                     </mat-error>
                                 </mat-form-field>
-
                             </div>
                         </div>
                     </form>
                 </mat-card-content>
-
-                <mat-card-actions class="d-flex justify-content-between">
-                    <a mat-raised-button color="accent" href="https://chat.openai.com/" target="_blank"
-                        rel="noopener noreferrer">
-                        Vai a ChatGPT
-                    </a>
-                    <button mat-raised-button color="primary" [disabled]="!jsonForm.valid"
-                        (click)="finish()">Fine</button>
-                </mat-card-actions>
             </mat-card>
         </mat-tab>
-
     </mat-tab-group>
+
+    <!-- Cancel button -->
+    <div class="d-flex flex-row justify-content-center align-items-center" style="height: 20%">
+        <app-field-button colorClass="btn-primary" icon="check_circle"
+            tooltip="{{ 'GENERATE_FROM_AI.FINISH' | translate }}" [isDisabled]="!jsonForm.valid"
+            (buttonClick)="finish()">
+        </app-field-button>
+        <app-field-button colorClass="btn-danger" icon="cancel" tooltip="{{ 'GENERATE_FROM_AI.CANCEL' | translate }}"
+            (buttonClick)="cancel()">
+        </app-field-button>
+    </div>
 </app-dynamic-wrapper-modal>

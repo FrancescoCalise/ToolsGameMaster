@@ -17,14 +17,7 @@ export interface PNG_5E extends BaseDocument {
     wisdom: number;
     charisma: number;
   };
-  savingThrows: {
-    strength: string;
-    dexterity: string;
-    constitution: string;
-    intelligence: string;
-    wisdom: string;
-    charisma: string;
-  };
+  save:string;
   skills: string[];
   damageResistances: string;
   damageVulnerabilities: string;
@@ -72,14 +65,7 @@ export function createEmptyPng(): PNG_5E {
       wisdom: 0,
       charisma: 0
     },
-    savingThrows: {
-      strength: '',
-      dexterity: '',
-      constitution: '',
-      intelligence: '',
-      wisdom: '',
-      charisma: ''
-    },
+    save:'',
     skills: [],
     damageResistances: '',
     damageVulnerabilities: '',

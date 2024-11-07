@@ -7,7 +7,7 @@
         </div>
 
         <div class="p-2" [ngClass]="showSiteMap ? 'game-area-with-site-map-open' : 'game-area-with-site-map-closed'">
-            <div class="row w-100 overflow-visibile mt-3">
+            <div class="container-fluid w-100 h-100 p-0 overflow-auto">
                 <router-outlet class="w-100"></router-outlet>
             </div>
         </div>
@@ -20,7 +20,7 @@
         </div>
 
         <div class="p-2"  [ngClass]="showSiteMap ? 'game-area-with-site-map-open-small-device' : 'game-area-with-site-map-closed-small-device'">
-            <div class="row w-100 overflow-visibile mt-3">
+            <div class="container-fluid w-100 h-100 p-0 overflow-auto">
                 <router-outlet class="w-100"></router-outlet>
             </div>
         </div>

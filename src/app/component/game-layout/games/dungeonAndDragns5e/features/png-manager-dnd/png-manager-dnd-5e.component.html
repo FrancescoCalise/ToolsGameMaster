@@ -1,50 +1,56 @@
-<div class="w-100 h-100 p-3">
-    <div class="d-flex mb-3 w-100 flex-column">
-        <div class="d-flex justify-content-between align-items-center">
-            <h1>
-                <strong>{{ 'FEATURE.CREATE_CHARACTER' | translate }}</strong>
-            </h1>
-            <div class="d-flex">
-                <app-field-button colorClass="btn-success" icon="close"
-                    tooltip="{{ 'DUNGEON_AND_DRAGONS_5E.FEATURE.PNG_MANAGER.CLOSE' | translate }}" (buttonClick)="close()">
+<app-dynamic-wrapper-modal class="h-100">
+
+    <div class="conteiner-fluid p-3">
+        <div class="d-flex mb-3 w-100 flex-column">
+            <div class="d-flex justify-content-between align-items-center">
+                <h1>
+                    <strong>{{ 'FEATURE.CREATE_CHARACTER' | translate }}</strong>
+                </h1>
+                <div class="d-flex">
+                    <app-field-button colorClass="btn-success" icon="close"
+                        tooltip="{{ 'DUNGEON_AND_DRAGONS_5E.FEATURE.PNG_MANAGER.CLOSE' | translate }}"
+                        (buttonClick)="close()">
                     </app-field-button>
+                </div>
+            </div>
+
+            <div class="d-flex mt-3">
+                <app-session-manager-widget class="me-2" [gameNameInput]="configGame.id"
+                    (sessionLoaded)="onSessionLoaded($event)">
+                </app-session-manager-widget>
             </div>
         </div>
 
-        <div class="d-flex mt-3">
-            <app-session-manager-widget class="me-2" [gameNameInput]="configGame.id" (sessionLoaded)="onSessionLoaded($event)">
-            </app-session-manager-widget>
+        <div *ngIf="pngList.length > 0; else noPng" class="row g-2">
+            <div *ngFor="let png of pngList" class="col-6 col-md-4 col-lg-2">
+                <mat-card class="h-100 w-100">
+                    <mat-card-header class="text-center">
+                        <mat-card-title>
+                            <h4>{{png.name}}</h4>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content class="text-center">
+                        <h5>{{png.size}} {{png.type}} - {{'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.LEVEL' | translate}}
+                            {{png.challengeRating}}</h5>
+                    </mat-card-content>
+                    <mat-card-actions class="d-flex justify-content-center">
+                        <app-field-button colorClass="btn-primary me-2" icon="edit" (buttonClick)="goToEdit(png)">
+                        </app-field-button>
+                        <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="openPreview(png)">
+                        </app-field-button>
+                        <app-field-button colorClass="btn-danger" icon="delete" (buttonClick)="deleteCharacter(png)">
+                        </app-field-button>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
         </div>
-    </div>
 
-    <div *ngIf="pngList.length > 0; else noPng" class="row g-2">
-        <div *ngFor="let png of pngList" class="col-6 col-md-4 col-lg-2">
-            <mat-card class="h-100 w-100">
-                <mat-card-header class="text-center">
-                    <mat-card-title>
-                        <h4>{{png.name}}</h4>
-                    </mat-card-title>
-                </mat-card-header>
-                <mat-card-content class="text-center">
-                    <h5>{{png.size}} {{png.type}} - {{'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.LEVEL' | translate}} {{png.challengeRating}}</h5>
-                </mat-card-content>
-                <mat-card-actions class="d-flex justify-content-center">
-                    <app-field-button colorClass="btn-primary me-2" icon="edit"
-                        (buttonClick)="goToEdit(png)">
-                    </app-field-button>
-                    <app-field-button colorClass="btn-dark me-2" icon="print" (buttonClick)="openPreview(png)">
-                    </app-field-button>
-                    <app-field-button colorClass="btn-danger" icon="delete" (buttonClick)="deleteCharacter(png)">
-                    </app-field-button>
-                </mat-card-actions>
-            </mat-card>
+        <div>
+
         </div>
+        <ng-template #noPng>
+            <div class="alert alert-info text-center">{{ 'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.NO_CHARACTERS' |
+                translate }}</div>
+        </ng-template>
     </div>
-
-    <div>
-        
-    </div>
-    <ng-template #noPng>
-        <div class="alert alert-info text-center">{{ 'DUNGEON_AND_DRAGONS_5E.CREATE_CHARACTER.NO_CHARACTERS' | translate }}</div>
-    </ng-template>
-</div>
+</app-dynamic-wrapper-modal>

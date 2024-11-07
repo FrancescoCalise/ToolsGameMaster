@@ -39,6 +39,26 @@ export class ConvertXmlToJson {
   }
 
   processSingleNode(xmlDoc: Element): any {
+    const skillsString = xmlDoc.getElementsByTagName('skill')[0]?.textContent || '';
+    const skillsArray = skillsString.split(',').map(skill => skill.trim());
+    const spellSlotsArray = Array.from(xmlDoc.getElementsByTagName('slots'))
+    .flatMap(spellSlotNode => 
+        (spellSlotNode.textContent || '0')
+            .split(',')
+            .map(slot => parseInt(slot.trim(), 10))
+    );
+    const spells = xmlDoc.getElementsByTagName('spells')[0]?.textContent || '';
+    const spellsArray = spells.split(/[.,]/).map(spell => spell.trim());
+
+    let spellPng: Array<{
+      level: number;
+      spellName: string;
+    }> = [];
+
+    spellsArray.forEach(element => {
+      spellPng.push({ level: 0, spellName: element });
+    });
+
     return {
       name: xmlDoc.getElementsByTagName('name')[0]?.textContent || '',
       size: xmlDoc.getElementsByTagName('size')[0]?.textContent || '',
@@ -55,15 +75,8 @@ export class ConvertXmlToJson {
         wisdom: parseInt(xmlDoc.getElementsByTagName('wis')[0]?.textContent || '0', 0),
         charisma: parseInt(xmlDoc.getElementsByTagName('cha')[0]?.textContent || '0', 0)
       },
-      savingThrows: {
-        strength: xmlDoc.getElementsByTagName('strengthSave')[0]?.textContent || '',
-        dexterity: xmlDoc.getElementsByTagName('dexteritySave')[0]?.textContent || '',
-        constitution: xmlDoc.getElementsByTagName('constitutionSave')[0]?.textContent || '',
-        intelligence: xmlDoc.getElementsByTagName('intelligenceSave')[0]?.textContent || '',
-        wisdom: xmlDoc.getElementsByTagName('wisdomSave')[0]?.textContent || '',
-        charisma: xmlDoc.getElementsByTagName('charismaSave')[0]?.textContent || ''
-      },
-      skills: (xmlDoc.getElementsByTagName('skills')[0]?.textContent || '').split(',').map(skill => skill.trim()),
+      save: xmlDoc.getElementsByTagName('save')[0]?.textContent || '',
+      skills: skillsArray,
       damageResistances: xmlDoc.getElementsByTagName('damageResistances')[0]?.textContent || '',
       damageVulnerabilities: xmlDoc.getElementsByTagName('damageVulnerabilities')[0]?.textContent || '',
       damageImmunities: xmlDoc.getElementsByTagName('damageImmunities')[0]?.textContent || '',
@@ -71,27 +84,26 @@ export class ConvertXmlToJson {
       senses: xmlDoc.getElementsByTagName('senses')[0]?.textContent || '',
       passivePerception: parseInt(xmlDoc.getElementsByTagName('passivePerception')[0]?.textContent || '0', 10),
       languages: xmlDoc.getElementsByTagName('languages')[0]?.textContent || '',
-      challengeRating: xmlDoc.getElementsByTagName('challengeRating')[0]?.textContent || '',
+      challengeRating: xmlDoc.getElementsByTagName('cr')[0]?.textContent || '',
       traits: Array.from(xmlDoc.getElementsByTagName('trait')).map(traitNode => ({
         name: traitNode.getElementsByTagName('name')[0]?.textContent || '',
-        description: traitNode.getElementsByTagName('description')[0]?.textContent || '',
+        description: Array.from(traitNode.getElementsByTagName('text'))
+                    .map(textNode => textNode.textContent || '')
+                    .join('\n'),
         attack: traitNode.getElementsByTagName('attack')[0]?.textContent || ''
       })),
       actions: Array.from(xmlDoc.getElementsByTagName('action')).map(actionNode => ({
         name: actionNode.getElementsByTagName('name')[0]?.textContent || '',
-        description: actionNode.getElementsByTagName('description')[0]?.textContent || '',
+        description: actionNode.getElementsByTagName('text')[0]?.textContent || '',
         attack: actionNode.getElementsByTagName('attack')[0]?.textContent || ''
       })),
-      legendaryActions: Array.from(xmlDoc.getElementsByTagName('legendaryAction')).map(legendaryActionNode => ({
+      legendaryActions: Array.from(xmlDoc.getElementsByTagName('legendary')).map(legendaryActionNode => ({
         name: legendaryActionNode.getElementsByTagName('name')[0]?.textContent || '',
-        description: legendaryActionNode.getElementsByTagName('description')[0]?.textContent || ''
+        description: legendaryActionNode.getElementsByTagName('text')[0]?.textContent || ''
       })),
-      spells: Array.from(xmlDoc.getElementsByTagName('spell')).map(spellNode => ({
-        level: parseInt(spellNode.getElementsByTagName('level')[0]?.textContent || '0', 10),
-        spellName: spellNode.getElementsByTagName('spellName')[0]?.textContent || ''
-      })),
-      spellSlots: Array.from(xmlDoc.getElementsByTagName('spellSlot')).map(spellSlotNode => parseInt(spellSlotNode.textContent || '0', 0))
-    };
+      spells: spellPng,
+      spellSlots: spellSlotsArray
+    } as PNG_5E;
   }
 
 

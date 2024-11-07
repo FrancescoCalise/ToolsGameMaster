@@ -10,13 +10,16 @@ import { FirestoreService } from '../../../../../../services/firestore.service';
 import { dnd5eConfig } from '../../dnd-5e-config';
 import { MatDialogRef } from '@angular/material/dialog';
 import { Router } from '@angular/router';
+import { DynamicWrapperModalComponent } from '../../../../../framework/modal/dynamic-wrapper-modal.component';
+import { PNGreviewDialogComponent } from '../png-generator/png-card-preview/png-card-preview-componenet';
+import { DialogService } from '../../../../../../services/dialog.sevice';
 
 @Component({
   selector: 'app-png-manager-dnd-5e',
   templateUrl: './png-manager-dnd-5e.component.html',
   styleUrls: ['./png-manager-dnd-5e.component.css'],
   standalone: true,
-  imports: [SharedModule, SharedFields, SessionManagerWidgetComponent]
+  imports: [SharedModule, SharedFields, SessionManagerWidgetComponent, DynamicWrapperModalComponent]
 })
 export class PNGManagerDnd5e implements OnInit, OnDestroy {
   public configGame = dnd5eConfig;
@@ -28,15 +31,16 @@ export class PNGManagerDnd5e implements OnInit, OnDestroy {
   constructor(
     @Inject(PNG_SHEET_DND_5) private firestoreLogService: FirestoreService<PNG_5E>,
     private dialogRef: MatDialogRef<PNGManagerDnd5e>,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ){
     firestoreLogService.setCollectionName('png-sheet-dnd-5e');
   }
 
-  async onSessionLoaded(loadedSession: SessionManager) {
+  async onSessionLoaded(loadedSession: SessionManager): Promise<void> {
     this.defaultSession = loadedSession;
     this.sessionLoaded = true;
-    await this.ngOnInit();
+    await this.loadPngList()
   }
 
   async ngOnInit(): Promise<void> {
@@ -63,7 +67,10 @@ export class PNGManagerDnd5e implements OnInit, OnDestroy {
   }
 
   async openPreview(png: PNG_5E) {
-    console.log(png);
+    this.dialogService.open(PNGreviewDialogComponent, {
+      panelClass: 'png-preview-dialog',
+      data: png
+  });
   }
 
   goToEdit(png: PNG_5E) {

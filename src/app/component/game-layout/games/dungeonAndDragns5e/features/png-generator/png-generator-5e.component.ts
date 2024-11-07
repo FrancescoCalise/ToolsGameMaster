@@ -37,11 +37,10 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
     filteredPngFromSession: PNG_5E[] = [];
     filterPngFromSessionText: string = '';
 
-    png: PNG_5E = createEmptyPng();
     // Definizione degli attributi e tiri salvezza con tipi espliciti
     attributes: Array<keyof PNG_5E['attributes']> = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-    savingThrows: Array<keyof PNG_5E['savingThrows']> = ['strength', 'dexterity', 'constitution', 'intelligence', 'wisdom', 'charisma'];
-
+    spellSlots: (number | null)[] = Array(9).fill(null); // Initialize spell slots with null values
+    levels = Array.from({ length: 9 }, (_, i) => i + 1);
     translationIds: { [key: string]: string } = {
         // Attributi
         strength: 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.STRENGTH',
@@ -64,30 +63,46 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
     defaultSession: SessionManager | undefined = undefined;
     sessionLoaded = false;
 
-    pngId: string | undefined = undefined;
+    _pngId: string | undefined = undefined;
+    
+    get pngId(): string | undefined {
+        return this._pngId;
+    }
+    set pngId(value: string | undefined) {
+        this._pngId = value;
+        if(this.pngFromSession){
+            this.png = this.pngFromSession.find(x => x.id == value) || this.png;
+        }
+    }
+
+    _png: PNG_5E = createEmptyPng();
+
+    get png(): PNG_5E {
+        return this._png;
+    }
+
+    set png(value: PNG_5E) {
+        this._png = value;
+        this.spellSlots = value.spellSlots;
+    }
+
     constructor(
         @Inject(PNG_SHEET_DND_5) private firestoreLogService: FirestoreService<PNG_5E>,
         private dialogService: DialogService,
         private http: HttpClient,
         private spinnerService: SpinnerService,
         private translationMessageService: TranslationMessageService,
-        private route: ActivatedRoute
+        private route: ActivatedRoute,
     ) {
         firestoreLogService.setCollectionName('png-sheet-dnd-5e');
-        this.route.queryParams.subscribe(params => {  
-            if (params['pngId']) {
-                this.pngId = params['pngId'];
-                console.log(`PNG ID retrieved: ${this.pngId}`);
-            } else {
-                console.warn('pngId non trovato in queryParams');
-            }
-        });
+        
     }
 
-    onSessionLoaded(loadedSession: SessionManager) {
+    async onSessionLoaded(loadedSession: SessionManager): Promise<void> {
         this.defaultSession = loadedSession;
         this.sessionLoaded = true;
-        this.ngOnInit();
+        await this.loadTemplates();
+        await this.loadPngFromSession();
     }
 
     ngOnDestroy(): void {
@@ -97,10 +112,14 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
     async ngOnInit(): Promise<void> {
         this.spinnerService.show("PngGenerator5eComponent.ngOnInit");
         await this.loadTemplates();
-        await this.loadPngFromSession();
-        if (this.pngId) {
-            this.png = this.pngFromSession.find(x => x.id == this.pngId) || this.png;
+        if(this.sessionLoaded){
+            await this.loadPngFromSession();
         }
+        this.route.queryParams.subscribe(params => {  
+            if (params['pngId']) {
+                this.pngId = params['pngId'];
+            }
+        });
         this.spinnerService.hide("PngGenerator5eComponent.ngOnInit");
     }
 
@@ -138,6 +157,7 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
 
     selectTemplate(template: PNG_5E): void {
         this.png = { ...template };
+        console.log(template)
     }
 
     addSkill() {
@@ -188,13 +208,10 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
         this.png.spells.splice(index, 1);
     }
 
-    // Metodo per Spell Slots
-    addSpellSlot() {
-        this.png.spellSlots.push(0); // Aggiunge uno slot con valore predefinito 0
-    }
 
-    removeSpellSlot(index: number) {
-        this.png.spellSlots.splice(index, 1);
+    updateSpellSlots() {
+        this.png.spellSlots = this.spellSlots.filter(slot => slot !== null) as number[];
+        console.log(this.png.spellSlots);
     }
 
     async loadFromAI() {
@@ -215,14 +232,6 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
             wisdom: 0,
             charisma: 0
         },
-            sheetPrefill.savingThrows = {
-                strength: '',
-                dexterity: '',
-                constitution: '',
-                intelligence: '',
-                wisdom: '',
-                charisma: ''
-            };
         sheetPrefill.skills = [""];
         sheetPrefill.traits = [{ name: '', description: '', attack: '' }];
         sheetPrefill.actions = [{ name: '', description: '', attack: '' }];
@@ -245,6 +254,7 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
             const result = await firstValueFrom(dialogRef.afterClosed());
             if (result && JSON.parse(result) as PNG_5E) {
                 this.png = JSON.parse(result) as PNG_5E;
+                
             } else if (result) {
                 throw new Error("Error in the creation of the character");
             }

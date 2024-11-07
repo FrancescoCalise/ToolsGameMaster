@@ -5,6 +5,7 @@ import { TranslationMessageService } from '../../../../services/translation-mess
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
 import { DynamicWrapperModalComponent } from '../../../framework/modal/dynamic-wrapper-modal.component';
+import { SharedFields } from '../../../../shared/shared-fields.module';
 
 export interface StepperData {
     template: any;
@@ -24,7 +25,8 @@ export interface FormField {
     standalone: true,
     imports: [
         SharedModule,
-        DynamicWrapperModalComponent
+        DynamicWrapperModalComponent,
+        SharedFields
     ],
     templateUrl: './dialog-ai-generation.component.html',
     styleUrls: ['./dialog-ai-generation.component.css']
@@ -129,6 +131,15 @@ export class DialogAiGeneration implements OnInit {
         );
     }
 
+    
+    openChatGPT(): void {
+        window.open('https://chat.openai.com/', '_blank', 'noopener,noreferrer');
+    }
+    
+    cancel(){
+        this.dialogRef.close();
+    }
+    
     finish() {
         if (this.jsonForm.valid) {
             this.dialogRef.close(this.jsonForm.value.jsonResponse);

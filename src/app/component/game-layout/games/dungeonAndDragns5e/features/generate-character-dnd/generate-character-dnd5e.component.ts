@@ -19,6 +19,7 @@ import { firstValueFrom } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { DialogService } from '../../../../../../services/dialog.sevice';
 import { dnd5eConfig } from '../../dnd-5e-config';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-generate-character-dnd5e',
@@ -44,7 +45,8 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private pdfService: PdfService,
-    private dialogService: DialogService) {
+    private dialogService: DialogService,
+    private router: Router) {
     firestoreLurSheetService.setCollectionName('character-sheet-dnd5e');
   }
 
@@ -53,6 +55,8 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
   }
 
   async ngOnInit() {
+    alert("This feature is not completed");
+    this.router.navigate(['/games/dungeon-and-dragons-5e/SESSION_MANAGER']);
     this.spinnerService.show("GenerateCharacterLurComponent.ngOnInit");
     await this.loadCharacters();
     this.spinnerService.hide("GenerateCharacterLurComponent.ngOnInit");
@@ -93,10 +97,10 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
     if (index !== -1) this.characters[index] = updatedCharacter;
   }
 
-  onSessionLoaded(loadedSession: SessionManager) {
+  async onSessionLoaded(loadedSession: SessionManager): Promise<void> {
     this.defaultSession = loadedSession;
     this.sessionLoaded = true;
-    this.ngOnInit();
+    await this.loadCharacters();
   }
 
   async loadCharacters(): Promise<void> {

@@ -1,6 +1,5 @@
-import { Component, ElementRef, ViewChild, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, ElementRef, ViewChild, OnInit, OnDestroy } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { MatTableDataSource } from '@angular/material/table';
 import { SharedModule } from '../../../../shared/shared.module';
 import { SharedFields } from '../../../../shared/shared-fields.module';
 import { CacheStorageService } from '../../../../services/cache-storage.service';
@@ -10,6 +9,8 @@ interface Character {
   name: string;
   initiative: number;
   health: number;
+  maxHealth: number;
+  target:number;
 }
 
 @Component({
@@ -21,12 +22,13 @@ interface Character {
 })
 export class TurnOrderComponent implements OnInit, OnDestroy {
   characters: Character[] = [];
-  dataSource = new MatTableDataSource(this.characters);
   displayedColumns: string[] = ['initiative','name','health', 'actions'];
 
   @ViewChild('characterName') characterName!: ElementRef<HTMLInputElement>;
   @ViewChild('characterInitiative') characterInitiative!: ElementRef<HTMLInputElement>;
   @ViewChild('characterHealth') characterHealth!: ElementRef<HTMLInputElement>;
+  @ViewChild('maxHealth') maxHealth!: ElementRef<HTMLInputElement>;
+  @ViewChild('target') target!: ElementRef<HTMLInputElement>;
 
   constructor(
     private dialogRef: MatDialogRef<TurnOrderComponent>,
@@ -37,7 +39,6 @@ export class TurnOrderComponent implements OnInit, OnDestroy {
     const charactersCached = this.cacheStorageService.getItem(this.cacheStorageService.turnOrderKey);
     this.characters = charactersCached ? charactersCached : [];
     if (this.characters.length > 0) {
-      this.dataSource.data = [...this.characters];
     }
   }
 
@@ -45,15 +46,15 @@ export class TurnOrderComponent implements OnInit, OnDestroy {
     this.cacheStorageService.setItem(this.cacheStorageService.turnOrderKey, this.characters);
   }
 
-  addCharacter(name: string, initiative: number, health: number): void {
+  addCharacter(name: string, initiative: number, health: number, maxHealth:number, target: number): void {
     name = name.trim();
     initiative = initiative || 0;
     health = health || 0;
 
     if (name) {
-      this.characters.push({ name, initiative, health });
+      this.characters.push({ name, initiative, health, maxHealth, target});
       this.sortCharacters(); // Sort after adding a character
-      this.dataSource.data = [...this.characters]; // Update the data source
+      this.characters = [...this.characters]; // Update the data source
 
       // Clear inputs after adding the character
       this.characterName.nativeElement.value = '';
@@ -67,13 +68,13 @@ export class TurnOrderComponent implements OnInit, OnDestroy {
     const index = this.characters.indexOf(character);
     if (index >= 0) {
       this.characters.splice(index, 1);
-      this.dataSource.data = [...this.characters]; // Update the data source
+      this.characters = [...this.characters]; // Update the data source
     }
   }
 
   sortCharacters(): void {
     this.characters.sort((a, b) => b.initiative - a.initiative);
-    this.dataSource.data = [...this.characters]; // Update the data source to reflect changes
+    this.characters = [...this.characters]; // Update the data source to reflect changes
   }
 
   close(): void {

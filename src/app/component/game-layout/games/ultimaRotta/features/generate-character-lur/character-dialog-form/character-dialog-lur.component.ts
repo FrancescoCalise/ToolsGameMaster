@@ -6,6 +6,7 @@ import { SharedModule } from '../../../../../../../shared/shared.module';
 import { UtilitiesCreateCharacterLur } from '../utilities-create-character-lur/utilities-create-character-lur';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 import { SharedFields } from '../../../../../../../shared/shared-fields.module';
+import { DynamicWrapperModalComponent } from '../../../../../../framework/modal/dynamic-wrapper-modal.component';
 
 @Component({
     selector: 'app-character-dialog',
@@ -14,7 +15,8 @@ import { SharedFields } from '../../../../../../../shared/shared-fields.module';
     standalone: true,
     imports: [
         SharedModule,
-        SharedFields
+        SharedFields,
+        DynamicWrapperModalComponent
     ]
 })
 export class CharacterDialogLURComponent implements OnInit {

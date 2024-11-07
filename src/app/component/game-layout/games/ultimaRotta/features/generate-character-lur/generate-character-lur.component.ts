@@ -89,8 +89,11 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
   }
 
   updateCharacter(updatedCharacter: CharacterSheetLURTemplate) {
-    const index = this.characters.findIndex((char) => char.id === updatedCharacter.id);
-    if (index !== -1) this.characters[index] = updatedCharacter;
+    this.firestoreLurSheetService.updateItem(updatedCharacter).then(
+      (id : string) => {
+      const index = this.characters.findIndex((char) => char.id === id);
+      if (index !== -1) this.characters[index] = updatedCharacter;
+    })
   }
 
   onSessionLoaded(loadedSession: SessionManager) {
@@ -125,11 +128,12 @@ export class GenerateCharacterLurComponent implements OnInit, OnDestroy {
     this.spinnerService.show("GenerateCharacterLurComponent.printRandom");
     let newChar = character ? character : await this.generateRandom(false);
     if (newChar) {
+
       await this.pdfService.loadPdf(this.pathTemplateFIle);
       this.pdfService.updateFieldsWithMap(newChar, fieldMapPDFLUR);
       let pdf = await this.pdfService.getPDFUpdated();
       let fileName = `${newChar.name}_${newChar.genetic_and_role}.pdf`;
-      this.pdfService.downloadPdf(pdf, fileName);
+      this.pdfService.downloadPdf(pdf, fileName); 
 
       this.spinnerService.hide("GenerateCharacterLurComponent.printRandom");
     }

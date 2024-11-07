@@ -44,8 +44,6 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     this.dialogService.open(ErrorModalComponent, {
       data: logData,
-      width: '50%',
-      height: '50%',
     });
 
     throw error;

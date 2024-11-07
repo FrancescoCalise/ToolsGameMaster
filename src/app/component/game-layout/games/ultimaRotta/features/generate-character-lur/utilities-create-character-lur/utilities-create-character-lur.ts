@@ -28,7 +28,7 @@ export class UtilitiesCreateCharacterLur {
     static readonly pathTemplateFIle = 'assets/pdfFiles/{0}/ultima-rotta-template.pdf';
 
     constructor() { }
-
+    
     private static generateRandomNumber(max: number): number {
         return Math.floor(Math.random() * max) + 1;
     }
@@ -40,6 +40,7 @@ export class UtilitiesCreateCharacterLur {
     private static async getRandomName(randomNameService: RandomNameService): Promise<string> {
         try {
             let name = await firstValueFrom(randomNameService.getRandomName());
+
             return name;
         } catch (error) {
             return '';

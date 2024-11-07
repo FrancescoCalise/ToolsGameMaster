@@ -1,10 +1,10 @@
-// stepper.component.ts
 import { Component, Inject, OnInit } from '@angular/core';
 import { SharedModule } from '../../../../shared/shared.module';
 import { AbstractControl, AsyncValidatorFn, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { TranslationMessageService } from '../../../../services/translation-message-service';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Observable, of } from 'rxjs';
+import { DynamicWrapperModalComponent } from '../../../framework/modal/dynamic-wrapper-modal.component';
 
 export interface StepperData {
     template: any;
@@ -24,6 +24,7 @@ export interface FormField {
     standalone: true,
     imports: [
         SharedModule,
+        DynamicWrapperModalComponent
     ],
     templateUrl: './dialog-ai-generation.component.html',
     styleUrls: ['./dialog-ai-generation.component.css']

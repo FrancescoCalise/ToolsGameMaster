@@ -1,9 +1,8 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { SharedModule } from '../../../shared/shared.module';
 import { FeatureConfig } from '../../../interface/FeatureConfig';
-import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
+import { MatDialogConfig } from '@angular/material/dialog';
 import { TranslationMessageService } from '../../../services/translation-message-service';
-import { ToastService } from '../../../services/toast.service';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { GameConfig } from '../../../interface/GameConfig';
 import { BreakpointService } from '../../../services/breakpoint.service';

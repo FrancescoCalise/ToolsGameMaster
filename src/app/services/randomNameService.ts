@@ -17,7 +17,8 @@ export class RandomNameService {
     return this.http.get<any>(this.apiUrl).pipe(
       timeout(5000), // Timeout di 5 secondi
       map(response => {
-        return `${response.results[0].name.first} ${response.results[0].name.last}`;
+        let name =  `${response.results[0].name.first} ${response.results[0].name.last}`;
+        return this.normalizeString(name);
       }),
       catchError(error => {
         return of(''); // Ritorna una stringa vuota in caso di errore o timeout
@@ -25,5 +26,13 @@ export class RandomNameService {
     );
   }
   
+  private normalizeString(input: string): string {
+    const specialCharactersMap: { [key: string]: string } = {
+        'ć': 'c', 'č': 'c', 'š': 's', 'ž': 'z', 'đ': 'd', // Add other mappings as needed
+        'Ć': 'C', 'Č': 'C', 'Š': 'S', 'Ž': 'Z', 'Đ': 'D'
+    };
+
+    return input.split('').map(char => specialCharactersMap[char] || char).join('');
+}
 
 }

@@ -118,13 +118,13 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
   }
 
 
-  async updateItem(item: T): Promise<boolean> {
+  async updateItem(item: T): Promise<string> {
     this.spinner.show("FirestoreService.updateItem");
     item.lastUpdateDate = serverTimestamp();
     const docRef = doc(this.firestore, `${this.collectionName}/${item.id}`);
     try {
       await setDoc(docRef, item);
-      return true;
+      return docRef.id;
     } catch (e) {
       throw e;
     }

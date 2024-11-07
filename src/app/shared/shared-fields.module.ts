@@ -9,7 +9,7 @@ import { FieldButtonComponent } from '../component/framework/fields/field-button
     CommonModule,
     FormsModule,
     ImageUploaderComponent,
-    FieldButtonComponent 
+    FieldButtonComponent
   ],
   exports: [
     ImageUploaderComponent,

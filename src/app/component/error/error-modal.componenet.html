@@ -1,6 +1,8 @@
-<div class="error-modal w-100 h-100">
-  <h2 class="error-title">{{ title }}</h2>
-  <p class="error-code"><strong>{{'ERROR.CODE_ERROR_LABEL' | translate}}</strong> {{ data.errorCode }}</p>
-  <p class="error-description">{{ data.message }}</p>
-  <button mat-button (click)="close()" class="close-button">{{'GENERIC_LABEL.CLOSE' | translate}}</button>
-</div>
+<app-dynamic-wrapper-modal>
+  <div class="error-modal w-100 h-100">
+    <h2 class="error-title">{{ title }}</h2>
+    <p class="error-code"><strong>{{'ERROR.CODE_ERROR_LABEL' | translate}}</strong> {{ data.errorCode }}</p>
+    <p class="error-description">{{ data.message }}</p>
+    <button mat-button (click)="close()" class="close-button">{{'GENERIC_LABEL.CLOSE' | translate}}</button>
+  </div>
+</app-dynamic-wrapper-modal>

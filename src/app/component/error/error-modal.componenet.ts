@@ -6,6 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ErrorLog } from '../../interface/Document/ErrorLog';
 import { TranslationMessageService } from '../../services/translation-message-service';
 import { SpinnerService } from '../../services/spinner.service';
+import { DynamicWrapperModalComponent } from '../framework/modal/dynamic-wrapper-modal.component';
 
 @Component({
   selector: 'app-error-modal',
@@ -14,7 +15,8 @@ import { SpinnerService } from '../../services/spinner.service';
   standalone: true,
   imports: [
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DynamicWrapperModalComponent
   ]
 })
 

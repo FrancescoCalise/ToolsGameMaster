@@ -1,9 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { SharedModule } from '../../shared/shared.module';
-import { TableConfig } from '../../interface/TableConfig';
+import { SharedModule } from '../../../shared/shared.module';
+import { TableConfig } from '../../../interface/TableConfig';
 import { ActivatedRoute } from '@angular/router';
+import { TranslationMessageService } from '../../../services/translation-message-service';
 import { DynamicTableComponent } from '../dynamic-table/dynamic-table.component';
-import { TranslationMessageService } from '../../services/translation-message-service';
 
 @Component({
   selector: 'app-multi-dynamic-table',

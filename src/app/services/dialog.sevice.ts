@@ -6,8 +6,9 @@ import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dial
 })
 export class DialogService {
     width: string = '90vw';
-    minHeight: string = '200px'; // Altezza minima per la dialog
     maxWidth: string = '90vw';
+    minWidth: string = '90vw'; // Larghezza minima per la dialog
+    minHeight: string = '200px'; // Altezza minima per la dialog
     maxHeight: string = '80vh'; // Limita l’altezza massima all’80% dell’altezza visibile
     panelClass: string = '';
 
@@ -23,11 +24,11 @@ export class DialogService {
             }
         } else {
             dialogConfig = {
+                minWidth: config.minWidth ? config.minWidth : this.minWidth,
                 width: config.width ? config.width : this.width,
                 maxWidth: config.maxWidth ? config.maxWidth : this.maxWidth,
                 maxHeight: config.maxHeight ? config.maxHeight : this.maxHeight,
                 minHeight: config.minHeight ? config.minHeight : this.minHeight,
-                
                 ...config
             };
         }

@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { TableConfig } from '../../interface/TableConfig';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TranslationMessageService } from '../../services/translation-message-service';
-import { SharedModule } from '../../shared/shared.module';
+import { TableConfig } from '../../../interface/TableConfig';
+import { TranslationMessageService } from '../../../services/translation-message-service';
+import { SharedModule } from '../../../shared/shared.module';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -95,7 +95,6 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
 
   async generateNotes(): Promise<void> {
     const notesMap = new Map<string, string>();
-
     this.translatedTable.notes?.forEach((note) => {
       if (note && note.symbol && !notesMap.has(note.symbol)) {
         notesMap.set(note.symbol, note.description);
@@ -105,7 +104,7 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
     // Traduzione delle note e salvataggio in `notesToShow`
     this.notesToShow = await Promise.all(
       Array.from(notesMap, async ([symbol, description]) => ({
-        symbol,
+        symbol: symbol.includes('.') ? await this.translationService.translate(symbol) : symbol,
         description: await this.translationService.translate(description),
       }))
     );

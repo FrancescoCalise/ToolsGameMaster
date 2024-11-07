@@ -7,7 +7,7 @@ import { NotFoundComponent } from './component/notFoud/not-found.component';
 import { UserProfileComponent } from './component/user/profile/user-profile.component';
 import { UserSettingsComponent } from './component/user/settings/user-settings.component';
 import { GameLayoutComponent } from './component/game-layout/game-layout.component';
-import { MultiDynamicTablesComponent } from './component/multi-dynamic-tables/multi-dynamic-tables.component';
+import { MultiDynamicTablesComponent } from './component/framework/multi-dynamic-tables/multi-dynamic-tables.component';
 import { DungeonAndDragons5eComponent } from './component/game-layout/games/dungeonAndDragns5e/dungeonanddragons5e.component';
 import { UltimaRottaComponent } from './component/game-layout/games/ultimaRotta/ultimaRotta.component';
 import { ultimaRottaCriticDamage, ultimaRottaWeapon } from './component/game-layout/games/ultimaRotta/ultima-rotta-table';

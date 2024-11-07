@@ -4,6 +4,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { SharedModule } from '../../../../shared/shared.module';
 import { SharedFields } from '../../../../shared/shared-fields.module';
 import { CacheStorageService } from '../../../../services/cache-storage.service';
+import { DynamicWrapperModalComponent } from '../../../framework/modal/dynamic-wrapper-modal.component';
 
 interface Character {
   name: string;
@@ -16,7 +17,7 @@ interface Character {
   templateUrl: './turn-order.component.html',
   styleUrls: ['./turn-order.component.css'],
   standalone: true,
-  imports: [SharedModule, SharedFields]
+  imports: [SharedModule, SharedFields, DynamicWrapperModalComponent]
 })
 export class TurnOrderComponent implements OnInit, OnDestroy {
   characters: Character[] = [];

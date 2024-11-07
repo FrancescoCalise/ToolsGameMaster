@@ -1,15 +1,11 @@
-import { ChangeDetectorRef, Component, HostListener, OnDestroy, OnInit, } from '@angular/core';
-import { ActivatedRoute, RouterOutlet } from '@angular/router';
+import { Component, HostListener, OnDestroy, OnInit, } from '@angular/core';
+import {  RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
-import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
 import { FeatureAreaComponent } from '../../feature-sitemap/feature-area.component';
-import { ToastService } from '../../../../services/toast.service';
-import { GameConfig } from '../../../../interface/GameConfig';
 import { ultimeRottaConfig } from './ultime-rotta-config';
-import { BreakpointService } from '../../../../services/breakpoint.service';
-import { MatDialog } from '@angular/material/dialog';
 import { DeathSunComponent } from './features/death-sun/death-sun.component';
 import { GameBaseComponent } from '../base/game-base.component';
+import { DynamicTableComponent } from '../../../framework/dynamic-table/dynamic-table.component';
 
 export interface DeathOfSunInterface{
   deathSunBonus: number;

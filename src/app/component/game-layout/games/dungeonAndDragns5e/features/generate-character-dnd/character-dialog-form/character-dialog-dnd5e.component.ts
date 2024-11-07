@@ -5,6 +5,7 @@ import { SharedModule } from '../../../../../../../shared/shared.module';
 import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 import { SharedFields } from '../../../../../../../shared/shared-fields.module';
 import { CharacterSheetDND5ETemplate } from '../charachter-sheet-dnd5e';
+import { DynamicWrapperModalComponent } from '../../../../../../framework/modal/dynamic-wrapper-modal.component';
 
 @Component({
     selector: 'app-character-dialog',
@@ -13,7 +14,8 @@ import { CharacterSheetDND5ETemplate } from '../charachter-sheet-dnd5e';
     standalone: true,
     imports: [
         SharedModule,
-        SharedFields
+        SharedFields,
+        DynamicWrapperModalComponent
     ]
 })
 export class CharacterDialogDND5eComponent implements OnInit {

@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
-
-import { DynamicTableComponent } from '../../../dynamic-table/dynamic-table.component';
 import { FeatureAreaComponent } from '../../feature-sitemap/feature-area.component';
 import { GameBaseComponent } from '../base/game-base.component';
 import { dnd5eConfig } from './dnd-5e-config';
@@ -14,7 +12,6 @@ import { dnd5eConfig } from './dnd-5e-config';
   standalone: true,
   imports: [
     SharedModule,
-    DynamicTableComponent,
     FeatureAreaComponent,
     RouterOutlet,
   ],

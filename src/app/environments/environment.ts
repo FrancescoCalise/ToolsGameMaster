@@ -12,5 +12,5 @@ export const environment = {
     appId: "1:1040681236914:web:054073e0de6ba1ffc04cab",
     measurementId: "G-4W0QCDYVYF"
   } as FirebaseOptions,
-  version: '2024.11.7.20:31'
+  version: '2024.11.8.17:10'
 };

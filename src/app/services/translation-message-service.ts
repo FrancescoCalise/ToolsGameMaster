@@ -125,7 +125,6 @@ export class TranslationMessageService implements OnInit {
     this.translationCacheService.updateCache(key, translatedText);
 
     if (translatedText === key) {
-      debugger
       console.error(`Translation not found for key: ${key}`);
     }
 

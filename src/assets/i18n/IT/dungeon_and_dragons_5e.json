@@ -1,16 +1,15 @@
 {
   "DUNGEON_AND_DRAGONS_5E": {
-    "CHALLENGE_RATING": "Grado di Sfida",
     "CREATE_CHARACTER": {
       "LEVEL": "Livello",
-      "NO_CHARACTERS": "Nessun personaggio disponibile. Crea il tuo personaggio!"
+      "NO_CHARACTERS": "Nessun personaggio disponibile. Crea il tuo personaggio!",
+      "TITLE": "Crea personaggio"
     },
     "PNG_GENERATOR": {
       "ACTIONS": "Azioni",
       "ACTION_ATTACK": "Azione",
       "ACTION_DESCRIPTION": "Descrizione",
       "ACTION_NAME": "Nome",
-      "ADDITIONAL_DETAILS": "Dettagli aggiuntivi",
       "ALIGNMENT": "Allineamento",
       "ARMOR_CLASS": "Classe armatura (CA)",
       "ATTRIBUTES": "Attributi",
@@ -61,7 +60,8 @@
       "TRAIT_NAME": "Nome",
       "TYPE": "Tipo",
       "WISDOM": "Saggezza",
-      "WISDOM_SAVE": "Tiro salvezza saggezza"
+      "WISDOM_SAVE": "Tiro salvezza saggezza",
+      "SAVEING_THROWS": "Tiri salvezza"
     },
     "TITLE": "Dungeon & Dragons 5E"
   }

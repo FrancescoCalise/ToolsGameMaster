@@ -1,6 +1,0 @@
-{
-  "UPDATE": {
-    "DESCRIPTION": "Nuova versione rilasciata ({{version}}). L'applicazione verrà aggiornata tra 3 secondi.",
-    "TITLE": "Aggiornamento disponibile"
-  }
-}

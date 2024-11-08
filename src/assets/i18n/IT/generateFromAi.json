@@ -8,6 +8,7 @@
         "PASTE_RESULT":"Incolla il risultato",
         "PROMPT_COPIED":"Prompt copiato",
         "PROMPT_PREVIEW":"Anteprima del prompt",
-        "SELECT_CHARACTER_INFO":"Seleziona le informazioni del personaggio"
+        "SELECT_CHARACTER_INFO":"Seleziona le informazioni del personaggio",
+        "PASTE_JSON":"Incolla JSON"
     }
 }

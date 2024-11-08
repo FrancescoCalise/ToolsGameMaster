@@ -2,17 +2,18 @@
   "USER": {
     "INFORMATION": "Informazioni di sistema",
     "PROFILE_SECTION": "Gestione Profilo",
-    "SELECT_LANGUAGE": "Seleziona la lingua"
+    "SELECT_LANGUAGE": "Seleziona la lingua",
+    "LOGOUT": "Esci",
+    "SETTINGS": "Impostazioni",
+    "PROFILE": "Profilo"
   },
   "USER_PROFILE": {
     "ANONYMOUS": "Anonimo",
     "EMAIL": "Email",
     "EMAIL_VERIFIED": "Email Verificata",
     "LAST_DONATION": "Ultima Donazione",
-    "NO": "No",
     "NO_DONATION_RECORDED": "Nessuna donazione registrata",
     "ROLE": "Ruolo",
-    "UID": "UID",
-    "YES": "Sì"
+    "UID": "UID"
   }
 }

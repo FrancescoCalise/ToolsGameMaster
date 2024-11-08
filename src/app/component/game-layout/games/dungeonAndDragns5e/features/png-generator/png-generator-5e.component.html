@@ -28,7 +28,7 @@
                   style="width: 100%; max-height: 400px; overflow-y: hidden;">
                   <!-- Campo di input per il filtro -->
                   <li class="p-2">
-                      <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
+                      <input type="text" [(ngModel)]="filterText" class="form-control" placeholder=" {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SEARCH_TEMPLATES' | translate }}"
                           (input)="filterPngFromSession()" />
                   </li>
                   <!-- Elenco filtrato e limitato a 10 elementi -->
@@ -48,7 +48,7 @@
                   style="width: 100%; max-height: 400px; overflow-y: hidden;">
                   <!-- Campo di input per il filtro -->
                   <li class="p-2">
-                      <input type="text" [(ngModel)]="filterText" class="form-control" placeholder="Search templates..."
+                      <input type="text" [(ngModel)]="filterText" class="form-control" placeholder=" {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SEARCH_TEMPLATES' | translate }}"
                           (input)="filterTemplates()" />
                   </li>
                   <!-- Elenco filtrato e limitato a 10 elementi -->
@@ -285,7 +285,7 @@
       <div class="d-flex flex-row p-0">
         <div class="col-12">
           <div class="d-flex justify-content-between align-items-center mb-3">
-            <h4 class="mb-0">{{ 'COMMON.ACTIONS' | translate }}</h4>
+            <h4 class="mb-0">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ACTIONS' | translate }}</h4>
             <button mat-icon-button color="primary dnd-5e" (click)="addAction()" aria-label="Add action">
               <mat-icon>add</mat-icon>
             </button>

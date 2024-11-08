@@ -77,6 +77,9 @@
       "UNO_CONTRO_MOLTI": "Uno contro Molti",
       "VECCHIO_CONTATTO": "Vecchio Contatto"
     },
+    "CREATE_CHARACTER": {
+      "NO_CHARACTERS": "Nessun personaggio disponibile. Crea il tuo personaggio!"
+    },
     "ARMOR_MELEE": "Armi Bianche",
     "BOMBS": "Bombe",
     "BURST_FIRE": "Raffica ***",
@@ -105,7 +108,8 @@
       "SOLE_SPENTO": "Il sole si spegne. Finché il sole è spento c'è il buio totale ed ogni zona è al Freddo. Da ora per ogni Test Morte Solare, il master tira 1D6. Con il 6 il sole si riaccende ed inizia un nuovo ciclo. Se esce tre volte 1 prima del 6 il sole esplode.",
       "SUN_DEATH": "Il sole è esploso. Nulla è sopravvissuto. Cambiate gioco",
       "TEST_BONUS": "Bonus al Test Morte Solare",
-      "TITLE": "Test Morte Solare"
+      "TITLE": "Test Morte Solare",
+      "RIMANING_TIME": "Tempo rimanente"
     },
     "DISTANCE": "Distanza",
     "DIST_100_M": "Dist. 100 m.",

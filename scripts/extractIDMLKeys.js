@@ -99,16 +99,28 @@ function extractAndSaveKeysToFile() {
 
   // Converte il set di chiavi in un array, ordina in ordine alfabetico e salva in JSON
   const keysArray = Array.from(allKeys).sort();
-  const idmlKeysPath = path.join(outputDir, 'idmlKeys.json');
+  const idmlKeysPath = path.join(outputDir, 'idml-used-into-html.json');
   fs.writeFileSync(idmlKeysPath, JSON.stringify(keysArray, null, 2));
   console.log(`Chiavi IDML salvate in ${idmlKeysPath}`);
 
   // Ottieni le chiavi esistenti e salvale in un nuovo file JSON
   const existingKeys = getExistingKeys();
-  
-  const existingKeysPath = path.join(outputDir, language + '-' + 'keyAlreadySaved.json');
+  const existingKeysPath = path.join(outputDir, 'idml-declared.json');
   fs.writeFileSync(existingKeysPath, JSON.stringify(existingKeys, null, 2));
   console.log(`Chiavi già salvate in ${existingKeysPath}`);
+
+  // Calcola le chiavi dichiarate ma non usate e le chiavi usate ma non dichiarate
+  const declaredButNotUsed = existingKeys.filter(key => !allKeys.has(key)).sort();
+  const usedButNotDeclared = keysArray.filter(key => !existingKeys.includes(key)).sort();
+
+  // Salva i risultati in due nuovi file JSON
+  const declaredButNotUsedPath = path.join(outputDir, 'idml-declared-but-not-used.json');
+  fs.writeFileSync(declaredButNotUsedPath, JSON.stringify(declaredButNotUsed, null, 2));
+  console.log(`Chiavi dichiarate ma non usate salvate in ${declaredButNotUsedPath}`);
+
+  const usedButNotDeclaredPath = path.join(outputDir, 'idml-used-but-not-declared.json');
+  fs.writeFileSync(usedButNotDeclaredPath, JSON.stringify(usedButNotDeclared, null, 2));
+  console.log(`Chiavi usate ma non dichiarate salvate in ${usedButNotDeclaredPath}`);
 }
 
 // Esecuzione dello script

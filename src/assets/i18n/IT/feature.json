@@ -1,10 +1,13 @@
 {
-  "FEATURE": {
-    "CREATE_CHARACTER": "Generatore personaggi",
-    "PNG_GENERATOR": "Generatore di PNG",
-    "SESSION_MANAGER": "Gestione sessioni",
-    "SHOW_CRITIC_DAMAGE": "Danni critici",
-    "SHOW_WEAPONS": "Armi",
-    "TURN_ORDER": "Gestione turni"
-  }
+    "FEATURE":
+    {
+        "SESSION_MANAGER": "Gestione Sessioni",
+        "TURN_ORDER": "Ordine di Turno",
+        "SHOW_WEAPONS": "Mostra Armi",
+        "SHOW_CRITIC_DAMAGE": "Mostra Critici",
+        "CREATE_CHARACTER": "Crea Personaggio",
+        "PNG_GENERATOR": "Generatore PNG",
+        "PNG_MANAGER": "Gestione PNG"
+
+    }
 }

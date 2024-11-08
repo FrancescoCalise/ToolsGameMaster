@@ -40,7 +40,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     private cacheStorageService: CacheStorageService,
     private translationMessageService: TranslationMessageService
   ) {
-    debugger
+  
     this.selectedLanguage = this.translationMessageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
     this.selectedFlag = selectedLang ? selectedLang.flag : 'fi fi-it';

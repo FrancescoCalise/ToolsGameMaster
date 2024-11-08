@@ -1,0 +1,13 @@
+{
+  "SYSTEM_FOOTER": {
+    "CONTAINER_NOT_FOUND": "Il contenitore non è stato trovato.",
+    "DESCRIPTION": "Se ti piace questo progetto aiutami a supportarlo, mantenerlo ed aggiornarlo.",
+    "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi.",
+    "DONATION_SUCCESS": "Grazie per il tuo supporto!",
+    "TITLE": "OFFRIMI UNA BIRRA!"
+  },
+  "SYSTEM_NAVBAR": {
+    "CLEAN_CACHE": "Pulisci Cache",
+    "TITLE": "STRUMENTI DEL GAME MASTER"
+  }
+}

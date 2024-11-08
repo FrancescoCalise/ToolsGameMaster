@@ -1,0 +1,10 @@
+{
+  "SESSION_MANAGER": {
+    "ACTIVE_SESSION": "Sessione Attiva",
+    "GAME_LABEL": "Gioco",
+    "NO_SESSIONS_AVAILABLE": "Nessuna sessione disponibile. Clicca 'Crea Nuova Sessione' per aggiungerne una.",
+    "SESSION_NAME_LABEL": "Nome della Sessione",
+    "SET_ACTIVE": "Imposta come Attiva",
+    "TITLE": "Gestione Sessioni"
+  }
+}

@@ -4,7 +4,6 @@ import { TranslationMessageService } from '../../../../../../services/translatio
 import { SharedModule } from '../../../../../../shared/shared.module';
 import { ToastService } from '../../../../../../services/toast.service';
 import { SharedFields } from '../../../../../../shared/shared-fields.module';
-import { CacheStorageService } from '../../../../../../services/cache-storage.service';
 
 @Component({
   selector: 'app-death-sun',
@@ -81,7 +80,6 @@ export class DeathSunComponent implements OnInit {
     public dialogRef: MatDialogRef<DeathSunComponent>,
     private translationMessageService: TranslationMessageService,
     private toastService: ToastService,
-    private cacheSessionStorage: CacheStorageService,
     @Inject(MAT_DIALOG_DATA) public data: {
       solarDeathTestValue: number,
       counterPermanentDeathOfSun: number

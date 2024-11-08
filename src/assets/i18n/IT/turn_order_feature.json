@@ -1,0 +1,12 @@
+{
+  "TURN_ORDER_FEATURE": {
+    "ACTIONS_COLUMN": "Azioni",
+    "CHARACTER_NAME": "Nome del Personaggio",
+    "HEALTH": "Salute",
+    "MAX_HEALTH": "Salute Massima",
+    "INITIATIVE": "Iniziativa",
+    "NAME_COLUMN": "Nome",
+    "TITLE": "Ordine di Turno",
+    "TARGET": "CD"
+  }
+}

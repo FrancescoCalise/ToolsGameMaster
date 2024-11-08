@@ -4,7 +4,6 @@ import { BaseDocument } from '../interface/Document/BaseModel';
 import { AuthService, PersonalUser } from './auth.service';
 import { Subscription } from 'rxjs';
 import { SpinnerService } from './spinner.service';
-import { TranslationMessageService } from './translation-message-service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +17,6 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
     private firestore: Firestore,
     private authService: AuthService,
     private spinner: SpinnerService,
-    private translationMessageService: TranslationMessageService
   ) {
     this.userSubscription = this.authService.subscribeToUserChanges().subscribe(
       (user: PersonalUser | null) => {
@@ -89,8 +87,7 @@ export class FirestoreService<T extends BaseDocument> implements OnDestroy {
       }
 
       if (docRef === null) {
-        const message = await this.translationMessageService.translate("FIRESTORE.DOC_REF_NULL");
-        throw new Error(message);
+        throw new Error("ERR");
       }
 
       this.convertUndefinedToNull(item);

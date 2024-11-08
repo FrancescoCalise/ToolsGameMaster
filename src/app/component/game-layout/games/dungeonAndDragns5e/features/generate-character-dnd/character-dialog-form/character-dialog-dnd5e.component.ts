@@ -2,7 +2,6 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { SharedModule } from '../../../../../../../shared/shared.module';
-import { TranslationMessageService } from '../../../../../../../services/translation-message-service';
 import { SharedFields } from '../../../../../../../shared/shared-fields.module';
 import { CharacterSheetDND5ETemplate } from '../charachter-sheet-dnd5e';
 import { DynamicWrapperModalComponent } from '../../../../../../framework/modal/dynamic-wrapper-modal.component';
@@ -35,7 +34,6 @@ export class CharacterDialogDND5eComponent implements OnInit {
         public dialogRef: MatDialogRef<CharacterDialogDND5eComponent>,
         private fb: FormBuilder,
         @Inject(MAT_DIALOG_DATA) public data: { character: CharacterSheetDND5ETemplate, sessionId: string | undefined },
-        private translationMessageService: TranslationMessageService,
     ) {
         this.characterForm = this.fb.group({
             CharacterName: [null],

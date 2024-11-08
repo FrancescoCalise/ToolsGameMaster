@@ -1,0 +1,19 @@
+{
+  "SECTIONS": {
+    "DASHBOARD": {
+      "TITLE": "Dashboard"
+    },
+    "HOME": {
+      "DESCRIPTION": "Questa è la home page",
+      "TITLE": "Benvenuto"
+    },
+    "SESSION_MANAGER": {
+      "ACTIVE_SESSION": "Sessione Attiva",
+      "CREATE_NEW_SESSION": "Crea Nuova Sessione",
+      "NO_SESSIONS_AVAILABLE": "Nessuna sessione disponibile. Clicca 'Crea Nuova Sessione' per aggiungerne una.",
+      "SAVE_SESSION": "Salva Sessione",
+      "SET_ACTIVE": "Imposta come Attiva",
+      "TITLE": "Gestione Sessioni"
+    }
+  }
+}

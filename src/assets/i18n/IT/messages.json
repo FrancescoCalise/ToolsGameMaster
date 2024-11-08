@@ -1,0 +1,12 @@
+{
+  "MESSAGES": {
+    "CONTAINER_NOT_FOUND": "Il contenitore non è stato trovato.",
+    "DONATION_ERROR": "Qualcosa è andato storto, riprova più tardi.",
+    "DONATION_SUCCESS": "Grazie per il tuo supporto!",
+    "ERROR_COMPONENT_UNKNOWN": "Componente sconosciuto",
+    "ERROR_UNKNOWN": "Errore sconosciuto",
+    "LOGOUT_CONFIRMED": "Sei stato disconnesso",
+    "NO_DONATION_RECORDED": "Nessuna donazione registrata",
+    "USER_NOT_AUTHENTICATED": "Utente non autenticato"
+  }
+}

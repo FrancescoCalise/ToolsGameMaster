@@ -11,8 +11,7 @@ import { provideAnimationsAsync } from '@angular/platform-browser/animations/asy
 
 import { importProvidersFrom } from '@angular/core';
 import { HttpClientModule, HttpClient, provideHttpClient } from '@angular/common/http';
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
-import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -20,13 +19,11 @@ import { provideToastr } from 'ngx-toastr'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GlobalErrorHandler } from './services/gobal-error-handler.service';
 import { FireBaseProviders } from './firebase-provider';
-import { ClipboardModule } from '@angular/cdk/clipboard';
+import { MultiTranslateLoaderFactory } from './services/multi-translate-loader.service';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
-}
-interface NgxSpinnerConfig {
-  type?: string;
 }
 
 export const appConfig: ApplicationConfig = {
@@ -37,22 +34,21 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideServiceWorker('./ngsw-worker.js', {
-            enabled: environment.production,
-            registrationStrategy: 'registerWhenStable:30000'
-    }), 
+      enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
+    }),
     provideAnimationsAsync(),
     importProvidersFrom(HttpClientModule),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useFactory: HttpLoaderFactory,
+          useFactory: MultiTranslateLoaderFactory,
           deps: [HttpClient]
         }
       })
     ),
     importProvidersFrom(NgxSpinnerModule.forRoot({ type: 'ball-scale-multiple' })),
-    
     importProvidersFrom(BrowserAnimationsModule),
     provideAnimations(),
     provideToastr(),

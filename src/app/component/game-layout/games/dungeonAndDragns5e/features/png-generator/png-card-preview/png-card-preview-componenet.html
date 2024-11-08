@@ -15,15 +15,15 @@
                 <!-- Sezione Dati -->
                 <div class="d-flex flex-wrap">
                     <p *ngIf="data.armorClass" class="col-lg-4 col-md-6 col-12">
-                        <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.ARMOR_CLASS' | translate }}</strong>:
+                        <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ARMOR_CLASS' | translate }}</strong>:
                         {{ data.armorClass }}
                     </p>
                     <p *ngIf="data.hitPoints" class="col-lg-4 col-md-6 col-12">
-                        <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.HIT_POINTS' | translate }}</strong>: {{
+                        <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.HIT_POINTS' | translate }}</strong>: {{
                         data.hitPoints }}
                     </p>
                     <p *ngIf="data.speed" class="col-lg-4 col-md-6 col-12">
-                        <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.SPEED' | translate }}</strong>: {{
+                        <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}</strong>: {{
                         data.speed }}
                     </p>
                 </div>
@@ -62,7 +62,7 @@
                 <!-- Sezione Salvataggi -->
                 <div *ngIf="data.save" class="d-flex flex-wrap">
                     <div class="col-2">
-                        <p class="col-lg-12 col-md-12 col-12"><strong>{{ 'SAVING_THROWS' | translate }}:</strong></p>
+                        <p class="col-lg-12 col-md-12 col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SAVING_THROWS' | translate }}:</strong></p>
                     </div>
                     <div class="col-10">
                         <span *ngIf="data.save" class="col-lg-2 col-md-4 col-6"> {{ data.save }}</span>
@@ -71,33 +71,33 @@
 
                 <!-- Altre Informazioni -->
                 <p *ngIf="data.skills && data.skills.length > 0 && !isObjectEmpty(data.skills)" class="col-12">
-                    <strong>{{ 'SKILLS' | translate }}:</strong> {{ data.skills.join(', ') }}
+                    <strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SKILLS' | translate }}:</strong> {{ data.skills.join(', ') }}
                 </p>
-                <p *ngIf="data.damageResistances" class="col-12"><strong>{{ 'DAMAGE_RESISTANCES' | translate
+                <p *ngIf="data.damageResistances" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_RESISTANCES' | translate
                         }}:</strong> {{ data.damageResistances }}</p>
-                <p *ngIf="data.damageVulnerabilities" class="col-12"><strong>{{ 'DAMAGE_VULNERABILITIES' | translate
+                <p *ngIf="data.damageVulnerabilities" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_VULNERABILITIES' | translate
                         }}:</strong> {{ data.damageVulnerabilities }}</p>
-                <p *ngIf="data.damageImmunities" class="col-12"><strong>{{ 'DAMAGE_IMMUNITIES' | translate }}:</strong>
+                <p *ngIf="data.damageImmunities" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.DAMAGE_IMMUNITIES' | translate }}:</strong>
                     {{ data.damageImmunities }}</p>
-                <p *ngIf="data.conditionImmunities" class="col-12"><strong>{{ 'CONDITION_IMMUNITIES' | translate
+                <p *ngIf="data.conditionImmunities" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CONDITION_IMMUNITIES' | translate
                         }}:</strong> {{ data.conditionImmunities }}</p>
-                <p *ngIf="data.senses" class="col-12"><strong>{{ 'SENSES' | translate }}:</strong> {{ data.senses }}</p>
-                <p *ngIf="data.passivePerception" class="col-12"><strong>{{ 'PASSIVE_PERCEPTION' | translate
+                <p *ngIf="data.senses" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SENSES' | translate }}:</strong> {{ data.senses }}</p>
+                <p *ngIf="data.passivePerception" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATO.PASSIVE_PERCEPTION' | translate
                         }}:</strong> {{ data.passivePerception }}</p>
-                <p *ngIf="data.languages" class="col-12"><strong>{{ 'LANGUAGES' | translate }}:</strong> {{
+                <p *ngIf="data.languages" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATORLANGUAGES' | translate }}:</strong> {{
                     data.languages }}</p>
-                <p *ngIf="data.challengeRating" class="col-12"><strong>{{ 'CHALLENGE_RATING' | translate }}:</strong> {{
+                <p *ngIf="data.challengeRating" class="col-12"><strong>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.CHALLENGE_RATING' | translate }}:</strong> {{
                     data.challengeRating }}</p>
 
                 <!-- Sezione con Traits, Actions, e Legendary Actions -->
-                <h4 *ngIf="data.traits && data.traits.length > 0" class="mt-3">{{ 'TRAITS' | translate }}</h4>
+                <h4 *ngIf="data.traits && data.traits.length > 0" class="mt-3">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAITS' | translate }}</h4>
                 <div *ngFor="let trait of data.traits" class="d-flex flex-wrap mb-2">
                     <p class="col-12"><strong>{{ trait.name }}</strong>: {{ trait.description }}</p>
-                    <p *ngIf="trait.attack" class="col-12"><em>{{ 'TRAIT_ATTACK' | translate }}</em>: {{ trait.attack }}
+                    <p *ngIf="trait.attack" class="col-12"><em>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.TRAIT_ATTACK' | translate }}</em>: {{ trait.attack }}
                     </p>
                 </div>
 
-                <h4 *ngIf="data.actions && data.actions.length > 0" class="mt-3">{{ 'ACTIONS' | translate }}</h4>
+                <h4 *ngIf="data.actions && data.actions.length > 0" class="mt-3">{{ 'COMMON.ACTIONS' | translate }}</h4>
                 <div *ngFor="let action of data.actions" class="d-flex flex-wrap mb-2">
                     <p class="col-12">
                         <strong>{{ action.name }}</strong>
@@ -106,9 +106,7 @@
                     <p *ngIf="action.attack" class="col-12"> {{ action.attack }}</p>
                 </div>
 
-                <h4 *ngIf="data.legendaryActions && data.legendaryActions.length > 0" class="mt-3">{{
-                    'LEGENDARY_ACTIONS' |
-                    translate }}</h4>
+                <h4 *ngIf="data.legendaryActions && data.legendaryActions.length > 0" class="mt-3">{{'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.LEGENDARY_ACTIONS' | translate }}</h4>
                 <div *ngFor="let legendaryAction of data.legendaryActions" class="d-flex flex-wrap mb-2">
                     <p class="col-12">
                         <strong>{{ legendaryAction.name }}</strong>
@@ -116,10 +114,10 @@
                     </p>
                 </div>
 
-                <h4 *ngIf="data.spells && data.spells.length > 0" class="mt-3">{{ 'SPELLS' | translate }}</h4>
+                <h4 *ngIf="data.spells && data.spells.length > 0" class="mt-3">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELLS' | translate }}</h4>
                 <div *ngFor="let spell of data.spells" class="d-flex flex-wrap mb-2">
                     <p class="col-12">
-                        <strong *ngIf="spell.level">{{ 'SPELL_LEVEL' | translate }} {{ spell.level}}</strong>
+                        <strong *ngIf="spell.level">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPELL_LEVEL' | translate }} {{ spell.level}}</strong>
                         <span *ngIf="spell.spellName">: {{ spell.spellName }}</span>
                 </div>
             </div>
@@ -130,9 +128,9 @@
 <!-- Pulsanti di azione -->
 <div class="card-footer d-flex justify-content-end">
     <button mat-button (click)="downloadPNG()" class="btn btn-primary me-2">
-        {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.DOWNLOAD_PNG' | translate }}
+        {{ 'COMMON.DOWNLOAD_PNG' | translate }}
     </button>
     <button mat-button (click)="close()" class="btn btn-secondary">
-        {{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.PREVIEW.CLOSE' | translate }}
+        {{ 'COMMON.CLOSE' | translate }}
     </button>
 </div>

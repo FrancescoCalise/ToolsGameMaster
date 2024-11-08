@@ -22,7 +22,7 @@
                                 <mat-form-field class="w-100" appearance="fill">
                                     <mat-label>{{ 'GENERATE_FROM_AI.ADDITIONAL_INFORMATION' | translate }}</mat-label>
                                     <textarea matInput [(ngModel)]="promptPart3"
-                                        placeholder="{{ 'GENERATE_FROM_AI.ADDITIONAL_INFORMATION_PLACEHOLDER' | translate }}"
+                                        placeholder="{{ 'GENERATE_FROM_AI.ADDITIONAL_INFORMATION' | translate }}"
                                         [ngModelOptions]="{standalone: true}"></textarea>
                                 </mat-form-field>
                             </div>
@@ -36,7 +36,7 @@
 
                 <mat-card-actions class="d-flex justify-content-center">
                     <app-field-button colorClass="btn-primary" icon="content_copy"
-                        tooltip="{{ 'GENERATE_FROM_AI.COPY' | translate }}" (buttonClick)="copyPrompt()">
+                        tooltip="{{ 'COMMON.COPY' | translate }}" (buttonClick)="copyPrompt()">
                     </app-field-button>
                     <div *ngIf="promptCopied" class="prompt-copied-message p-2 ml-3">
                         {{ 'GENERATE_FROM_AI.PROMPT_COPIED' | translate }}
@@ -64,14 +64,14 @@
                                 <mat-form-field appearance="fill" class="w-100">
                                     <mat-label>{{ 'GENERATE_FROM_AI.PASTE_JSON_HERE' | translate }}</mat-label>
                                     <textarea matInput
-                                        placeholder="{{ 'GENERATE_FROM_AI.PASTE_JSON_PLACEHOLDER' | translate }}"
+                                        placeholder="{{ 'GENERATE_FROM_AI.PASTE_JSON' | translate }}"
                                         formControlName="jsonResponse" rows="15"></textarea>
 
                                     <mat-error *ngIf="jsonForm.get('jsonResponse')?.hasError('invalidJsonFormat')">
-                                        {{ 'GENERATE_FROM_AI.INVALID_JSON_FORMAT' | translate }}
+                                        {{ 'COMMON.INVALID_JSON_FORMAT' | translate }}
                                     </mat-error>
                                     <mat-error *ngIf="jsonForm.get('jsonResponse')?.hasError('invalidJsonTemplate')">
-                                        {{ 'GENERATE_FROM_AI.INVALID_JSON_TEMPLATE' | translate }}
+                                        {{ 'COMMON.INVALID_JSON_TEMPLATE' | translate }}
                                     </mat-error>
                                 </mat-form-field>
                             </div>
@@ -85,10 +85,10 @@
     <!-- Cancel button -->
     <div class="d-flex flex-row justify-content-center align-items-center" style="height: 20%">
         <app-field-button colorClass="btn-primary" icon="check_circle"
-            tooltip="{{ 'GENERATE_FROM_AI.FINISH' | translate }}" [isDisabled]="!jsonForm.valid"
+            tooltip="{{ 'COMMON.COMPLETE' | translate }}" [isDisabled]="!jsonForm.valid"
             (buttonClick)="finish()">
         </app-field-button>
-        <app-field-button colorClass="btn-danger" icon="cancel" tooltip="{{ 'GENERATE_FROM_AI.CANCEL' | translate }}"
+        <app-field-button colorClass="btn-danger" icon="cancel" tooltip="{{ 'COMMON.CANCEL' | translate }}"
             (buttonClick)="cancel()">
         </app-field-button>
     </div>

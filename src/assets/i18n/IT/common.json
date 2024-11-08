@@ -1,0 +1,22 @@
+{
+  "COMMON": {
+    "ACTIONS": "Azioni",
+    "ADD": "Aggiungi",
+    "CANCEL": "Annulla",
+    "CLOSE": "Chiudi",
+    "DELETE": "Elimina",
+    "EDIT": "Modifica",
+    "LOGIN": "Accedi",
+    "LOGOUT": "Esci",
+    "PROFILE": "Profilo",
+    "SAVE": "Salva",
+    "SETTINGS": "Impostazioni",
+    "DOWNLOAD_PNG": "Scarica PNG",
+    "SHOW_PREVIEW": "Mostra anteprima",
+    "LOAD_PHOTO": "Carica Foto",
+    "COPY": "Copia",
+    "COMPLETE": "Completa",
+    "INVALID_JSON_FORMAT": "Formato JSON non valido",
+    "INVALID_JSON_TEMPLATE": "Modello JSON non valido"
+  }
+}

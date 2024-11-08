@@ -1,0 +1,8 @@
+{
+  "ERROR": {
+    "CODE_ERROR_LABEL": "Codice errore",
+    "COMPONENT_UNKNOWN": "Componente sconosciuto",
+    "TITLE": "Errore",
+    "UNKNOWN": "Errore sconosciuto"
+  }
+}

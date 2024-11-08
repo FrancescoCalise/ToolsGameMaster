@@ -1,18 +1,18 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component,  isDevMode, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { SystemNavBarComponent } from '../app/shared/system-navbar/system-navbar.component';
-import { LoadingComponent } from './shared/loading/loading.component';
+import { SystemNavBarComponent } from './component/shared/system-navbar/system-navbar.component';
+import { LoadingComponent } from './component/shared/loading/loading.component';
 import { SpinnerService } from './services/spinner.service';
-import { SystemFooterComponent } from './shared/system-footer/system-footer.component';
+import { SystemFooterComponent } from './component/shared/system-footer/system-footer.component';
 
 import { environment } from '../app/environments/environment';
 import { ToastService } from './services/toast.service';
 import { TranslationMessageService } from './services/translation-message-service';
-import { TranslateService } from '@ngx-translate/core';
 
-import { SwUpdate, VersionEvent, VersionDetectedEvent, VersionReadyEvent } from '@angular/service-worker';
+import { SwUpdate, VersionEvent, VersionDetectedEvent } from '@angular/service-worker';
 import { CacheStorageService } from './services/cache-storage.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-root',
@@ -35,6 +35,7 @@ export class AppComponent implements OnInit {
 
  
   constructor(
+    private translate: TranslateService,
     private translationMessage: TranslationMessageService,
     private spinnerService: SpinnerService,
     private swUpdate: SwUpdate,
@@ -44,9 +45,6 @@ export class AppComponent implements OnInit {
   ) {
     console.log('Environment: ', environment);
     spinnerService.show("AppComponent.constructor");
-    let selectedLanguage = this.translationMessage.getLanguage();
-    this.translationMessage.setDefaultLang(selectedLanguage);
-    this.translationMessage.use(selectedLanguage);
     spinnerService.hide("AppComponent.constructor");
   }
 

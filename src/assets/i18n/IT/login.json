@@ -1,0 +1,8 @@
+{
+  "LOGIN": {
+    "DESCRIPTION": "Accedi per utilizzare gli strumenti del Game Master",
+    "LOGIN_GOOGLE": "Accedi con Google",
+    "TITLE": "Bentornato",
+    "USER_NOT_AUTHENTICATED": "Utente non autenticato"
+  }
+}

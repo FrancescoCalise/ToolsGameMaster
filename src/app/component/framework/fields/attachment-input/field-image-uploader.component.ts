@@ -1,6 +1,5 @@
 import { Component, Output, EventEmitter, ViewChild, ElementRef, Input, OnInit } from "@angular/core";
 import { SharedModule } from "../../../../shared/shared.module";
-import { TranslationMessageService } from "../../../../services/translation-message-service";
 
 @Component({
     selector: 'field-image-uploader',
@@ -49,7 +48,7 @@ export class ImageUploaderComponent  {
 
     imageSrc: string | ArrayBuffer | null = null;
 
-    constructor(private translationMessageService: TranslationMessageService) { 
+    constructor() { 
 
     }
     

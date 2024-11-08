@@ -3,7 +3,7 @@
     <mat-card-header class="d-flex justify-content-between align-items-center">
       <!-- Title aligned to the left -->
       <mat-card-title class="text-start">
-          {{ 'FEATURE.TURN_ORDER_FEATURE.TITLE' | translate }}
+          {{ 'TURN_ORDER_FEATURE.TITLE' | translate }}
       </mat-card-title>
       
       <!-- Actions aligned to the right -->
@@ -11,7 +11,7 @@
           <app-field-button 
               colorClass="btn-success" 
               icon="close" 
-              tooltip="{{ 'FEATURE.TURN_ORDER_FEATURE.CLOSE' | translate }}" 
+              tooltip="{{ 'COMMON.CLOSE' | translate }}" 
               (buttonClick)="close()">
           </app-field-button>
       </mat-card-actions>
@@ -23,44 +23,44 @@
           
         <div class="p-1 col-4 d-flex justify-content-start align-items-start">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.CHARACTER_NAME' | translate }}</mat-label>
-            <input matInput #characterName  placeholder="{{ 'FEATURE.TURN_ORDER_FEATURE.CHARACTER_NAME' | translate }}" required />
+            <mat-label>{{ 'TURN_ORDER_FEATURE.CHARACTER_NAME' | translate }}</mat-label>
+            <input matInput #characterName  placeholder="{{ 'TURN_ORDER_FEATURE.CHARACTER_NAME' | translate }}" required />
           </mat-form-field>
         </div>
 
         <div class="p-1 col-1 d-flex justify-content-start align-items-center">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.INITIATIVE' | translate }}</mat-label>
+            <mat-label>{{ 'TURN_ORDER_FEATURE.INITIATIVE' | translate }}</mat-label>
             <input matInput #characterInitiative type="number"
-              placeholder="{{ 'FEATURE.TURN_ORDER_FEATURE.INITIATIVE' | translate }}" />
+              placeholder="{{ 'TURN_ORDER_FEATURE.INITIATIVE' | translate }}" />
           </mat-form-field>
         </div>
 
         <div class="p-1 col-1 d-flex justify-content-start align-items-center">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.TARGET' | translate }}</mat-label>
-            <input matInput #target type="number" placeholder="{{ 'FEATURE.TURN_ORDER_FEATURE.TARGET' | translate }}" />
+            <mat-label>{{ 'TURN_ORDER_FEATURE.TARGET' | translate }}</mat-label>
+            <input matInput #target type="number" placeholder="{{ 'TURN_ORDER_FEATURE.TARGET' | translate }}" />
           </mat-form-field>
         </div>
 
         <div class="p-1 col-1 d-flex justify-content-start align-items-center">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.MAX_HEALTH' | translate }}</mat-label>
-            <input matInput #maxHealth type="number"  placeholder="{{ 'FEATURE.TURN_ORDER_FEATURE.MAX_HEALTH' | translate }}" />
+            <mat-label>{{ 'TURN_ORDER_FEATURE.MAX_HEALTH' | translate }}</mat-label>
+            <input matInput #maxHealth type="number"  placeholder="{{ 'TURN_ORDER_FEATURE.MAX_HEALTH' | translate }}" />
           </mat-form-field>
         </div>
 
         <div class="p-1 col-1 d-flex justify-content-start align-items-center">
           <mat-form-field appearance="outline" class="w-100">
-            <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.HEALTH' | translate }}</mat-label>
+            <mat-label>{{ 'TURN_ORDER_FEATURE.HEALTH' | translate }}</mat-label>
             <input matInput #characterHealth type="number"
-              placeholder="{{ 'FEATURE.TURN_ORDER_FEATURE.HEALTH' | translate }}" />
+              placeholder="{{ 'TURN_ORDER_FEATURE.HEALTH' | translate }}" />
           </mat-form-field>
         </div>
 
         <div class="p-1 col-12 col-md-1 col-lg-1 d-flex justify-content-center align-items-center">
           <app-field-button colorClass="btn-primary" icon="add"
-            tooltip="{{ 'FEATURE.TURN_ORDER_FEATURE.ADD' | translate }}"
+            tooltip="{{ 'TURN_ORDER_FEATURE.ADD' | translate }}"
             (buttonClick)="addCharacter(characterName.value, characterInitiative.valueAsNumber, characterHealth.valueAsNumber, target.valueAsNumber, maxHealth.valueAsNumber)"
             [isDisabled]="!characterName.value">
           </app-field-button>
@@ -75,33 +75,33 @@
         <!-- Initiative Column (Editable) -->
         <div class="col-1">
             <mat-form-field appearance="outline" class="w-100">
-                <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.INITIATIVE_COLUMN' | translate }}</mat-label>
+                <mat-label>{{ 'TURN_ORDER_FEATURE.INITIATIVE' | translate }}</mat-label>
                 <input matInput type="number" [(ngModel)]="character.initiative" (ngModelChange)="sortCharacters()" />
             </mat-form-field>
         </div>
         <!-- Character Name Column -->
         <div class="col-6">
             <mat-form-field appearance="outline" class="w-100">
-                <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.NAME_COLUMN' | translate }}</mat-label>
+                <mat-label>{{ 'TURN_ORDER_FEATURE.NAME_COLUMN' | translate }}</mat-label>
                 <input matInput [(ngModel)]="character.name" readonly />
             </mat-form-field>
         </div>
         <!-- Additional Columns -->
         <div class="col-1">
           <mat-form-field appearance="outline" class="w-100">
-              <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.TARGET' | translate }}</mat-label>
+              <mat-label>{{ 'TURN_ORDER_FEATURE.TARGET' | translate }}</mat-label>
               <input matInput type="number" [(ngModel)]="character.target" />
           </mat-form-field>
         </div>
         <div class="col-1">
           <mat-form-field appearance="outline" class="w-100">
-              <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.HEALT_MAX' | translate }}</mat-label>
+              <mat-label>{{ 'TURN_ORDER_FEATURE.MAX_HEALTH' | translate }}</mat-label>
               <input matInput type="number" [(ngModel)]="character.maxHealth" />
           </mat-form-field>
         </div>
         <div class="col-1">
             <mat-form-field appearance="outline" class="w-100">
-                <mat-label>{{ 'FEATURE.TURN_ORDER_FEATURE.HEALTH_COLUMN' | translate }}</mat-label>
+                <mat-label>{{ 'TURN_ORDER_FEATURE.HEALTH' | translate }}</mat-label>
                 <input matInput type="number" [(ngModel)]="character.health" />
             </mat-form-field>
         </div>
@@ -110,7 +110,7 @@
             <app-field-button 
                 colorClass="btn-danger" 
                 icon="delete" 
-                tooltip="{{ 'FEATURE.TURN_ORDER_FEATURE.DELETE' | translate }}" 
+                tooltip="{{ 'COMMON.DELETE' | translate }}" 
                 (buttonClick)="removeCharacter(character)">
             </app-field-button>
         </div>

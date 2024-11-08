@@ -1,8 +1,8 @@
 import { Component, Inject, OnDestroy, OnInit, } from '@angular/core';
 import { SharedModule } from '../../../../../../shared/shared.module';
-import { TranslationMessageService } from '../../../../../../services/translation-message-service';
+import { IDMLManager, TranslationMessageService } from '../../../../../../services/translation-message-service';
 import { FirestoreService } from '../../../../../../services/firestore.service';
-import { CHARECTER_SHEET_LUR, } from '../../../../../../firebase-provider';
+import { CHARECTER_SHEET_LUR, TRANSLATION_FIRESTORE_SERVICE, } from '../../../../../../firebase-provider';
 import { QueryFieldFilterConstraint, where } from 'firebase/firestore';
 import { SessionManager } from '../../../../../../interface/Document/SessionManager';
 import { SpinnerService } from '../../../../../../services/spinner.service';
@@ -42,6 +42,7 @@ export class GenerateCharacterDND5EComponent implements OnInit, OnDestroy {
 
   constructor(private translationMessageService: TranslationMessageService,
     @Inject(CHARECTER_SHEET_LUR) private firestoreLurSheetService: FirestoreService<CharacterSheetDND5ETemplate>,
+    
     private spinnerService: SpinnerService,
     private dialog: MatDialog,
     private pdfService: PdfService,

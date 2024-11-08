@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
-import { SharedModule } from '../shared.module';
-import { AuthService, PersonalUser } from '../../services/auth.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { AuthService, PersonalUser } from '../../../services/auth.service';
 import { Subscription } from 'rxjs';
-import { ToastService } from '../../services/toast.service';
-import { BreakpointService } from '../../services/breakpoint.service';
-import { FirestoreService } from '../../services/firestore.service';
+import { ToastService } from '../../../services/toast.service';
+import { BreakpointService } from '../../../services/breakpoint.service';
+import { FirestoreService } from '../../../services/firestore.service';
 import { Timestamp } from 'firebase/firestore';
-import { UserInformationSaved } from '../../interface/Document/UserInformationSaved';
-import { TranslationMessageService } from '../../services/translation-message-service';
-import { USER_FIRESTORE_SERVICE } from '../../firebase-provider';
+import { UserInformationSaved } from '../../../interface/Document/UserInformationSaved';
+import { TranslationMessageService } from '../../../services/translation-message-service';
+import { USER_FIRESTORE_SERVICE } from '../../../firebase-provider';
 
 
 @Component({

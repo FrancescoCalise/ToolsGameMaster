@@ -4,7 +4,7 @@
     <app-field-button 
       colorClass="btn-primary" 
       icon="add" 
-      tooltip="{{ 'SESSION_MANAGER.CREATE_NEW_SESSION' | translate }}" 
+      tooltip="{{ 'COMMON.ADD' | translate }}" 
       (buttonClick)="toggleForm(true)">
     </app-field-button>
   </div>
@@ -19,8 +19,8 @@
       </div>
     </form>
       <div class="mb-3 d-flex flex-row justify-content-center">
-        <app-field-button colorClass="btn-success" icon="save" tooltip="{{ 'SESSION_MANAGER.SAVE_SESSION' | translate }}" [isDisabled]="!sessionForm.valid"   (buttonClick)="sessionForm.ngSubmit.emit()"> </app-field-button>
-        <app-field-button colorClass="btn-secondary ms-2" icon="cancel" tooltip="{{ 'SESSION_MANAGER.CANCEL' | translate }}" (buttonClick)="toggleForm(false)"> </app-field-button>
+        <app-field-button colorClass="btn-success" icon="save" tooltip="{{ 'COMMON.SAVE' | translate }}" [isDisabled]="!sessionForm.valid"   (buttonClick)="sessionForm.ngSubmit.emit()"> </app-field-button>
+        <app-field-button colorClass="btn-secondary ms-2" icon="cancel" tooltip="{{ 'COMMON.CANCEL' | translate }}" (buttonClick)="toggleForm(false)"> </app-field-button>
       </div>
     
   </div>
@@ -39,14 +39,14 @@
             </div>
             <div class="btn-group" role="group">
               <app-field-button colorClass="btn-success" icon="edit"
-                tooltip="{{ 'SESSION_MANAGER.EDIT' | translate }}" (buttonClick)="editSession(session)">
+                tooltip="{{ 'COMMON.EDIT' | translate }}" (buttonClick)="editSession(session)">
               </app-field-button>
               <app-field-button colorClass="btn-info" icon="check"
                 tooltip="{{ 'SESSION_MANAGER.SET_ACTIVE' | translate }}"
                 [ngClass]="{'btn-primary': session.default}" (buttonClick)="setAsDefault(session)"  [isDisabled]="session.default">
               </app-field-button>
               <app-field-button colorClass="btn-danger" icon="delete"
-                tooltip="{{ 'SESSION_MANAGER.DELETE' | translate }}" (buttonClick)="deleteSession(session)" [isDisabled]="session.default">
+                tooltip="{{ 'COMMON.DELETE' | translate }}" (buttonClick)="deleteSession(session)" [isDisabled]="session.default">
               </app-field-button>
 
             </div>

@@ -1,0 +1,13 @@
+{
+    "GENERATE_FROM_AI":{
+        "ADDITIONAL_INFORMATION":"Informazioni aggiuntive",
+        "CONFIGURE_PROMPT":"Configura il prompt",
+        "GO_TO_CHATGPT":"Vai a ChatGPT",
+        "PASTE_JSON_HERE":"Incolla il JSON qui",
+        "PASTE_PROMPT_INSTRUCTION":"Incolla il prompt",
+        "PASTE_RESULT":"Incolla il risultato",
+        "PROMPT_COPIED":"Prompt copiato",
+        "PROMPT_PREVIEW":"Anteprima del prompt",
+        "SELECT_CHARACTER_INFO":"Seleziona le informazioni del personaggio"
+    }
+}

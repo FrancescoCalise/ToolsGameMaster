@@ -1,0 +1,20 @@
+{
+    "files": [
+      "common",
+      "dashboard",
+      "dungeon_and_dragons_5e",
+      "error",
+      "fields",
+      "home",
+      "login",
+      "messages",
+      "navigation",
+      "sections",
+      "session_manager",
+      "turn_order_feature",
+      "ultima_rotta",
+      "update",
+      "user"
+    ]
+  }
+  

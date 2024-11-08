@@ -1,12 +1,12 @@
 import { AfterViewChecked, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { SharedModule } from '../shared.module';
-import { AuthService } from '../../services/auth.service';
+import { SharedModule } from '../../../shared/shared.module';
+import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
+import { environment } from '../../../environments/environment';
 import { Subscription } from 'rxjs';
 import { SwUpdate } from '@angular/service-worker';
-import { CacheStorageService } from '../../services/cache-storage.service';
-import { TranslationMessageService } from '../../services/translation-message-service';
+import { CacheStorageService } from '../../../services/cache-storage.service';
+import { TranslationMessageService } from '../../../services/translation-message-service';
 
 @Component({
   selector: 'app-system-navbar',
@@ -40,6 +40,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
     private cacheStorageService: CacheStorageService,
     private translationMessageService: TranslationMessageService
   ) {
+    debugger
     this.selectedLanguage = this.translationMessageService.getLanguage();
     const selectedLang = this.languages.find(lang => lang.code === this.selectedLanguage);
     this.selectedFlag = selectedLang ? selectedLang.flag : 'fi fi-it';

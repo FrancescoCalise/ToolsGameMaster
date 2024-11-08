@@ -8,6 +8,7 @@ const language = process.argv[2] || 'IT';
 const baseDir = path.join(__dirname, '../src/app');
 const i18nDir = path.join(__dirname, `../src/assets/i18n/${language}`);
 const outputDir = path.join(__dirname, 'LabelManagment');
+const excludeFilePath = path.join(__dirname, 'idml-to-exclude.json');
 
 // Creazione della directory di output se non esiste
 if (!fs.existsSync(outputDir)) {
@@ -109,9 +110,15 @@ function extractAndSaveKeysToFile() {
   fs.writeFileSync(existingKeysPath, JSON.stringify(existingKeys, null, 2));
   console.log(`Chiavi già salvate in ${existingKeysPath}`);
 
+  // Carica le chiavi da escludere
+  const excludeKeys = loadExcludedKeys();
+
   // Calcola le chiavi dichiarate ma non usate e le chiavi usate ma non dichiarate
-  const declaredButNotUsed = existingKeys.filter(key => !allKeys.has(key)).sort();
+  let declaredButNotUsed = existingKeys.filter(key => !allKeys.has(key)).sort();
   const usedButNotDeclared = keysArray.filter(key => !existingKeys.includes(key)).sort();
+
+  // Rimuovi le chiavi da escludere da 'declaredButNotUsed'
+  declaredButNotUsed = declaredButNotUsed.filter(key => !excludeKeys.has(key));
 
   // Salva i risultati in due nuovi file JSON
   const declaredButNotUsedPath = path.join(outputDir, 'idml-declared-but-not-used.json');
@@ -121,6 +128,21 @@ function extractAndSaveKeysToFile() {
   const usedButNotDeclaredPath = path.join(outputDir, 'idml-used-but-not-declared.json');
   fs.writeFileSync(usedButNotDeclaredPath, JSON.stringify(usedButNotDeclared, null, 2));
   console.log(`Chiavi usate ma non dichiarate salvate in ${usedButNotDeclaredPath}`);
+}
+
+// Funzione per caricare le chiavi da escludere
+function loadExcludedKeys() {
+  if (fs.existsSync(excludeFilePath)) {
+    try {
+      const excludeContent = JSON.parse(fs.readFileSync(excludeFilePath, 'utf-8'));
+      return new Set(excludeContent);
+    } catch (error) {
+      console.error(`Errore nel caricamento del file ${excludeFilePath}:`, error);
+    }
+  } else {
+    console.warn(`File di esclusione non trovato: ${excludeFilePath}`);
+  }
+  return new Set();
 }
 
 // Esecuzione dello script

@@ -1,5 +1,23 @@
 {
   "ULTIMA_ROTTA": {
+    "ATTRIBUTES":{
+      "AGILITY": "Agilità",
+      "INTELLIGENCE": "Intelligenza",
+      "MANUALITY": "Manualità",
+      "PERCEPTION": "Percezione",
+      "STRENGTH": "Forza",
+      "COURAGE": "Coraggio",
+      "MAGIC": "Magia",
+      "SOCIALITY": "Socialità"
+    },
+    "ARMOR":{
+      "BODY":"Corpo",
+      "HEAD":"Testa",
+      "LEFT_ARM":"Braccio sinistro",
+      "LEFT_LEG":"Gamba sinistra",
+      "RIGHT_ARM":"Braccio destro",
+      "RIGHT_LEG":"Gamba destra"
+    },
     "ABILITY": {
       "ACCORTO": "Accorto",
       "ADDESTRAMENTO_BRUTALE": "Addestramento Brutale",

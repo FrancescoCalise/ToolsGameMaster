@@ -61,7 +61,7 @@ export class TranslationCacheService {
   providedIn: 'root',
 })
 export class TranslationMessageService implements OnInit {
-  private defaultLanguage = navigator.language.split('-')[0];
+  private defaultLanguage = 'IT';
   private languageChangeSubject = new Subject<string>();
 
   constructor(

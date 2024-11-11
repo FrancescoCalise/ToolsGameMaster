@@ -4,7 +4,7 @@
     <div class="card-body text-start">
       <h5 class="card-title text-center">{{ user.displayName }}</h5>
       <p class="card-text"><strong>{{ 'USER_PROFILE.EMAIL' | translate }}:</strong> {{ user.email }}</p>
-      <p class="card-text"><strong>{{ 'USER_PROFILE.EMAIL_VERIFIED' | translate }}:</strong> {{ user.emailVerified ? ('USER_PROFILE.YES' | translate) : ('USER_PROFILE.NO' | translate) }}</p>
+      <p class="card-text"><strong>{{ 'USER_PROFILE.EMAIL_VERIFIED' | translate }}:</strong> {{ user.emailVerified ? ('COMMON.YES' | translate) : ('COMMON.NO' | translate) }}</p>
       <p class="card-text"><strong>{{ 'USER_PROFILE.ROLE' | translate }}:</strong> {{ user.role }}</p>
       <p class="card-text">
         <strong>{{ 'USER_PROFILE.LAST_DONATION' | translate }}:</strong> 
@@ -17,7 +17,7 @@
     </div>
     <ul class="list-group list-group-flush text-start">
       <li class="list-group-item"><strong>{{ 'USER_PROFILE.UID' | translate }}:</strong> {{ user.uid }}</li>
-      <li class="list-group-item"><strong>{{ 'USER_PROFILE.ANONYMOUS' | translate }}:</strong> {{ user.isAnonymous ? ('USER_PROFILE.YES' | translate) : ('USER_PROFILE.NO' | translate) }}</li>
+      <li class="list-group-item"><strong>{{ 'USER_PROFILE.ANONYMOUS' | translate }}:</strong> {{ user.isAnonymous ? ('COMMON.YES' | translate) : ('COMMON.NO' | translate) }}</li>
     </ul>
   </div>
 </div>

@@ -109,7 +109,8 @@
       "SUN_DEATH": "Il sole è esploso. Nulla è sopravvissuto. Cambiate gioco",
       "TEST_BONUS": "Bonus al Test Morte Solare",
       "TITLE": "Test Morte Solare",
-      "RIMANING_TIME": "Tempo rimanente"
+      "RIMANING_TIME": "Tempo rimanente",
+      "NO_MESSAGE": "Nessun messaggio"
     },
     "DISTANCE": "Distanza",
     "DIST_100_M": "Dist. 100 m.",

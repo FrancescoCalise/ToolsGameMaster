@@ -61,7 +61,8 @@
       "TYPE": "Tipo",
       "WISDOM": "Saggezza",
       "WISDOM_SAVE": "Tiro salvezza saggezza",
-      "SAVEING_THROWS": "Tiri salvezza"
+      "SAVEING_THROWS": "Tiri salvezza",
+      "ADDITIONAL_INFORMATION": "Informazioni aggiuntive"
     },
     "TITLE": "Dungeon & Dragons 5E"
   }

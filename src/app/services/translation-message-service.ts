@@ -21,14 +21,13 @@ export class TranslationCacheService {
   private cache: { [key: string]: string } = {}; // Cache delle traduzioni
 
   constructor(
-    private cacheStorageService: CacheStorageService,
-    private firestoreService: TranslationFirestoreService
+    private cacheStorageService: CacheStorageService
   ) {
   }
 
   // Metodo per salvare le chiavi di traduzione in Firestore
   async saveTranslationKey(key: string, lang: string): Promise<void> {
-    await this.firestoreService.saveTranslationKey(key, lang);
+   // await this.firestoreService.saveTranslationKey(key, lang);
     this.cacheStorageService.setItem(this.cacheStorageService.translationCache, JSON.stringify(this.cache));
   }
 
@@ -62,12 +61,13 @@ export class TranslationCacheService {
   providedIn: 'root',
 })
 export class TranslationMessageService implements OnInit {
-  private defaultLanguage = navigator.language.toUpperCase();
+  private defaultLanguage = navigator.language.split('-')[0];
   private languageChangeSubject = new Subject<string>();
 
   constructor(
     private translateService: TranslateService,
-    private translationCacheService: TranslationCacheService
+    private translationCacheService: TranslationCacheService,
+    private firestoreService: TranslationFirestoreService,
   ) {
     this.use(this.getLanguage());
   }
@@ -126,6 +126,7 @@ export class TranslationMessageService implements OnInit {
 
     if (translatedText === key) {
       console.error(`Translation not found for key: ${key}`);
+      this.firestoreService.saveTranslationKey(key, this.getLanguage());
     }
 
     await this.translationCacheService.saveTranslationKey(key, this.getLanguage());

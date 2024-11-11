@@ -9,6 +9,7 @@
         "PROMPT_COPIED":"Prompt copiato",
         "PROMPT_PREVIEW":"Anteprima del prompt",
         "SELECT_CHARACTER_INFO":"Seleziona le informazioni del personaggio",
-        "PASTE_JSON":"Incolla JSON"
+        "PASTE_JSON":"Incolla JSON",
+        "PROMPT_4": "Utilizza i Metri come sistema di unita di misura e dammi in output solamente il JSON in lingua {{lang}}"
     }
 }

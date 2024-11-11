@@ -45,7 +45,9 @@ export class PNGreviewDialogComponent {
         return value
     }
 
-    getModifierBonus(value: number): string {
+    getModifierBonus(value: number | undefined): string {
+        if(value === undefined) return '';
+        
         let bonus = Math.floor((value - 10) / 2);
         return bonus >= 0 ? `(+${bonus})` : `(${bonus})`;
     }

@@ -108,7 +108,8 @@ export class DeathSunComponent implements OnInit {
         deathSunBonus: this.deathSunBonus + this.selectedDeathSun.bonus as number,
         counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
         resetCounter: this.resetCounter,
-        remaingTime: this.remaingTime
+        remaingTime: this.remaingTime,
+        message: this.selectedDeathSun.description
       });
   }
 

@@ -274,6 +274,10 @@ export class PNGGenerator5eComponent implements OnInit, OnDestroy {
         });
     }
 
+    cleanSheet() {
+        this.png = createEmptyPng();
+    }
+    
     savePng() {
         if (!this.defaultSession) return;
     

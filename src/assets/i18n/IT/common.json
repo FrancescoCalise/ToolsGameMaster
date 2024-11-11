@@ -13,6 +13,9 @@
     "COPY": "Copia",
     "COMPLETE": "Completa",
     "INVALID_JSON_FORMAT": "Formato JSON non valido",
-    "INVALID_JSON_TEMPLATE": "Modello JSON non valido"
+    "INVALID_JSON_TEMPLATE": "Modello JSON non valido",
+    "CLEAN": "Pulisci",
+    "YES": "Sì",
+    "NO": "No"
   }
 }

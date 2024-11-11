@@ -1,5 +1,5 @@
 import { Component, HostListener, OnDestroy, OnInit, } from '@angular/core';
-import {  RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { SharedModule } from '../../../../shared/shared.module';
 import { FeatureAreaComponent } from '../../feature-sitemap/feature-area.component';
 import { ultimeRottaConfig } from './ultime-rotta-config';
@@ -7,7 +7,7 @@ import { DeathSunComponent } from './features/death-sun/death-sun.component';
 import { GameBaseComponent } from '../base/game-base.component';
 import { DynamicTableComponent } from '../../../framework/dynamic-table/dynamic-table.component';
 
-export interface DeathOfSunInterface{
+export interface DeathOfSunInterface {
   deathSunBonus: number;
   remaingTime: number,
   displayTime: string,
@@ -32,17 +32,18 @@ export interface DeathOfSunInterface{
 
 })
 
-export class UltimaRottaComponent extends GameBaseComponent implements OnInit,OnDestroy {
- 
- 
+export class UltimaRottaComponent extends GameBaseComponent implements OnInit, OnDestroy {
+
+
   timerDisplay: string = '30:00';
   timerDisplayDefault: string = '30:00';
   private timeDefualt: number = 1800; // 30 minuti in secondi
   private timeRemaining: number = 1800; // 30 minuti in secondi
 
-  solarDeathTestValue:number = 0;
+  solarDeathTestValue: number = 0;
   counterPermanentDeathOfSun: number = 0;
   isDarkIconVisible = false;
+  currentDeathSunMessage: string = '';
 
   private timerInterval: any;
   private isTimerRunning = false;
@@ -50,7 +51,8 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit,On
   override async ngOnInit(): Promise<void> {
     this.gameConfig = ultimeRottaConfig;
     let init = this.cacheStorage.getItem(this.cacheStorage.sunOfDeathKey) as DeathOfSunInterface;
-    if(init){
+    this.currentDeathSunMessage = await this.translationMessageService.translate('ULTIMA_ROTTA.DEATH_SUN.NO_MESSAGE');
+    if (init) {
       this.timerDisplay = init.displayTime;
       this.timeRemaining = init.remaingTime;
       this.solarDeathTestValue = init.deathSunBonus;
@@ -69,7 +71,7 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit,On
     this.saveData();
   }
 
-  saveData(){
+  saveData() {
     let data: DeathOfSunInterface = {
       displayTime: this.timerDisplay,
       remaingTime: this.timeRemaining,
@@ -77,8 +79,9 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit,On
       counterPermanentDeathOfSun: this.counterPermanentDeathOfSun,
       isDarkIconVisible: this.isDarkIconVisible
     }
-    this.cacheStorage.setItem(this.cacheStorage.sunOfDeathKey,data)
+    this.cacheStorage.setItem(this.cacheStorage.sunOfDeathKey, data)
   }
+
   // Funzione per avviare il timer
   handleTimer() {
     if (this.isTimerRunning) {
@@ -112,7 +115,7 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit,On
     this.timerDisplay = this.timerDisplayDefault; // Resetta il display del timer
   }
 
-  initDeathSun(){
+  initDeathSun() {
     this.openDeathSunDialog(false);
   }
 
@@ -130,21 +133,27 @@ export class UltimaRottaComponent extends GameBaseComponent implements OnInit,On
         this.solarDeathTestValue = result.deathSunBonus as number;
         this.counterPermanentDeathOfSun = result.counterPermanentDeathOfSun as number;
         let resetCounter = result.resetCounter;
-        if(this.solarDeathTestValue > 20) {
+        this.currentDeathSunMessage = result.message;
+
+        if (this.solarDeathTestValue > 20) {
           this.isDarkIconVisible = true;
         }
-        
-        if(resetCounter){
+
+        if (resetCounter) {
           this.solarDeathTestValue = 0;
           this.counterPermanentDeathOfSun = 0;
         }
 
-        if(result.remaingTime && this.timeRemaining !== result.remaingTime){
+        if (result.remaingTime && this.timeRemaining !== result.remaingTime) {
           this.timeRemaining = result.remaingTime;
           this.updateTimerDisplay();
         }
       }
     })
+  }
+
+  showLastMessage() {
+    this.toastService.showInfo(this.currentDeathSunMessage, "", 5000);
   }
 
   // Formatta il tempo in formato mm:ss

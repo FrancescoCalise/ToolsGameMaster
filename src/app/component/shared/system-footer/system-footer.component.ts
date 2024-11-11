@@ -27,6 +27,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
 
   isAuthenticating: boolean = false;
   user: PersonalUser | null = null;
+  haveDonationValid: boolean = false;
 
   currentLang: string = 'IT';
   private languageSubscription: Subscription = new Subscription;
@@ -96,8 +97,7 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
     this.isAuthenticating = true;
 
     if (this.user.role === 'admin') {
-      this.toggleFooterVisibility(false);
-      this.clearPayPalButtonContainer();
+      this.haveDonationValid = true;
       return;
     }
 
@@ -110,15 +110,8 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
     }
 
     let lastDonationDate = timeStamp ? new Date(timeStamp.seconds * 1000) : undefined;
-    let haveDonationValid = lastDonationDate !== undefined && lastDonationDate >= oneMonthAgo;
-
-    if (!haveDonationValid) {
-      this.toggleFooterVisibility(true);
-      await this.toggleDonateButton();
-    } else {
-      this.toggleFooterVisibility(false);
-      this.clearPayPalButtonContainer();
-    }
+    this.haveDonationValid = lastDonationDate !== undefined && lastDonationDate >= oneMonthAgo;
+    this.toggleFooterVisibility(!this.haveDonationValid);
   }
 
   clearPayPalButtonContainer(): void {
@@ -132,6 +125,8 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
   }
 
   async renderPayPalDonateButton(currentLink: string) {
+    if(this.haveDonationValid) return;
+
     let idDiv = 'paypal-donate-button-container';
   
     setTimeout(async () => {
@@ -166,8 +161,6 @@ export class SystemFooterComponent implements OnInit, OnDestroy {
     }, 0);
   }
   
-
-
   async saveLastDonation() {
     if (!this.isAuthenticating) return;
     let user = this.user as PersonalUser;

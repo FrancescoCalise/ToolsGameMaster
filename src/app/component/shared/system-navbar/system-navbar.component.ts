@@ -22,7 +22,7 @@ export class SystemNavBarComponent implements OnInit, AfterViewChecked, OnDestro
   selectedLanguage: string;
   selectedFlag: string; // Flag per la lingua selezionata
   languages = [
-    { code: 'EN', label: 'English', flag: 'fi fi-gb' },
+    //{ code: 'EN', label: 'English', flag: 'fi fi-gb' },
     { code: 'IT', label: 'Italiano', flag: 'fi fi-it' }
   ];
   isAuthenticating: boolean = false;

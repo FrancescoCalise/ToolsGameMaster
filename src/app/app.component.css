@@ -98,8 +98,8 @@
 /* Altezza per tablet */
 @media (min-width: 768px) and (max-width: 991px) {
     .header-fixed {
-        height: 30px;
-        max-height: 30px;
+        height: 40px;
+        max-height: 40px;
     }
 
     .footer-fixed {
@@ -108,14 +108,14 @@
     }
 
     .main-container-no-footer {
-        margin-top: 30px;
-        height: calc(100vh - 30px);
+        margin-top: 40px;
+        height: calc(100vh - 40px);
     }
 
     .main-container-with-footer {
-        margin-top: 30px;
+        margin-top: 40px;
         margin-bottom: 40px;
-        height: calc(100vh - 70px);
+        height: calc(100vh - 80px);
     }
 }
 

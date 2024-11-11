@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { TableConfig } from '../../../interface/TableConfig';
@@ -12,9 +12,11 @@ import { SharedModule } from '../../../shared/shared.module';
   standalone: true,
   imports: [SharedModule],
 })
-export class DynamicTableComponent implements OnInit, OnDestroy {
+export class DynamicTableComponent implements OnInit, OnDestroy, AfterViewInit {
   @Input() table!: TableConfig; // Tabella originale non tradotta (input)
   @Input() excludedColumnsToTranslate: string[] = []; // Colonne da escludere dalla traduzione
+  @Output() isLoaded = new EventEmitter<string>();
+
   private originalTable!: TableConfig; // Copia della tabella originale per ricalcolare le traduzioni
   translatedTable!: TableConfig; // Tabella d'appoggio tradotta
   columnIds: string[] = []; // ID delle colonne originali
@@ -28,7 +30,11 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
     private router: Router,
     private translationService: TranslationMessageService,
     private changeDetectorRef: ChangeDetectorRef
-  ) {}
+  ) { }
+
+  ngAfterViewInit(): void {
+    this.isCompleted();
+  }
 
   ngOnDestroy(): void {
     if (this.langSubscription) {
@@ -50,26 +56,26 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
     this.defaultLang = this.translationService.getLanguage();
     await this.applyTranslations();
     await this.generateNotes();
-    this.changeDetectorRef.detectChanges(); // Forza il rilevamento delle modifiche dopo la prima traduzione
+    //this.changeDetectorRef.detectChanges(); // Forza il rilevamento delle modifiche dopo la prima traduzione
 
     // Sottoscrizione al cambiamento di lingua
     this.langSubscription = this.translationService.onLanguageChange()
-    .subscribe(async (newLang) => {
-      if (this.defaultLang !== newLang) {
+      .subscribe(async (newLang) => {
+        if (this.defaultLang !== newLang) {
 
 
-        this.translatedTable = {} as TableConfig;
-        this.translatedColumnHeaders =  [];
-        this.notesToShow = [];
+          this.translatedTable = {} as TableConfig;
+          this.translatedColumnHeaders = [];
+          this.notesToShow = [];
 
-        this.defaultLang = newLang;
+          this.defaultLang = newLang;
 
-        this.translatedTable = structuredClone(this.originalTable);
-        await this.applyTranslations();
-        //await this.generateNotes();
-        this.changeDetectorRef.detectChanges(); // Forza il rilevamento delle modifiche
-      }
-    });
+          this.translatedTable = structuredClone(this.originalTable);
+          await this.applyTranslations();
+          //await this.generateNotes();
+         // this.changeDetectorRef.detectChanges(); // Forza il rilevamento delle modifiche
+        }
+      });
   }
 
   async applyTranslations() {
@@ -111,5 +117,9 @@ export class DynamicTableComponent implements OnInit, OnDestroy {
 
     // Forza il rilevamento delle modifiche anche per le note
     this.changeDetectorRef.detectChanges();
+  }
+
+  isCompleted() {
+    this.isLoaded.emit(this.table.id);
   }
 }

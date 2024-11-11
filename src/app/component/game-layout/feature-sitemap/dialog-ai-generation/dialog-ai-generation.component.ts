@@ -49,7 +49,7 @@ export class DialogAiGeneration implements OnInit {
     promptPart1: string = "";
     promptPart2: string = "Per farlo devi compilarmi correttamente questo JSON {json}.";
     promptPart3: string = "";
-    promptPart4: string = `STEPPER_DIALOG.PROMPT_4`;
+    promptPart4: string = `GENERATE_FROM_AI.PROMPT_4`;
 
     get prompt() {
         return this.promptPart1 + '\n' + this.promptPart2_converted + '\n' + this.promptPart3 + '\n' + this.promptPart4;

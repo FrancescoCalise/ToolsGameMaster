@@ -10,12 +10,12 @@ export interface PNG_5E extends BaseDocument {
   hitPoints: string;
   speed: string;
   attributes: {
-    strength: number;
-    dexterity: number;
-    constitution: number;
-    intelligence: number;
-    wisdom: number;
-    charisma: number;
+    strength?: number;
+    dexterity?: number;
+    constitution?: number;
+    intelligence?: number;
+    wisdom?: number;
+    charisma?: number;
   };
   save:string;
   skills: string[];
@@ -24,7 +24,7 @@ export interface PNG_5E extends BaseDocument {
   damageImmunities: string;
   conditionImmunities: string;
   senses: string;
-  passivePerception: number;
+  passivePerception?: number;
   languages: string;
   challengeRating: string;
   traits: Array<{
@@ -42,7 +42,7 @@ export interface PNG_5E extends BaseDocument {
     description: string;
   }>;
   spells: Array<{
-    level: number;
+    level?: number;
     spellName: string;
   }>;
   spellSlots: number[];
@@ -58,12 +58,12 @@ export function createEmptyPng(): PNG_5E {
     hitPoints: '',
     speed: '',
     attributes: {
-      strength: 0,
-      dexterity: 0,
-      constitution: 0,
-      intelligence: 0,
-      wisdom: 0,
-      charisma: 0
+      strength: undefined,
+      dexterity: undefined,
+      constitution: undefined,
+      intelligence: undefined,
+      wisdom: undefined,
+      charisma: undefined
     },
     save:'',
     skills: [],
@@ -72,7 +72,7 @@ export function createEmptyPng(): PNG_5E {
     damageImmunities: '',
     conditionImmunities: '',
     senses: '',
-    passivePerception: 0,
+    passivePerception: undefined,
     languages: '',
     challengeRating: '',
     traits: [], // Array vuoto

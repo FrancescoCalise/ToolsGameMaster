@@ -57,6 +57,12 @@
                   </li>
               </ul>
           </div>
+          <app-field-button 
+              colorClass="btn-danger"
+              icon="delete"
+              tooltip="{{ 'COMMON.CLEAN' | translate }}"
+              (buttonClick)="cleanSheet()">
+          </app-field-button>
       </div>
     </div>  
 
@@ -116,6 +122,7 @@
 
       <!-- Attributes -->
       <div class="row p-0">
+        <h4 class="p-1">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ATTRIBUTES' | translate }}</h4>
         <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3" *ngFor="let attr of attributes">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ translationIds[attr] | translate }}</mat-label>
@@ -164,6 +171,7 @@
 
       <!-- Additional Details -->
       <div class="row p-0">
+        <h4 class="p-1">{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.ADDITIONAL_INFORMATION' | translate }}</h4>
         <div class="col-4 col-sm-4 col-md-2 col-lg-2 mb-3">
           <mat-form-field appearance="outline" class="w-100">
             <mat-label>{{ 'DUNGEON_AND_DRAGONS_5E.PNG_GENERATOR.SPEED' | translate }}</mat-label>

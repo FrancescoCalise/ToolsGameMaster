@@ -1,5 +1,7 @@
 {
   "ERROR": {
-    "CODE_ERROR_LABEL": "Codice errore"
+    "CODE_ERROR_LABEL": "Codice errore",
+    "UNKNOWN": "Errore sconosciuto",
+    "TITLE": "Errore"
   }
 }

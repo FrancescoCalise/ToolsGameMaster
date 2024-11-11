@@ -1,4 +1,5 @@
 export interface TableConfig {
+    id: string;
     title?:string;
     columns: string[];
     data: Array<{ [key: string]: any }>;

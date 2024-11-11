@@ -50,7 +50,7 @@
       </div>
   
       <!-- Test Bonus -->
-      <div *ngIf="solarDeathTestValue < 21" class="col-7 d-flex justify-content-center align-items-center">
+      <div *ngIf="solarDeathTestValue < 21" class="col-7 d-flex justify-content-center align-items-center" (click)="showLastMessage()" style="cursor: pointer;">
         <h4 class="text-white text-center">{{ 'ULTIMA_ROTTA.DEATH_SUN.TEST_BONUS' | translate }}: + {{ solarDeathTestValue }}</h4>
       </div>
   

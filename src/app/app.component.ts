@@ -44,8 +44,6 @@ export class AppComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {
     console.log('Environment: ', environment);
-    spinnerService.show("AppComponent.constructor");
-    spinnerService.hide("AppComponent.constructor");
   }
 
   async ngOnInit(): Promise<void> {

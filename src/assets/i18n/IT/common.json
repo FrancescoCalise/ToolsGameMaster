@@ -17,5 +17,9 @@
     "CLEAN": "Pulisci",
     "YES": "Sì",
     "NO": "No"
+  },
+  "UPDATE": {
+    "TITLE": "Aggiornamento disponibile",
+    "DESCRIPTION": "L'app verra aggiornata tra 3 secondi"
   }
 }

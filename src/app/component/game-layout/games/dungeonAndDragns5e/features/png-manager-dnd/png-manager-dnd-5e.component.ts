@@ -30,7 +30,7 @@ export class PNGManagerDnd5e implements OnInit, OnDestroy {
 
   constructor(
     @Inject(PNG_SHEET_DND_5) private firestoreLogService: FirestoreService<PNG_5E>,
-    private dialogRef: MatDialogRef<PNGManagerDnd5e>,
+    public dialogRef: MatDialogRef<PNGManagerDnd5e>,
     private router: Router,
     private dialogService: DialogService
   ){

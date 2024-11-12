@@ -65,7 +65,7 @@ export class DialogAiGeneration implements OnInit {
     constructor(
         @Inject(MAT_DIALOG_DATA) public data: StepperData,
         private translationMessageService: TranslationMessageService,
-        private dialogRef: MatDialogRef<DialogAiGeneration>,
+        public dialogRef: MatDialogRef<DialogAiGeneration>,
         private fb: FormBuilder
     ) {
         if (data) {

@@ -31,7 +31,7 @@ export class TurnOrderComponent implements OnInit, OnDestroy {
   @ViewChild('target') target!: ElementRef<HTMLInputElement>;
 
   constructor(
-    private dialogRef: MatDialogRef<TurnOrderComponent>,
+    public dialogRef: MatDialogRef<TurnOrderComponent>,
     private cacheStorageService: CacheStorageService
   ) {}
 
@@ -77,7 +77,4 @@ export class TurnOrderComponent implements OnInit, OnDestroy {
     this.characters = [...this.characters]; // Update the data source to reflect changes
   }
 
-  close(): void {
-    this.dialogRef.close();
-  }
 }

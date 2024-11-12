@@ -1,19 +1,8 @@
-<app-dynamic-wrapper-modal class="h-100">
+<app-dynamic-wrapper-modal class="h-100" [dialogRef]="dialogRef" [IdmlTitle]="'FEATURE.PNG_MANAGER'">
 
     <div class="conteiner-fluid p-3">
         <div class="d-flex mb-3 w-100 flex-column">
-            <div class="d-flex justify-content-between align-items-center">
-                <h1>
-                    <strong>{{ 'FEATURE.PNG_MANAGER' | translate }}</strong>
-                </h1>
-                <div class="d-flex">
-                    <app-field-button colorClass="btn-success" icon="close"
-                        tooltip="{{ 'COMMON.CLOSE' | translate }}"
-                        (buttonClick)="close()">
-                    </app-field-button>
-                </div>
-            </div>
-
+            
             <div class="d-flex mt-3">
                 <app-session-manager-widget class="me-2" [gameNameInput]="configGame.id"
                     (sessionLoaded)="onSessionLoaded($event)">

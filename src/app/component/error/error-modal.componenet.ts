@@ -23,14 +23,12 @@ import { DynamicWrapperModalComponent } from '../framework/modal/dynamic-wrapper
 export class ErrorModalComponent implements OnInit {
   public title: string = '';
   public originalComponenetThatOpenSpinner: string = '';
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: ErrorLog,
-    private dialogRef: MatDialogRef<ErrorModalComponent>,
+    public dialogRef: MatDialogRef<ErrorModalComponent>,
     private translationMessageService: TranslationMessageService,
     private spinnerService: SpinnerService
   ) {
-
   }
 
   async ngOnInit(): Promise<void> {
@@ -39,7 +37,5 @@ export class ErrorModalComponent implements OnInit {
     this.spinnerService.hide(this.originalComponenetThatOpenSpinner);
   }
 
-  close(): void {
-    this.dialogRef.close();
-  }
+
 }

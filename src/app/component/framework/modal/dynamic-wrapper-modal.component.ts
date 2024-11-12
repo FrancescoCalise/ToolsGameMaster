@@ -28,7 +28,7 @@ export class DynamicWrapperModalComponent implements OnInit {
 
     dialogAction: ButtonConfig[] = [
         {
-            colorClass: 'btn-success',
+            colorClass: 'btn-danger',
             icon: 'close',
             tooltip: 'COMMON.CLOSE',
             action: () => this.close(),

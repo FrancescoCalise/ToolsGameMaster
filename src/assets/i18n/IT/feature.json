@@ -7,7 +7,8 @@
         "SHOW_CRITIC_DAMAGE": "Mostra Critici",
         "CREATE_CHARACTER": "Crea Personaggio",
         "PNG_GENERATOR": "Generatore PNG",
-        "PNG_MANAGER": "Gestione PNG"
+        "PNG_MANAGER": "Gestione PNG",
+        "GENERATE_FROM_AI": "Generatore Form AI"
 
     }
 }
